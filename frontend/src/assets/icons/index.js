@@ -1,0 +1,12 @@
+export { default as media } from "./media.svg";
+export { default as retweet } from "./retweet.svg";
+export { default as reply } from "./reply.svg";
+export { default as like } from "./like.svg";
+export { default as home } from "./home.svg";
+export { default as bell } from "./bell.svg";
+export { default as options } from "./options.svg";
+export { default as mobile } from "./mobile.svg";
+export { default as pc } from "./pc.svg";
+export { default as tablet } from "./tablet.svg";
+export { default as profile } from "./profile.svg";
+export { default as search } from "./search.svg";
