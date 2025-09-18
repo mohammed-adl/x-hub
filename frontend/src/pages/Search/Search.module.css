@@ -1,0 +1,76 @@
+.usersContainer {
+  padding: 0.8rem 1rem;
+}
+
+.headingBox {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  margin-bottom: 1rem;
+}
+
+.title {
+  font-size: 1.5rem;
+  font-weight: 800;
+  margin: 0;
+}
+
+.userCard {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5rem 0;
+  cursor: pointer;
+  border-radius: 0.8rem;
+}
+
+.profilePic {
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.userInfo {
+  flex-grow: 1;
+  margin-left: 0.8rem;
+  overflow: hidden;
+}
+
+.fullName {
+  flex: 1;
+  margin: 0;
+  font-weight: 700;
+  font-size: 1.1rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.userName {
+  font-size: 0.9rem;
+  color: var(--color-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.followButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.4rem 1rem;
+  font-size: 0.9rem;
+  font-weight: 700;
+  background-color: #1d9bf0;
+  color: #fff;
+  border: none;
+  border-radius: 9999px;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background-color 0.15s ease-in-out;
+}
+
+.followButton:hover {
+  background-color: #1a8cd8;
+}
