@@ -18,11 +18,14 @@ export default function TimeLine() {
   } = useInfiniteQuery({
     queryKey: ["tweets"],
     queryFn: async ({ pageParam = 0 }) => {
-      return await handleGetTimeLine({ limit: 20, cursor: pageParam });
+      try {
+        return await handleGetTimeLine({ limit: 20, cursor: pageParam });
+      } catch (error) {
+        throw error;
+      }
     },
-    getNextPageParam: (lastPage) => {
-      return lastPage?.nextCursor;
-    },
+    getNextPageParam: (lastPage) => lastPage?.nextCursor,
+    retry: 1,
   });
   const tweets = data?.pages?.flatMap((page) => page.tweets);
 
