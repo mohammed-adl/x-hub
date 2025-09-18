@@ -40,8 +40,8 @@ export default function AppRoutes() {
           <Route path="/tweet/:id" element={<Tweet />} />
           <Route path="/profile/edit" element={<EditProfile />} />
           <Route path="/:username" element={<Profile />} />
-          {/* <Route path="/:username/following" element={<Following />} />
-          <Route path="/:username/followers" element={<Followers />} /> */}
+          <Route path="/:username/following" element={<Following />} />
+          <Route path="/:username/followers" element={<Followers />} />
         </Route>
       </Route>
 

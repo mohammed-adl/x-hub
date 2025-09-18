@@ -1,0 +1,43 @@
+.followHeader {
+  border-bottom: 1px solid var(--color-secondary);
+  padding: 10px 13px;
+}
+
+.userInfo {
+  display: flex;
+  gap: 12px;
+}
+
+.userMeta {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.fullName {
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.userName {
+  font-size: 14px;
+  color: var(--color-secondary);
+}
+
+.followNav {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 12px;
+}
+
+.navButton {
+  flex: 1;
+  padding: 14px 0;
+  text-align: center;
+  text-decoration: none;
+}
+
+.navButton:hover {
+  background-color: #16181c;
+}

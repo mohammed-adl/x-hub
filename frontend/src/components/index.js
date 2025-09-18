@@ -6,5 +6,5 @@ export { default as Navbar } from "./Navbar/Navbar.jsx";
 export { default as ExploreBar } from "./ExploreBar/ExploreBar.jsx";
 export { default as SplashWrapper } from "./SplashWrapper.jsx";
 export { default as ToasterProvider } from "./ToasterProvider.jsx";
-// export { default as FollowHeader } from "./FollowHeader/FollowHeader.jsx";
-// export { default as FollowCard } from "./FollowCard/FollowCard.jsx";
+export { default as FollowHeader } from "./FollowHeader/FollowHeader.jsx";
+export { default as FollowCard } from "./FollowCard/FollowCard.jsx";
