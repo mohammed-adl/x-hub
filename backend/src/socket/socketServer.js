@@ -1,6 +1,6 @@
 import { Server } from "socket.io";
 import { socketAuthMiddleware } from "./socketAuth.js";
-// import { registerSocketHandlers } from "./socketHandlers.js";
+import { registerSocketHandlers } from "./socketHandlers.js";
 
 const ORIGIN = process.env.ORIGIN || "http://localhost:5173";
 
@@ -17,9 +17,9 @@ export function setupSocket(server) {
 
   io.use(socketAuthMiddleware);
 
-  // io.on("connection", (socket) => {
-  //   registerSocketHandlers(socket);
-  // });
+  io.on("connection", (socket) => {
+    registerSocketHandlers(socket);
+  });
 
   return io;
 }
