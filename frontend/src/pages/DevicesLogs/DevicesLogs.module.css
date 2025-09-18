@@ -1,0 +1,157 @@
+.devicesPageContainer {
+  display: flex;
+  justify-content: center;
+  min-height: 100vh;
+  padding-top: 0.06rem;
+  background-color: #000;
+  color: #fff;
+}
+
+.contentWrapper {
+  width: 100%;
+  max-width: 42rem;
+}
+
+.headingBox {
+  display: flex;
+  padding: 0;
+  border: none;
+}
+
+.heading {
+  font-size: 1.5rem;
+  font-weight: 700;
+  padding-bottom: 1rem;
+}
+
+.deviceList {
+  display: grid;
+  gap: 1rem;
+}
+
+.deviceCard {
+  display: block;
+  border: 0.06rem solid #374151;
+  border-radius: 0.5rem;
+  color: #fff;
+}
+
+.deviceCardContent {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+}
+
+.deviceIcon {
+  width: 1.88rem;
+  height: 1.88rem;
+  border-radius: 0.5rem;
+  object-fit: contain;
+}
+
+.deviceInfo {
+  flex: 1;
+}
+
+.deviceName {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+}
+
+.signedin {
+  color: #fff;
+}
+
+.deviceLocation {
+  font-size: 1rem;
+  margin-bottom: 0.38rem;
+  color: var();
+}
+
+.deviceCreatedAt {
+  font-size: 1rem;
+  color: var(--color-secondary);
+}
+
+.currentDeviceLabel {
+  font-size: 1rem;
+  color: #ef4444;
+}
+
+.logoutButton {
+  cursor: pointer;
+  border-radius: 9999px;
+  border: 0.06rem solid var(--color-button);
+  background-color: transparent;
+  color: var(--color-button);
+  padding: 0.5rem 1rem;
+  font-weight: 500;
+  transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
+}
+
+.logoutButton:hover {
+  background-color: #7f1d1d;
+  color: #fff;
+}
+
+.logoutAllContainer {
+  margin-top: 2rem;
+  text-align: center;
+}
+
+.logoutAllButton {
+  cursor: pointer;
+  border: none;
+  border-radius: 9999px;
+  background-color: var(--color-button);
+  color: #fff;
+  padding: 0.63rem 2rem;
+  font-weight: 600;
+  width: 100%;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.logoutAllButton:hover {
+  background-color: #b91c1c;
+}
+
+@media (max-width: 768px) {
+  .contentWrapper {
+    padding: 1rem;
+  }
+
+  .deviceCard {
+    padding: 0.75rem;
+  }
+
+  .deviceCardContent {
+    gap: 0.5rem;
+  }
+
+  .deviceIcon {
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+
+  .deviceName {
+    font-size: 0.9rem;
+  }
+
+  .deviceLocation,
+  .deviceCreatedAt,
+  .currentDeviceLabel {
+    font-size: 0.85rem;
+  }
+
+  .deviceList {
+    gap: 0.75rem;
+  }
+}
+
+@media (min-width: 64rem) {
+  .devicesPageContainer {
+    padding: 2rem;
+  }
+}
