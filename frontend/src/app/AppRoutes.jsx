@@ -6,14 +6,14 @@ import {
   SignUp,
   LogIn,
   ResetPassword,
-  // Notifications,
-  // Profile,
+  Notifications,
+  Profile,
   // Following,
   // Followers,
-  // Tweet,
-  // EditProfile,
-  // DevicesLogs,
-  // Search,
+  Tweet,
+  EditProfile,
+  DevicesLogs,
+  Search,
 } from "../pages/index.js";
 
 import {
@@ -38,9 +38,9 @@ export default function AppRoutes() {
           <Route path="/search" element={<Search />} />
           <Route path="/devices" element={<DevicesLogs />} />
           <Route path="/tweet/:id" element={<Tweet />} />
-          {/* <Route path="/profile/edit" element={<EditProfile />} />
+          <Route path="/profile/edit" element={<EditProfile />} />
           <Route path="/:username" element={<Profile />} />
-          <Route path="/:username/following" element={<Following />} />
+          {/* <Route path="/:username/following" element={<Following />} />
           <Route path="/:username/followers" element={<Followers />} /> */}
         </Route>
       </Route>
