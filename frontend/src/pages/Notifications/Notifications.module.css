@@ -1,0 +1,91 @@
+.headingBox {
+  display: flex;
+  margin-left: 8px;
+}
+
+.heading {
+  font-size: 20px;
+  font-weight: 800;
+  padding: 16px;
+  border-bottom: 1px solid var(--border-color);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.notificationBox {
+  display: flex;
+  align-items: flex-start;
+  padding: 15px;
+
+  gap: 12px;
+  transition: background 0.2s;
+  flex-direction: row;
+}
+
+.profilePicture {
+  width: 40px;
+  height: 40px;
+  background-color: #555;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.notificationContent {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  flex: 1;
+}
+
+.notificationHeader {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.notificationText {
+  font-size: 16px;
+  line-height: 1.6;
+  color: #e7e9ea;
+}
+
+.eventDate {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--color-secondary);
+  margin-left: auto;
+  white-space: nowrap;
+}
+
+.tweetPlaceholder {
+  padding: 12px;
+  background-color: #16181c;
+  border-radius: 12px;
+  border: 1px solid #2f3336;
+  color: #e7e9ea;
+  font-size: 14px;
+}
+
+.sender {
+  color: #b8bcc0;
+}
+
+.tweetText {
+  font-size: 15px;
+  color: #8899a6;
+  margin-top: 4px;
+  margin-bottom: 6px;
+}
+
+.unViewedBox {
+  background-color: rgba(113, 118, 123, 0.2);
+}
+
+.tweetPlaceholder,
+.tweetText,
+.notificationText {
+  white-space: normal;
+  word-break: break-word;
+  overflow-wrap: anywhere;
+}
