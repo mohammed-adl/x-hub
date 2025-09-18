@@ -3,7 +3,6 @@ class ApiError extends Error {
     super(message);
     this.status = status;
     this.name = this.constructor.name;
-    this.isOpetational = true;
     Error.captureStackTrace(this, this.constructor);
   }
 }
