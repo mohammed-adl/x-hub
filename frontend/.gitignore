@@ -1,0 +1,16 @@
+# Environment
+.env
+.env.local
+
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+
+# Logs
+*.log
+
+# Editor junk
+.vscode/
+.DS_Store
