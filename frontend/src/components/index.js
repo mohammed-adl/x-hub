@@ -1,4 +1,4 @@
-// export { default as MainLayout } from "./MainLayout/MainLayout.jsx";
+export { default as MainLayout } from "./MainLayout/MainLayout.jsx";
 export { default as PublicRoute } from "./PublicRoute.jsx";
 export { default as ProtectedRoute } from "./ProtectedRoute.jsx";
 export { default as TweetCard } from "./TweetCard/TweetCard.jsx";

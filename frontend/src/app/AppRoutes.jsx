@@ -17,7 +17,7 @@ import {
 } from "../pages/index.js";
 
 import {
-  // MainLayout,
+  MainLayout,
   PublicRoute,
   ProtectedRoute,
 } from "../components/index.js";
@@ -32,11 +32,10 @@ export default function AppRoutes() {
         <Route path="/reset-password" element={<ResetPassword />} />
       </Route>
       <Route element={<ProtectedRoute />}>
-        {/* <Route element={<MainLayout />}> */}
+        <Route element={<MainLayout />}>
         <Route path="/home" element={<Home />} />
         <Route path="/notifications" element={<Notifications />} />
         <Route path="/search" element={<Search />} />
-
         {/* <Route path="/tweet/:id" element={<Tweet />} />
           <Route path="/profile/edit" element={<EditProfile />} />
           <Route path="/devices" element={<DevicesLogs />} />
