@@ -6,3 +6,181 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+model User {
+  id                String    @id @default(uuid())
+  username          String?   @unique
+  name              String
+  email             String    @unique
+  password          String
+  bio               String?
+  hasNotifications  Boolean   @default(false)
+  profilePicture    String?
+  coverImage        String?
+  isVerified        Boolean   @default(false)
+  isProtected       Boolean   @default(false)
+  passcode          String?
+  passcodeExpiresAt DateTime?
+  sentWelcome       Boolean   @default(false)
+  createdAt         DateTime  @default(now())
+
+  refreshTokens RefreshToken[]
+  tweets        Tweet[]
+
+  following Follows[] @relation("Following")
+  followers Follows[] @relation("Followers")
+
+  notificationsFrom Notification[] @relation("NotificationsFrom")
+  notificationsTo   Notification[] @relation("NotificationsTo")
+
+  likes   Like[]
+  Session Session[]
+
+  @@map("users")
+}
+
+model Tweet {
+  id        String   @id
+  content   String?
+  createdAt DateTime @default(now())
+
+  user     User   @relation(fields: [authorId], references: [id])
+  authorId String
+
+  tweetMedia    TweetMedia[]
+  notifications Notification[] @relation("TweetNotifications")
+  likes         Like[]
+  retweets      Tweet[]        @relation("TweetRetweets")
+  replies       Tweet[]        @relation("TweetReplies")
+
+  originalTweet   Tweet?  @relation("TweetRetweets", fields: [originalTweetId], references: [id], onDelete: Cascade)
+  originalTweetId String?
+
+  parentTweet   Tweet?  @relation("TweetReplies", fields: [parentTweetId], references: [id], onDelete: Cascade)
+  parentTweetId String?
+
+  @@index([authorId])
+  @@map("tweets")
+}
+
+model TweetMedia {
+  id        String    @id @default(uuid())
+  path      String
+  type      MediaType
+  createdAt DateTime  @default(now())
+
+  tweet   Tweet  @relation(fields: [tweetId], references: [id], onDelete: Cascade)
+  tweetId String
+
+  @@map("tweet_media")
+}
+
+model Follows {
+  id          String   @id @default(uuid())
+  createdAt   DateTime @default(now())
+  following   User     @relation("Following", fields: [followingId], references: [id])
+  followingId String
+
+  follower   User   @relation("Followers", fields: [followerId], references: [id])
+  followerId String
+
+  @@unique([followerId, followingId])
+  @@index([followerId, followingId])
+  @@map("follows")
+}
+
+model Like {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+
+  user   User   @relation(fields: [userId], references: [id])
+  userId String
+
+  tweet   Tweet?  @relation(fields: [tweetId], references: [id], onDelete: Cascade)
+  tweetId String?
+
+  @@unique([userId, tweetId])
+  @@index([userId, tweetId])
+  @@map("likes")
+}
+
+model Notification {
+  id        String           @id @default(uuid())
+  type      NotificationType
+  isViewed  Boolean          @default(false)
+  isSent    Boolean          @default(false)
+  createdAt DateTime         @default(now())
+
+  fromUser   User   @relation("NotificationsFrom", fields: [fromUserId], references: [id])
+  fromUserId String
+
+  toUser   User   @relation("NotificationsTo", fields: [toUserId], references: [id])
+  toUserId String
+
+  tweet   Tweet?  @relation("TweetNotifications", fields: [tweetId], references: [id], onDelete: Cascade)
+  tweetId String?
+
+  @@unique([tweetId, type])
+  @@unique([fromUserId, tweetId, type])
+  @@index([isViewed])
+  @@index([type, fromUserId, toUserId])
+  @@map("notifications")
+}
+
+model Session {
+  id        String   @id @default(uuid())
+  token     String
+  ip        String?
+  device    String?
+  createdAt DateTime @default(now())
+
+  user   User   @relation(fields: [userId], references: [id])
+  userId String
+
+  @@index([userId])
+  @@map("sessions")
+}
+
+model RefreshToken {
+  id        String   @id @default(uuid())
+  token     String
+  ip        String?
+  device    String?
+  socketId  String?
+  createdAt DateTime @default(now())
+  expiresAt DateTime
+
+  user   User   @relation(fields: [userId], references: [id])
+  userId String
+
+  refreshTokenSockets RefreshTokenSocket[]
+
+  @@index([userId])
+  @@map("refresh_tokens")
+}
+
+model RefreshTokenSocket {
+  id             String   @id @default(uuid())
+  refreshTokenId String
+  socketId       String
+  createdAt      DateTime @default(now())
+
+  refreshToken RefreshToken @relation(fields: [refreshTokenId], references: [id], onDelete: Cascade)
+
+  @@index([refreshTokenId])
+  @@map("refresh_token_sockets")
+}
+
+enum NotificationType {
+  FOLLOW
+  LIKE
+  REPLY
+  MENTION
+  RETWEET
+  WELCOME
+}
+
+enum MediaType {
+  IMAGE
+  VIDEO
+}
