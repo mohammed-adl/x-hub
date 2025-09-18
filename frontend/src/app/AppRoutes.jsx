@@ -35,10 +35,11 @@ export default function AppRoutes() {
         {/* <Route element={<MainLayout />}> */}
         <Route path="/home" element={<Home />} />
         <Route path="/notifications" element={<Notifications />} />
+        <Route path="/search" element={<Search />} />
+
         {/* <Route path="/tweet/:id" element={<Tweet />} />
           <Route path="/profile/edit" element={<EditProfile />} />
           <Route path="/devices" element={<DevicesLogs />} />
-          <Route path="/search" element={<Search />} />
           <Route path="/:username" element={<Profile />} />
           <Route path="/:username/following" element={<Following />} />
           <Route path="/:username/followers" element={<Followers />} /> */}

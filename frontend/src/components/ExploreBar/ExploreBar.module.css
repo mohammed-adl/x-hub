@@ -1,0 +1,104 @@
+.exploreContainer {
+  padding-top: 10px;
+}
+
+.searchBar {
+  margin-bottom: 16px;
+}
+
+.searchBar input[type="search"] {
+  width: 100%;
+  height: 38px;
+  padding: 0 40px 0 12px;
+  font-size: 14px;
+  border: 1px solid var(--color-secondary);
+  border-radius: 9999px;
+  background-color: black;
+  outline: none;
+}
+
+.searchBar input[type="search"]::placeholder {
+  color: white;
+}
+
+.followingCard {
+  padding: 12px 16px;
+  border: 1px solid var(--color-secondary);
+  border-radius: 16px;
+  box-shadow: 0 0 10px rgb(15 20 25 / 0.05);
+}
+
+.followingBoxTitle {
+  font-size: 18px;
+  font-weight: 800;
+  margin-bottom: 12px;
+  color: white;
+}
+
+.userCard {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 0;
+  cursor: pointer;
+  border-radius: 12px;
+}
+
+.profilePic {
+  height: 48px;
+  width: 48px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  background-color: #ccc;
+}
+
+.userInfo {
+  flex-grow: 1;
+  margin-left: 12px;
+  overflow: hidden;
+}
+
+.fullName {
+  margin: 0;
+  overflow: hidden;
+  font-size: 14px;
+  font-weight: 700;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  flex: 1;
+}
+
+.userName {
+  color: var(--color-secondary);
+  font-size: 13px;
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.followButton {
+  padding: 6px 16px;
+  font-size: 14px;
+  font-weight: 700;
+  border-radius: 9999px;
+  border: none;
+  background-color: #1d9bf0;
+  color: #fff;
+  cursor: pointer;
+  transition: background-color 0.15s ease-in-out;
+}
+
+.followButton:hover {
+  background-color: #1a8cd8;
+}
+
+.searchWrapper input {
+  width: 100%;
+  height: 36px;
+  font-size: 14px;
+  box-sizing: border-box;
+  background: url("../../assets/icons/search.svg") no-repeat 12px center;
+  background-size: 16px 16px;
+  text-indent: 20px;
+}

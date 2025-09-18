@@ -2,8 +2,8 @@
 export { default as PublicRoute } from "./PublicRoute.jsx";
 export { default as ProtectedRoute } from "./ProtectedRoute.jsx";
 export { default as TweetCard } from "./TweetCard/TweetCard.jsx";
-// export { default as Navbar } from "./Navbar/Navbar.jsx";
-// export { default as ExploreBar } from "./ExploreBar/ExploreBar.jsx";
+export { default as Navbar } from "./Navbar/Navbar.jsx";
+export { default as ExploreBar } from "./ExploreBar/ExploreBar.jsx";
 export { default as SplashWrapper } from "./SplashWrapper.jsx";
 // export { default as ToasterProvider } from "./ToasterProvider.jsx";
 // export { default as FollowHeader } from "./FollowHeader/FollowHeader.jsx";
