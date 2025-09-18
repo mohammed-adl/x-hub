@@ -1,0 +1,315 @@
+.tweetCard {
+  display: flex;
+  flex-direction: column;
+  padding: 0 1rem;
+  justify-content: center;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.tweetWrapper {
+  display: flex;
+}
+
+.tweetAvatar {
+  margin: 0.625rem 0.125rem 0 0;
+  flex-shrink: 0;
+  height: fit-content;
+  cursor: pointer;
+}
+
+.tweetBox {
+  display: flex;
+  flex-direction: column;
+  padding: 0.5rem;
+  width: 100%;
+  gap: 0.75rem;
+}
+
+.mediaContainer {
+  display: grid;
+  gap: 0.375rem;
+  margin-top: 0.625rem;
+}
+
+.mediaCount1 {
+  grid-template-columns: 1fr;
+  grid-template-rows: 1fr;
+}
+.mediaCount1 .media {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  border-radius: 0.875rem;
+}
+
+.mediaCount2 {
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr;
+}
+.mediaCount2 .media {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  border-radius: 0.875rem;
+}
+
+.mediaCount3 {
+  grid-template-columns: 2fr 1fr;
+  grid-template-rows: 1fr 1fr;
+}
+.mediaCount3 .media:nth-child(1) {
+  grid-row: 1 / span 2;
+  grid-column: 1 / 2;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 0.875rem 0 0 0.875rem;
+}
+.mediaCount3 .media:nth-child(2) {
+  grid-row: 1 / 2;
+  grid-column: 2 / 3;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 0 0.875rem 0 0;
+}
+.mediaCount3 .media:nth-child(3) {
+  grid-row: 2 / 3;
+  grid-column: 2 / 3;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 0 0 0.875rem 0;
+}
+
+/* 4 images: 2x2 grid */
+.mediaCount4 {
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+}
+.mediaCount4 .media {
+  width: 100%;
+  height: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+}
+.mediaCount4 .media:nth-child(1) {
+  border-radius: 0.875rem 0 0 0;
+}
+.mediaCount4 .media:nth-child(2) {
+  border-radius: 0 0.875rem 0 0;
+}
+.mediaCount4 .media:nth-child(3) {
+  border-radius: 0 0 0 0.875rem;
+}
+.mediaCount4 .media:nth-child(4) {
+  border-radius: 0 0 0.875rem 0;
+}
+
+.headerWithIcon {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  width: 100%;
+  /* position: relative; */
+}
+
+.retweetSection {
+  flex: 1;
+}
+
+.retweetInfo {
+  font-size: 0.8125rem;
+  font-weight: 500;
+  display: flex;
+  gap: 0.375rem;
+  color: var(--color-secondary);
+  margin-left: 2.625rem;
+}
+
+.retweetInfo img {
+  margin-top: 0.125rem;
+  width: 1rem;
+  height: 1rem;
+}
+
+.tweetContent {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.tweetHeader {
+  display: flex;
+  gap: 0.375rem;
+  font-size: 0.875rem;
+}
+
+.authorData {
+  display: flex;
+  gap: 0.4375rem;
+}
+
+.optionsIcon {
+  width: 1rem;
+  height: 1rem;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+}
+
+.tweetAuthor {
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.tweetUsername,
+.tweetDate,
+.tweetDot {
+  color: var(--color-secondary);
+  font-weight: 600;
+}
+
+.tweetText {
+  margin-top: 0.75rem;
+  font-size: 0.9375rem;
+  white-space: pre-wrap;
+}
+
+.tweetFooter {
+  display: flex;
+  justify-content: space-between;
+  margin-left: -1.125rem;
+}
+
+.actionBox {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  font-size: 0.875rem;
+  margin-left: 0.75rem;
+  padding: 0.375rem;
+  border-radius: 9999px;
+  cursor: pointer;
+  transition: background-color 0.2s ease, color 0.2s ease;
+  color: var(--color-secondary);
+}
+
+.actionBox img {
+  width: 1.125rem;
+  height: 1.125rem;
+  filter: grayscale(100%);
+  transition: filter 0.2s ease, transform 0.2s ease;
+}
+
+.actionCount {
+  font-weight: 600;
+  font-size: 0.875rem;
+}
+
+.liked {
+  background-color: #fce7f0;
+  color: #e0245e;
+}
+
+.liked img {
+  filter: grayscale(0%) brightness(1.1);
+}
+
+.liked:hover {
+  background-color: #f9c7d7;
+  color: #e0245e;
+}
+
+.liked:hover img {
+  filter: grayscale(0%) brightness(1.1);
+  transform: scale(1.05);
+}
+
+.retweeted {
+  background-color: #d6f5e1;
+  color: #17bf63;
+}
+
+.retweeted img {
+  filter: grayscale(0%) brightness(1.1);
+}
+
+.retweeted:hover {
+  background-color: #b0deb8;
+  color: #17bf63;
+}
+
+.retweeted:hover img {
+  filter: grayscale(0%) brightness(1.1);
+  transform: scale(1.05);
+}
+
+@media (max-width: 600px) {
+  .tweetCard {
+    padding: 0 0.75rem;
+  }
+
+  .tweetAvatar {
+    margin: 0.5rem 0.25rem 0 0;
+  }
+
+  .tweetBox {
+    padding: 0rem;
+    gap: 0.5rem;
+  }
+
+  .retweetInfo {
+    font-size: 0.75rem;
+    margin-left: 2rem;
+  }
+
+  .tweetHeader {
+    font-size: 0.8125rem;
+    gap: 0.25rem;
+  }
+
+  .tweetText {
+    font-size: 0.9rem;
+    margin-top: 0.5rem;
+  }
+
+  .tweetFooter {
+    margin-left: -0.75rem;
+  }
+
+  .actionBox {
+    font-size: 0.8rem;
+    margin-left: 0.5rem;
+    padding: 0.25rem 0.375rem;
+    gap: 0.25rem;
+  }
+
+  .actionBox img {
+    width: 1rem;
+    height: 1rem;
+  }
+
+  .actionCount {
+    font-size: 0.8rem;
+  }
+}
+
+@media (max-width: 600px) {
+  .tweetCard {
+    padding: 0.7rem;
+  }
+
+  .tweetContent {
+    padding-left: 0.2rem;
+  }
+
+  .tweetBox {
+    margin-left: 0.7rem;
+  }
+
+  .tweetAvatar {
+    margin: 0.5rem 0.25rem 0 0;
+  }
+}
