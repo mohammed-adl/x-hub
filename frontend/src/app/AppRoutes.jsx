@@ -37,9 +37,8 @@ export default function AppRoutes() {
           <Route path="/notifications" element={<Notifications />} />
           <Route path="/search" element={<Search />} />
           <Route path="/devices" element={<DevicesLogs />} />
-
-          {/* <Route path="/tweet/:id" element={<Tweet />} />
-          <Route path="/profile/edit" element={<EditProfile />} />
+          <Route path="/tweet/:id" element={<Tweet />} />
+          {/* <Route path="/profile/edit" element={<EditProfile />} />
           <Route path="/:username" element={<Profile />} />
           <Route path="/:username/following" element={<Following />} />
           <Route path="/:username/followers" element={<Followers />} /> */}
