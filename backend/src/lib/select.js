@@ -7,7 +7,6 @@ export const userSelect = {
   coverImage: true,
   isVerified: true,
   isProtected: true,
-  tokenVersion: true,
   hasNotifications: true,
   sentWelcome: true,
   createdAt: true,
