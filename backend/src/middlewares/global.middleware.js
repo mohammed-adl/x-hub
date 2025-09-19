@@ -30,11 +30,9 @@ export const authLimiter = rateLimit({
 });
 
 export const registerMiddlewares = (app) => {
-  app.set("trust proxy", 1);
-
   app.use(helmet());
 
-  const allowedOrigins = [`${process.env.ORIGIN}`, "http://localhost:3000"];
+  const allowedOrigins = [`${process.env.ORIGIN}`, "http://localhost:5173"];
   app.use(
     cors({
       origin: (origin, callback) => {
@@ -46,6 +44,8 @@ export const registerMiddlewares = (app) => {
       credentials: true,
     })
   );
+
+  app.use("/uploads", express.static("uploads"));
 
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));

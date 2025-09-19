@@ -1,2 +1,2 @@
-export * from "./UserContext.js";
+export * from "./UserContext.jsx";
 export * from "./NotificationContext.jsx";

@@ -1,6 +1,6 @@
 import axios from "axios";
-import { ApiError } from "@/utils";
-import { authService } from "@/services";
+import { ApiError } from "../utils";
+import { authService } from "../services";
 import { socket, initSocketConnection } from "../socket";
 
 const API_URL = import.meta.VITE_API_URL || "http://localhost:3000/api/v1";
