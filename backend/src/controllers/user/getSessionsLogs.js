@@ -19,5 +19,7 @@ export const getSessionsLogs = asyncHandler(async (req, res) => {
 
   const safeSessions = sessions.map(({ token, ...rest }) => rest);
 
+  console.log(safeSessions);
+
   return success(res, { sessions: safeSessions });
 });

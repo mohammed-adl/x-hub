@@ -35,10 +35,6 @@ export const refreshToken = asyncHandler(async (req, res) => {
     where: { id: validToken.id },
   });
 
-  const user = await prisma.user.findUnique({
-    where: { id: payload.id },
-  });
-
   const newAccessToken = authService.generateAccessToken({
     id: payload.id,
   });

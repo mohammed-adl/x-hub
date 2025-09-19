@@ -47,6 +47,8 @@ export const logIn = asyncHandler(async (req, res) => {
     path,
   });
 
+  console.log("login", refreshTokenId);
+
   success(res, {
     token: accessToken,
     refreshTokenId,

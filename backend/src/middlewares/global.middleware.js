@@ -30,7 +30,11 @@ export const authLimiter = rateLimit({
 });
 
 export const registerMiddlewares = (app) => {
-  app.use(helmet());
+  app.use(
+    helmet({
+      crossOriginResourcePolicy: { policy: "cross-origin" },
+    })
+  );
 
   const allowedOrigins = [`${process.env.ORIGIN}`, "http://localhost:5173"];
   app.use(
