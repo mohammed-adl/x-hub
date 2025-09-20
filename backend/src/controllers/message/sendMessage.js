@@ -3,18 +3,19 @@ import { prisma, success, fail, messageSelect } from "../../lib/index.js";
 
 export const sendMessage = asyncHandler(async (req, res) => {
   const senderId = req.user.id;
-  const { receiverId, content } = req.body;
+  const partnerId = req.params.id;
+  const { content } = req.body;
 
-  const receiver = await prisma.user.findUnique({
-    where: { id: receiverId },
+  const partner = await prisma.user.findUnique({
+    where: { id: partnerId },
   });
-  if (!receiver) return fail(res, "Receiver not found", 400);
+  if (!partner) return fail(res, "Partner not found", 400);
 
   const newMessage = await prisma.message.create({
     data: {
       content,
       senderId,
-      receiverId,
+      receiverId: partnerId,
     },
     select: messageSelect,
   });
