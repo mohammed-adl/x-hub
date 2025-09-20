@@ -109,7 +109,7 @@ model Like {
 
 model Message {
   id        String   @id @default(uuid())
-  message   String
+  content   String
   isRead    Boolean  @default(false)
   createdAt DateTime @default(now())
 
