@@ -1,5 +1,5 @@
 import { io } from "../socket/index.js";
-import { prisma, notificationSelect } from "../lib/index.js";
+import { prisma, notificationSelect, userSelect } from "../lib/index.js";
 
 const socketService = {
   async createNotification(type, fromUserId, toUserId, tweetId = null) {
@@ -23,6 +23,18 @@ const socketService = {
     io.to(userId).emit("newNotification", payload);
 
     console.log("Emitted newNotification to user:", userId);
+  },
+
+  async alertMessage(senderId, receiverId, message) {
+    const sender = await prisma.user.findUnique({
+      where: { id: senderId },
+      select: userSelect,
+    });
+
+    io.to(receiverId).emit("newMessage", {
+      sender,
+      message,
+    });
   },
 };
 

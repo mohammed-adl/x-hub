@@ -1,24 +1,28 @@
 import asyncHandler from "express-async-handler";
 import { prisma, success, fail, messageSelect } from "../../lib/index.js";
 
+import { socketService } from "../../services/index.js";
+
 export const sendMessage = asyncHandler(async (req, res) => {
   const senderId = req.user.id;
-  const partnerId = req.params.id;
+  const receiverId = req.params.id;
   const { content } = req.body;
 
-  const partner = await prisma.user.findUnique({
-    where: { id: partnerId },
+  const receiver = await prisma.user.findUnique({
+    where: { id: receiverId },
   });
-  if (!partner) return fail(res, "Partner not found", 400);
+  if (!receiver) return fail(res, "Receiver not found", 400);
 
-  const newMessage = await prisma.message.create({
+  const message = await prisma.message.create({
     data: {
       content,
       senderId,
-      receiverId: partnerId,
+      receiverId,
     },
     select: messageSelect,
   });
 
-  return success(res, { message: newMessage }, 201);
+  await socketService.alertMessage(senderId, receiverId, message);
+
+  return success(res, { message }, 201);
 });

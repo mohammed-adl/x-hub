@@ -1,6 +1,9 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { UserProvider } from "../contexts/UserContext.jsx";
-import { NotificationProvider } from "../contexts/NotificationContext.jsx";
+import {
+  UserProvider,
+  MessageProvider,
+  NotificationProvider,
+} from "../contexts";
 
 const queryClient = new QueryClient();
 
@@ -8,7 +11,9 @@ export default function Providers({ children }) {
   return (
     <QueryClientProvider client={queryClient}>
       <UserProvider>
-        <NotificationProvider>{children}</NotificationProvider>
+        <MessageProvider>
+          <NotificationProvider>{children}</NotificationProvider>
+        </MessageProvider>
       </UserProvider>
     </QueryClientProvider>
   );
