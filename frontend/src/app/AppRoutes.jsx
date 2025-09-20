@@ -14,6 +14,7 @@ import {
   EditProfile,
   DevicesLogs,
   Search,
+  Messages,
 } from "../pages/index.js";
 
 import {
@@ -42,6 +43,7 @@ export default function AppRoutes() {
           <Route path="/:username" element={<Profile />} />
           <Route path="/:username/following" element={<Following />} />
           <Route path="/:username/followers" element={<Followers />} />
+          <Route path="/messages" element={<Messages />} />
         </Route>
       </Route>
 

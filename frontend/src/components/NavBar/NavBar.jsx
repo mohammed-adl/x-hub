@@ -8,7 +8,7 @@ import UserDropdown from "./UserDropdown.jsx";
 import LinkBox from "./LinkBox.jsx";
 import { Avatar } from "../ui";
 import XLogo from "../../assets/XLogo.svg";
-import { home, bell, profile } from "../../assets/icons";
+import { home, bell, profile, message } from "../../assets/icons";
 import styles from "./NavBar.module.css";
 
 export default function NavBar() {
@@ -43,6 +43,7 @@ export default function NavBar() {
       <ul className={styles.linksContainer}>
         <LinkBox value="Home" src={home} navLink="/home" />
         <LinkBox value="Profile" src={profile} navLink={`/${username}`} />
+        <LinkBox value="Messages" src={message} navLink="/messages" />
         <LinkBox
           value="Notifications"
           src={bell}

@@ -11,3 +11,4 @@ export { default as Tweet } from "./Tweet/Tweet.jsx";
 export { default as EditProfile } from "./EditProfile/EditProfile.jsx";
 export { default as DevicesLogs } from "./DevicesLogs/DevicesLogs.jsx";
 export { default as Search } from "./Search/Search.jsx";
+export { default as Messages } from "./Messages/Messages.jsx";

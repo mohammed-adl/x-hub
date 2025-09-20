@@ -10,3 +10,5 @@ export { default as pc } from "./pc.svg";
 export { default as tablet } from "./tablet.svg";
 export { default as profile } from "./profile.svg";
 export { default as search } from "./search.svg";
+export { default as message } from "./message.svg";
+export { default as send } from "./send.svg";
