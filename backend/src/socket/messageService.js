@@ -1,14 +1,11 @@
-import { prisma, userSelect } from "../lib/index.js";
+import { prisma } from "../lib/index.js";
 
-export async function handleMessages(io, socket) {
-  // const sender = await prisma.user.findUnique({
-  //   where: { id: socket.userId },
-  //   select: userSelect,
-  // });
-  // socket.on("newUserMessage", (receiverId, message) => {
-  //   io.to(receiverId).emit("newMessage", {
-  //     sender,
-  //     message,
-  //   });
-  // });
+export function handleMessages(io, socket) {
+  socket.on("typing", ({ receiverId, chatId }) => {
+    socket.to(receiverId).emit("typing", { chatId });
+  });
+
+  socket.on("stopTyping", ({ receiverId, chatId }) => {
+    socket.to(receiverId).emit("stopTyping", { chatId });
+  });
 }
