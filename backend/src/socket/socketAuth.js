@@ -7,8 +7,10 @@ export function socketAuthMiddleware(socket, next) {
   try {
     const userId = validateBodyToken(token);
     if (!userId) return next(new Error("Unauthorized"));
+
     socket.userId = userId;
     socket.join(userId);
+
     next();
   } catch (err) {
     next(new Error("Unauthorized"));

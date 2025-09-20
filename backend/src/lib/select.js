@@ -166,3 +166,24 @@ export const sessionSelect = {
   createdAt: true,
   token: true,
 };
+
+export const messageSelect = {
+  id: true,
+  content: true,
+  isRead: true,
+  createdAt: true,
+  sender: {
+    select: {
+      id: true,
+      name: true,
+      username: true,
+    },
+  },
+  receiver: {
+    select: {
+      id: true,
+      name: true,
+      username: true,
+    },
+  },
+};
