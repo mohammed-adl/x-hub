@@ -37,3 +37,25 @@ export function attachFullUrls(input) {
     return mapUser(input);
   }
 }
+
+export function attachChatUrls(messages) {
+  return messages.map((msg) => ({
+    ...msg,
+    sender: msg.sender
+      ? {
+          ...msg.sender,
+          profilePicture: msg.sender.profilePicture
+            ? getFileUrl(msg.sender.profilePicture)
+            : null,
+        }
+      : null,
+    receiver: msg.receiver
+      ? {
+          ...msg.receiver,
+          profilePicture: msg.receiver.profilePicture
+            ? getFileUrl(msg.receiver.profilePicture)
+            : null,
+        }
+      : null,
+  }));
+}

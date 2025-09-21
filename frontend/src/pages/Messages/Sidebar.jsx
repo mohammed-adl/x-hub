@@ -4,7 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 
 import { useUser, useMessage } from "../../contexts";
 import { generateAvatar } from "../../utils";
-import { Spinner, ErrorMessage } from "../../components/ui";
+import { Spinner, ErrorMessage, Avatar } from "../../components/ui";
 import { handleGetAllConvos } from "../../fetchers";
 import styles from "./Messages.module.css";
 
@@ -70,10 +70,10 @@ export default function Sidebar() {
               }`}
               onClick={() => handleSelect(id)}
             >
-              <img
+              <Avatar
                 src={partner?.profilePicture || generateAvatar(partner?.name)}
                 alt={partner?.name}
-                className={styles.avatar}
+                size={37}
               />
               <div className={styles.info}>
                 <div className={styles.name}>{partner?.name}</div>
