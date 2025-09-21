@@ -5,7 +5,7 @@ import { handleGetChat, handleSendMessage } from "../../fetchers";
 import { send } from "../../assets/icons";
 import MessagesList from "./MessagesList";
 import { Spinner, ErrorMessage } from "../../components/ui";
-import { formatTimeAgo } from "../../utils";
+import { useAddMessage } from "../../hooks/useAddMessage";
 import styles from "./Messages.module.css";
 
 export default function ChatArea() {
@@ -14,6 +14,7 @@ export default function ChatArea() {
   const chatId = selectedChat?.id;
   const partnerId = selectedChat?.partnerId;
   const typingTimeoutRef = useRef(null);
+  const { addMessage } = useAddMessage(chatId);
 
   const {
     data,
@@ -43,14 +44,18 @@ export default function ChatArea() {
 
   const handleSend = async () => {
     if (!newMessage.trim()) return;
-    try {
-      await handleSendMessage(chatId, partnerId, newMessage);
-    } catch (err) {
-      console.log(err);
-    }
+
+    const messageToSend = newMessage;
     setNewMessage("");
     setIsTyping(false);
     if (typingTimeoutRef.current) clearTimeout(typingTimeoutRef.current);
+
+    try {
+      await handleSendMessage(chatId, partnerId, messageToSend);
+      addMessage(messageToSend);
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   if (isLoading) return <Spinner />;
