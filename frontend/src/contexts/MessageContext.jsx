@@ -5,7 +5,7 @@ const MessageContext = createContext();
 
 export function MessageProvider({ children }) {
   const [isTyping, setIsTyping] = useState(false);
-  const [isPartnerTyping, setIsPartnerTyping] = useState(new Set());
+  const [isPartnerTyping, setIsPartnerTyping] = useState(false);
   const [selectedChat, setSelectedChat] = useState({});
 
   useEffect(() => {
@@ -33,16 +33,13 @@ export function MessageProvider({ children }) {
 
   useEffect(() => {
     const handlePartnerTyping = ({ chatId }) => {
-      console.log("partnerTyping", chatId);
-      setIsPartnerTyping((prev) => new Set(prev).add(chatId));
+      if (chatId !== selectedChat?.id) return;
+      setIsPartnerTyping(true);
     };
 
     const handlePartnerStopTyping = ({ chatId }) => {
-      setIsPartnerTyping((prev) => {
-        const updated = new Set(prev);
-        updated.delete(chatId); // remove instead of add
-        return updated;
-      });
+      if (chatId !== selectedChat?.id) return;
+      setIsPartnerTyping(false);
     };
 
     socket.on("partnerTyping", handlePartnerTyping);
@@ -52,18 +49,20 @@ export function MessageProvider({ children }) {
       socket.off("partnerTyping", handlePartnerTyping);
       socket.off("partnerStopTyping", handlePartnerStopTyping);
     };
-  }, []);
-
-  const value = {
-    isTyping,
-    setIsTyping,
-    selectedChat,
-    setSelectedChat,
-    isPartnerTyping,
-  };
+  }, [selectedChat?.id]);
 
   return (
-    <MessageContext.Provider value={value}>{children}</MessageContext.Provider>
+    <MessageContext.Provider
+      value={{
+        isTyping,
+        setIsTyping,
+        selectedChat,
+        setSelectedChat,
+        isPartnerTyping,
+      }}
+    >
+      {children}
+    </MessageContext.Provider>
   );
 }
 

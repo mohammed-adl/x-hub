@@ -1,6 +1,5 @@
 import { useUser } from "../../contexts";
-import { generateAvatar } from "../../utils";
-
+import { generateAvatar, formatTimeAgo } from "../../utils";
 import { Avatar } from "../../components/ui";
 import styles from "./Messages.module.css";
 
@@ -11,12 +10,12 @@ export default function MessagesList({
 }) {
   const { user } = useUser();
 
-  console.log(messages);
-
   return (
     <>
       {messages.map((msg, index) => {
         const isMe = msg.sender.id === user.id;
+        const isLast = index === 0;
+
         return (
           <div
             key={`${msg.id}-${index}`}
@@ -34,24 +33,11 @@ export default function MessagesList({
             <div className={styles.textContainer}>
               <div className={styles.text}>{msg.content}</div>
               <div className={styles.timestamp}>
-                {new Date(msg.createdAt).toLocaleTimeString()}
+                {formatTimeAgo(msg.createdAt)}
               </div>
-              {isPartnerTyping.has(selectedChat?.id) &&
-                index === messages.length - 1 && (
-                  <div
-                    style={{
-                      backgroundColor: "red",
-                      color: "white",
-                      fontWeight: "bold",
-                      padding: "16px",
-                      position: "sticky",
-                      top: 0,
-                      zIndex: 9999,
-                    }}
-                  >
-                    typing...
-                  </div>
-                )}
+              {isPartnerTyping && isLast && (
+                <div className={styles.typingIndicator}>typing...</div>
+              )}
             </div>
           </div>
         );
