@@ -122,8 +122,8 @@ model Message {
   receiver   User   @relation("ReceivedMessages", fields: [receiverId], references: [id])
   receiverId String
 
-  chat   Chat   @relation(fields: [chatId], references: [id])
-  chatId String
+  chat   Chat?   @relation(fields: [chatId], references: [id], onDelete: Cascade)
+  chatId String?
 
   @@index([receiverId, createdAt])
   @@index([senderId, createdAt])
@@ -134,6 +134,7 @@ model Message {
 model Chat {
   id        String   @id @default(uuid())
   createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
 
   user1   User   @relation("User1Chats", fields: [user1Id], references: [id])
   user1Id String

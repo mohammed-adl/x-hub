@@ -1,11 +1,11 @@
-import { prisma } from "../lib/index.js";
-
-export function handleMessages(io, socket) {
-  socket.on("typing", ({ receiverId, chatId }) => {
-    socket.to(receiverId).emit("typing", { chatId });
+export function handleMessages(socket) {
+  socket.on("typing", ({ chatId, partnerId }) => {
+    if (!partnerId) return;
+    socket.to(partnerId).emit("partnerTyping", { chatId });
   });
 
-  socket.on("stopTyping", ({ receiverId, chatId }) => {
-    socket.to(receiverId).emit("stopTyping", { chatId });
+  socket.on("stopTyping", ({ chatId, partnerId }) => {
+    if (!partnerId) return;
+    socket.to(partnerId).emit("partnerStopTyping", { chatId });
   });
 }

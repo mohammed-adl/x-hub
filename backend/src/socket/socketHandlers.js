@@ -5,10 +5,12 @@ import { prisma } from "../lib/index.js";
 export async function handleConnection(socket) {
   socket.on("registerToken", (tokenId) => registerToken(tokenId, socket));
 
-  handleMessages(io, socket);
+  handleMessages(socket);
 
   socket.on("disconnect", async () => {
-    console.log(`User ${socket.userId} disconnected from socket ${socket.id}`);
+    console.log(
+      `User ${socket.userId} disconnected from room ${socket.socketId}`
+    );
     try {
       await prisma.refreshToken.updateMany({
         where: { socketId: socket.id },

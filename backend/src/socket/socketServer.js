@@ -18,6 +18,7 @@ export function setupSocket(server) {
   io.use(socketAuthMiddleware);
 
   io.on("connection", (socket) => {
+    console.log(`User ${socket.userId} connected to room ${socket.userId}`);
     handleConnection(socket);
   });
 

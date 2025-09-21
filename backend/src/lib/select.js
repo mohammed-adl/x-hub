@@ -177,6 +177,7 @@ export const messageSelect = {
       id: true,
       name: true,
       username: true,
+      profilePicture: true,
     },
   },
   receiver: {
@@ -184,6 +185,7 @@ export const messageSelect = {
       id: true,
       name: true,
       username: true,
+      profilePicture: true,
     },
   },
 };

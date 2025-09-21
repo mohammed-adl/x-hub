@@ -9,7 +9,7 @@ router.use(verifyToken);
 
 router.get("/", messageController.getAllConversations);
 
-router.get("/:partnerId", messageController.getChat);
+router.get("/:chatId", messageController.getChat);
 
 router.post("/:id", messageController.sendMessage);
 

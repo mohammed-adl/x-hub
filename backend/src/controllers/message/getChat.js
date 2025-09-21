@@ -2,20 +2,13 @@ import asyncHandler from "express-async-handler";
 import { prisma, success, fail, messageSelect } from "../../lib/index.js";
 
 export const getChat = asyncHandler(async (req, res) => {
-  const userId = req.user.id;
-  const { partnerId } = req.params;
+  const chatId = req.params.chatId;
   const limit = Number(req.query.limit) || 20;
-  const cursor = req.query.cursor;
-
-  const partner = await prisma.user.findUnique({ where: { id: partnerId } });
-  if (!partner) return fail(res, "Receiver not found", 400);
+  const cursor = Number(req.query.cursor || 0);
 
   const chat = await prisma.chat.findFirst({
     where: {
-      OR: [
-        { user1Id: userId, user2Id: partnerId },
-        { user1Id: partnerId, user2Id: userId },
-      ],
+      id: chatId,
     },
     include: {
       messages: {

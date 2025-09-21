@@ -3,3 +3,4 @@ export * from "./notification.js";
 export * from "./search.js";
 export * from "./tweet.js";
 export * from "./user.js";
+export * from "./message.js";

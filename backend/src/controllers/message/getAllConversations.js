@@ -15,14 +15,27 @@ export const getAllConversations = asyncHandler(async (req, res) => {
         orderBy: { createdAt: "desc" },
         select: messageSelect,
       },
+      user1: true,
+      user2: true,
     },
+    orderBy: { updatedAt: "desc" },
   });
 
   const conversations = chats.map((chat) => {
-    const partnerId = chat.user1Id === userId ? chat.user2Id : chat.user1Id;
+    const isUser1 = chat.user1Id === userId;
+    const partner = isUser1 ? chat.user2 : chat.user1;
     const lastMessage = chat.messages[0] || null;
 
-    return { partnerId, lastMessage };
+    return {
+      id: chat.id,
+      partnerId: partner.id,
+      partner: {
+        id: partner.id,
+        name: partner.name,
+        profilePicture: partner.profilePicture,
+      },
+      lastMessage,
+    };
   });
 
   return success(res, { conversations });

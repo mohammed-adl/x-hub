@@ -4,8 +4,8 @@ import { socketService } from "../../services/index.js";
 
 export const sendMessage = asyncHandler(async (req, res) => {
   const senderId = req.user.id;
-  const receiverId = req.params.id;
-  const { content } = req.body;
+  const chatId = req.params.chatId;
+  const { content, partnerId: receiverId } = req.body;
 
   const receiver = await prisma.user.findUnique({ where: { id: receiverId } });
   if (!receiver) return fail(res, "Receiver not found", 400);
@@ -13,10 +13,7 @@ export const sendMessage = asyncHandler(async (req, res) => {
   const result = await prisma.$transaction(async (prisma) => {
     let chat = await prisma.chat.findFirst({
       where: {
-        OR: [
-          { user1Id: senderId, user2Id: receiverId },
-          { user1Id: receiverId, user2Id: senderId },
-        ],
+        id: chatId,
       },
     });
 
@@ -41,5 +38,5 @@ export const sendMessage = asyncHandler(async (req, res) => {
 
   await socketService.alertMessage(senderId, receiverId, result.message);
 
-  return success(res, { message: result.message }, 201);
+  return success(res, { chat: result.chat, message: result.message }, 201);
 });
