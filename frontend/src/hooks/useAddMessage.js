@@ -6,10 +6,6 @@ export const useAddMessage = (chatId) => {
   const { user } = useUser();
 
   const addMessage = (messageContent) => {
-    if (!messageContent?.trim() || !chatId) {
-      return;
-    }
-
     const newMessageObj = {
       id: Date.now(),
       content: messageContent,

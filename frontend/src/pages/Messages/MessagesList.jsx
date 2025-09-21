@@ -3,11 +3,7 @@ import { generateAvatar, formatTimeAgo } from "../../utils";
 import { Avatar } from "../../components/ui";
 import styles from "./Messages.module.css";
 
-export default function MessagesList({
-  messages,
-  isPartnerTyping,
-  selectedChat,
-}) {
+export default function MessagesList({ messages, isPartnerTyping }) {
   const { user } = useUser();
 
   return (

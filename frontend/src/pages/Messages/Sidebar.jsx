@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 
@@ -20,8 +20,8 @@ export default function Sidebar() {
     queryFn: async () => {
       try {
         return await handleGetAllConvos();
-      } catch (e) {
-        throw e;
+      } catch (err) {
+        throw err;
       }
     },
   });

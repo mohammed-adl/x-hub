@@ -1,1 +1,1 @@
-export { default as useAddMessage } from "./useAddMessage";
+export * from "./useAddMessage";

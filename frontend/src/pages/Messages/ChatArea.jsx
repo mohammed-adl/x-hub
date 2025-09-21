@@ -1,11 +1,13 @@
 import { useState, useRef } from "react";
 import { useInfiniteQuery } from "@tanstack/react-query";
+
 import { useMessage } from "../../contexts";
 import { handleGetChat, handleSendMessage } from "../../fetchers";
+import { useAddMessage } from "../../hooks/useAddMessage";
+
 import { send } from "../../assets/icons";
 import MessagesList from "./MessagesList";
 import { Spinner, ErrorMessage } from "../../components/ui";
-import { useAddMessage } from "../../hooks/useAddMessage";
 import styles from "./Messages.module.css";
 
 export default function ChatArea() {
