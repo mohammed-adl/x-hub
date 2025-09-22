@@ -2,13 +2,13 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 
 import { handleMarkAsVisited } from "../../fetchers/index.js";
-import { useUser, useNotification } from "../../contexts";
+import { useUser, useNotification } from "../../contexts/index.js";
 
 import UserDropdown from "./UserDropdown.jsx";
 import LinkBox from "./LinkBox.jsx";
-import { Avatar } from "../ui";
+import { Avatar } from "../ui/index.js";
 import XLogo from "../../assets/XLogo.svg";
-import { home, bell, profile, message } from "../../assets/icons";
+import { home, bell, profile, message } from "../../assets/icons/index.js";
 import styles from "./NavBar.module.css";
 
 export default function NavBar() {
