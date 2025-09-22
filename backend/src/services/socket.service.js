@@ -25,14 +25,9 @@ const socketService = {
     console.log("Emitted newNotification to user:", userId);
   },
 
-  async alertMessage(senderId, receiverId, message) {
-    const sender = await prisma.user.findUnique({
-      where: { id: senderId },
-      select: userSelect,
-    });
-
+  async alertMessage(chatId, receiverId, message) {
     io.to(receiverId).emit("newMessage", {
-      sender,
+      chatId,
       message,
     });
   },

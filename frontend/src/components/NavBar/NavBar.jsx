@@ -9,7 +9,7 @@ import LinkBox from "./LinkBox.jsx";
 import { Avatar } from "../ui/index.js";
 import XLogo from "../../assets/XLogo.svg";
 import { home, bell, profile, message } from "../../assets/icons/index.js";
-import styles from "./NavBar.module.css";
+import styles from "./Navbar.module.css";
 
 export default function NavBar() {
   const { hasNotifications, setHasNotifications } = useNotification();

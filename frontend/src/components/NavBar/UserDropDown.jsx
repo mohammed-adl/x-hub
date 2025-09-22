@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 
 import { handleLogOut } from "../../fetchers";
 import authService from "../../services/authService";
-import styles from "./NavBar.module.css";
+import styles from "./Navbar.module.css";
 
 export default function UserDropdown() {
   const [open, setOpen] = useState(true);

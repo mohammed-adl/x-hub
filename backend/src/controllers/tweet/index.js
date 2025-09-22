@@ -7,5 +7,5 @@ export * from "./postTweet.js";
 export * from "./toggleLike.js";
 export * from "./toggleRetweet.js";
 export * from "./updateTweet.js";
-export * from "./replytoTweet.js";
+export * from "./replyToTweet.js";
 export * from "./getReplies.js";

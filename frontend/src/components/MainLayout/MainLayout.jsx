@@ -1,5 +1,5 @@
 import { Outlet, useLocation } from "react-router-dom";
-import NavBar from "../NavBar/Navbar.jsx";
+import Navbar from "../Navbar/Navbar.jsx";
 import ExploreBar from "../ExploreBar/ExploreBar.jsx";
 import styles from "./MainLayout.module.css";
 
@@ -11,7 +11,7 @@ export default function MainLayout() {
   return (
     <div className={styles.mainLayout}>
       <header className={styles.navBar}>
-        <NavBar />
+        <Navbar />
       </header>
 
       <main className={styles.mainContent}>

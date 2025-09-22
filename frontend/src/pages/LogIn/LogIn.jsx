@@ -7,7 +7,7 @@ import { useUser } from "../../contexts";
 import { handleLogIn } from "../../fetchers";
 import { logInSchema } from "../../schemas";
 import authService from "../../services/authService";
-import XLogo from "../../assets/Xlogo.svg";
+import XLogo from "../../assets/XLogo.svg";
 import styles from "./LogIn.module.css";
 
 export default function LogIn() {

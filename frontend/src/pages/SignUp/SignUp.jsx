@@ -7,7 +7,7 @@ import { useUser } from "../../contexts/UserContext.jsx";
 import { handleSignUp } from "../../fetchers/auth.js";
 import authService from "../../services/authService.js";
 import { signUpSchema } from "../../schemas/index.js";
-import XLogo from "../../assets/Xlogo.svg";
+import XLogo from "../../assets/XLogo.svg";
 import styles from "./SignUp.module.css";
 
 export default function SignUp() {

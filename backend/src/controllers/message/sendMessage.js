@@ -36,7 +36,11 @@ export const sendMessage = asyncHandler(async (req, res) => {
     return { chat, message };
   });
 
-  await socketService.alertMessage(senderId, receiverId, result.message);
+  await socketService.alertMessage(
+    result.chat.id,
+    receiverId,
+    result.message.content
+  );
 
   return success(res, { chat: result.chat, message: result.message }, 201);
 });

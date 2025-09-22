@@ -13,6 +13,7 @@
     "@dicebear/initials": "^9.2.3",
     "@hookform/resolvers": "2.9.10",
     "@tanstack/react-query": "^5.81.5",
+    "axios": "^1.12.2",
     "js-cookie": "^3.0.5",
     "jwt-decode": "^4.0.0",
     "react": "^19.1.0",
