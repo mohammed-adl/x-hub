@@ -1,8 +1,6 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import Cookies from "js-cookie";
 import DeviceCard from "./DeviceCard";
 
-import { useUser } from "../../contexts/UserContext";
 import { handleGetSessionsLogs } from "../../fetchers/user";
 import {
   handleLogOutSession,
@@ -14,7 +12,6 @@ import authService from "../../services/authService";
 import styles from "./DevicesLogs.module.css";
 
 export default function DevicesLogs() {
-  const { setTokenVersion } = useUser();
   const queryClient = useQueryClient();
 
   const { data, isLoading, error } = useQuery({
@@ -31,7 +28,7 @@ export default function DevicesLogs() {
   });
 
   const devices = data?.sessions || [];
-  const tokenId = Cookies.get("refreshTokenId");
+  const tokenId = localStorage.getItem("refreshToken").id;
 
   const currentSession = devices.find((session) => session.id === tokenId);
   const otherDevices = devices.filter((session) => session.id !== tokenId);
@@ -47,10 +44,10 @@ export default function DevicesLogs() {
 
   async function logoutAll() {
     try {
-      const data = await handleLogOutAllSessions();
-      setTokenVersion(data?.tokenVersion);
+      await handleLogOutAllSessions();
       authService.logout();
     } catch (err) {
+      console.log(err);
       if (err.status === 401) authService.logout();
     }
   }

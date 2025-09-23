@@ -2,13 +2,12 @@ import asyncHandler from "express-async-handler";
 import bcrypt from "bcrypt";
 
 import { prisma, success, fail } from "../../lib/index.js";
-import { REFRESH_TOKEN_MAX_AGE } from "../../config/constants.js";
 import { authService } from "../../services/index.js";
 
 const isProd = process.env.NODE_ENV === "production";
 
 export const refreshToken = asyncHandler(async (req, res) => {
-  const refreshToken = req.cookies?.refreshToken;
+  const refreshToken = req.body.refreshToken;
 
   if (!refreshToken) fail("Refresh token not found", 401);
 
@@ -43,21 +42,7 @@ export const refreshToken = asyncHandler(async (req, res) => {
     id: payload.id,
   });
 
-  const refreshTokenId = await authService.saveRefreshToken(
-    payload.id,
-    newRefreshToken,
-    req
-  );
+  await authService.saveRefreshToken(payload.id, newRefreshToken, req);
 
-  const path = isProd ? "/api/auth" : "/";
-
-  res.cookie("refreshToken", newRefreshToken, {
-    httpOnly: true,
-    secure: isProd,
-    sameSite: "Strict",
-    maxAge: REFRESH_TOKEN_MAX_AGE,
-    path,
-  });
-
-  success(res, { token: newAccessToken, refreshTokenId });
+  success(res, { token: newAccessToken, refreshToken: newRefreshToken });
 });

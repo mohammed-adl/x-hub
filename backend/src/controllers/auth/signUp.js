@@ -1,6 +1,5 @@
 import asyncHandler from "express-async-handler";
 import { success } from "../../lib/index.js";
-import { REFRESH_TOKEN_MAX_AGE } from "../../config/constants.js";
 import { authService } from "../../services/index.js";
 import { attachFullUrls } from "../../utils/index.js";
 
@@ -19,21 +18,7 @@ export const signUp = asyncHandler(async (req, res) => {
     id: user.id,
   });
 
-  const refreshTokenId = await authService.saveRefreshToken(
-    user.id,
-    refreshToken,
-    req
-  );
-
-  const path = isProd ? "/api/auth" : "/";
-
-  res.cookie("refreshToken", refreshToken, {
-    httpOnly: true,
-    secure: isProd,
-    sameSite: "Strict",
-    maxAge: REFRESH_TOKEN_MAX_AGE,
-    path,
-  });
+  await authService.saveRefreshToken(user.id, refreshToken, req);
 
   const userWithUrls = attachFullUrls(user);
 
@@ -42,7 +27,7 @@ export const signUp = asyncHandler(async (req, res) => {
     {
       message: "User registered successfully",
       token: accessToken,
-      refreshTokenId,
+      refreshToken,
       user: userWithUrls,
     },
     201

@@ -3,7 +3,7 @@ import { prisma, sessionSelect, success, fail } from "../../lib/index.js";
 
 export const getSessionsLogs = asyncHandler(async (req, res) => {
   const userId = req.user.id;
-  const refreshToken = req.cookies?.refreshToken;
+  const refreshToken = req.body.refreshToken;
 
   if (!refreshToken) return fail(res, "Refresh token not found", 401);
 

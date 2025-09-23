@@ -1,11 +1,17 @@
 import axios from "axios";
-import { ApiError } from "../utils";
-import { authService } from "../services";
+import { ApiError } from "@/utils";
+import { authService } from "@/services";
 import { socket, initSocketConnection } from "../socket";
 
-const API_URL = import.meta.VITE_API_URL || "http://localhost:3000/api/v1";
+const API_URL =
+  process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000/api/v1";
 
 const api = axios.create({
+  withCredentials: true,
+  baseURL: API_URL,
+});
+
+export const refreshApi = axios.create({
   withCredentials: true,
   baseURL: API_URL,
 });
@@ -15,21 +21,26 @@ let refreshing = null;
 api.interceptors.response.use(
   (response) => response,
   async (error) => {
-    if (error.response?.status === 401) {
-      const config = error.config;
+    const config = error.config;
+    if (error.response?.status === 401 && !config._retry) {
+      config._retry = true;
 
       if (!refreshing) {
-        refreshing = authService
-          .callRefreshToken()
-          .then((body) => {
-            authService.setToken(body.token);
+        refreshing = (async () => {
+          try {
+            const body = await authService.callRefreshToken();
+            authService.setTokens(body.token, body.refreshToken);
             if (socket?.connected) {
+              socket.disconnect();
               initSocketConnection();
             }
-          })
-          .finally(() => {
+          } catch (err) {
+            authService.logout();
+            throw err;
+          } finally {
             refreshing = null;
-          });
+          }
+        })();
       }
 
       try {
@@ -37,8 +48,7 @@ api.interceptors.response.use(
         const token = localStorage.getItem("token");
         if (token) config.headers["Authorization"] = `Bearer ${token}`;
         return api(config);
-      } catch {
-        authService.logout();
+      } catch (err) {
         return Promise.reject(error);
       }
     }

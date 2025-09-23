@@ -1,5 +1,4 @@
 import { socket } from "./socketServer.js";
-import Cookies from "js-cookie";
 import { authService } from "../services";
 
 export const initSocketConnection = () => {
@@ -7,11 +6,11 @@ export const initSocketConnection = () => {
   socket.auth.token = token;
   socket.connect();
 
-  const refreshTokenId = Cookies.get("refreshTokenId");
+  const refreshTokenId = localStorage.getItem("refreshToken").id;
   socket.emit("registerToken", refreshTokenId);
 
   socket.on("logoutSession", (tokenId) => {
-    if (Cookies.get("refreshTokenId") === tokenId) authService.logout();
+    if (refreshTokenId === tokenId) authService.logout();
   });
 
   socket.on("logout", () => authService.logout());

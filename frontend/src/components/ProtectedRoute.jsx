@@ -6,7 +6,7 @@ import { useUser } from "../contexts";
 import { SplashScreen } from "./ui";
 
 import { handleGetUser } from "../fetchers";
-import { initSocketConnection, disconnectSocket } from "../socket";
+import { initSocketConnection, disconnectSocket, socket } from "../socket";
 import { authService } from "../services";
 
 function ProtectedRoute() {
@@ -21,7 +21,7 @@ function ProtectedRoute() {
       const isExpired = await authService.validateAccessToken();
       if (isExpired) {
         const body = await authService.callRefreshToken();
-        if (body) authService.setToken(body.token);
+        if (body) authService.setTokens(body.token, body.refreshToken);
       }
 
       if (username && user && username !== user.username) {
@@ -38,6 +38,7 @@ function ProtectedRoute() {
       initSocketConnection();
     } catch (err) {
       authService.logout();
+      console.log(err);
     } finally {
       setLoading(false);
     }
@@ -47,6 +48,7 @@ function ProtectedRoute() {
     //Avoid react restrict mode race conditions
     if (hasRun.current) return;
     hasRun.current = true;
+    if (!user) return;
 
     validateToken();
 

@@ -53,8 +53,9 @@ export async function handleResetPassword(formData) {
   });
 }
 
-export async function handleRefreshToken() {
-  return await reqApi("/auth/refresh-token", {
-    method: "POST",
+export async function handleRefreshToken(refreshToken) {
+  const response = await refreshApi.post("/auth/refresh-token", {
+    refreshToken: refreshToken,
   });
+  return response.data;
 }

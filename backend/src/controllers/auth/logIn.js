@@ -2,7 +2,6 @@ import asyncHandler from "express-async-handler";
 
 import { authService, socketService } from "../../services/index.js";
 import { success, fail, prisma } from "../../lib/index.js";
-import { REFRESH_TOKEN_MAX_AGE } from "../../config/constants.js";
 import { attachFullUrls } from "../../utils/index.js";
 
 const XAccountId = process.env.X_ACCOUNT_ID;
@@ -31,27 +30,15 @@ export const logIn = asyncHandler(async (req, res) => {
     id: user.id,
   });
 
-  const refreshTokenId = await authService.saveRefreshToken(
-    user.id,
-    refreshToken,
-    req
-  );
+  await authService.saveRefreshToken(user.id, refreshToken, req);
 
   const userWithUrls = attachFullUrls(user);
-
-  res.cookie("refreshToken", refreshToken, {
-    httpOnly: true,
-    secure: isProd,
-    maxAge: REFRESH_TOKEN_MAX_AGE,
-    sameSite: "Strict",
-    path,
-  });
 
   console.log("login", refreshTokenId);
 
   success(res, {
     token: accessToken,
-    refreshTokenId,
+    refreshToken,
     user: userWithUrls,
   });
 });

@@ -13,22 +13,22 @@ export function UserProvider({ children }) {
   });
 
   useEffect(() => {
-    if (user) {
-      localStorage.setItem("user", JSON.stringify(user));
-    } else {
-      authService.clearSession();
-    }
+    if (user) localStorage.setItem("user", JSON.stringify(user));
+    else authService.clearSession();
+
     setIsLoading(false);
   }, [user]);
 
   useEffect(() => {
     function handleStorageChange(event) {
-      if (event.key === "user" && event.newValue === null) {
+      if (
+        (event.key === "user" && event.newValue === null) ||
+        (event.key === "token" && event.newValue === null) ||
+        (event.key === "refreshToken" && event.newValue === null)
+      )
         authService.logout();
-      } else if (event.key === "token" && event.newValue === null) {
-        authService.logout();
-      }
     }
+
     window.addEventListener("storage", handleStorageChange);
     return () => {
       window.removeEventListener("storage", handleStorageChange);
