@@ -38,6 +38,7 @@ function ProtectedRoute() {
       initSocketConnection();
     } catch (err) {
       authService.logout();
+
       console.log(err);
     } finally {
       setLoading(false);

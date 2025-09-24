@@ -4,8 +4,6 @@ import bcrypt from "bcrypt";
 import { prisma, success, fail } from "../../lib/index.js";
 import { authService } from "../../services/index.js";
 
-const isProd = process.env.NODE_ENV === "production";
-
 export const refreshToken = asyncHandler(async (req, res) => {
   const refreshToken = req.body.refreshToken;
 

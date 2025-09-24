@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 
 import { Spinner, ErrorMessage, Avatar } from "../ui";
 import { handleToggleFollow } from "../../fetchers";
+import { generateAvatar } from "../../utils";
 import styles from "./ExploreBar.module.css";
 
 export default function FollowSuggestions({
@@ -34,6 +35,8 @@ export default function FollowSuggestions({
     });
   }
 
+  console.log(suggestions);
+
   if (isLoading) return <Spinner />;
   if (error) return <ErrorMessage />;
 
@@ -46,7 +49,11 @@ export default function FollowSuggestions({
           return (
             <li className={styles.userCard} key={user.id}>
               <Link to={`/${user.username}`}>
-                <Avatar src={user.profilePicture} name={user.name} size={40} />
+                <Avatar
+                  src={user.profilePicture || generateAvatar(user.name)}
+                  name={user.name}
+                  size={40}
+                />
               </Link>
               <div className={styles.userInfo}>
                 <Link to={`/${user.username}`} className={styles.fullName}>

@@ -1,4 +1,4 @@
-import { reqApi } from "../lib";
+import { reqApi, refreshApi } from "../lib";
 
 export async function handleSignUp(formData) {
   return await reqApi("/auth/signup", {

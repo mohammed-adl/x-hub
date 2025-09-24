@@ -285,6 +285,7 @@ body {
 
   .logo {
     height: 4rem;
+    margin-left: 0;
   }
 }
 

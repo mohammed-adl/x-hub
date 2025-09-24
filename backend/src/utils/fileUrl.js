@@ -28,12 +28,17 @@ export function attachFullUrls(input) {
   });
 
   if (Array.isArray(input)) {
-    return input.map(mapTweet);
+    if (
+      input.length > 0 &&
+      (input[0].tweetMedia !== undefined || input[0].user)
+    ) {
+      return input.map(mapTweet);
+    } else {
+      return input.map(mapUser);
+    }
   } else if (input.user || input.tweetMedia) {
-    // Single tweet object
     return mapTweet(input);
   } else {
-    // Single user object
     return mapUser(input);
   }
 }

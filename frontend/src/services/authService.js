@@ -35,22 +35,24 @@ const authService = {
     try {
       const decoded = jwtDecode(token);
       const currentTime = new Date().getTime() / 1000;
-      if (decoded.exp < currentTime) {
-        return true;
-      } else {
-        return false;
-      }
+      return decoded.exp < currentTime;
     } catch (err) {
-      authService.logout();
+      console.log(err);
     }
   },
 
-  async callRefreshToken() {
+  callRefreshToken: async () => {
     try {
-      const body = await handleRefreshToken();
-      return body;
+      const refreshToken = localStorage.getItem("refreshToken");
+      if (!refreshToken) {
+        authService.logout();
+        return;
+      }
+      const data = await handleRefreshToken(refreshToken);
+      return data;
     } catch (err) {
       authService.logout();
+      throw err;
     }
   },
 };
