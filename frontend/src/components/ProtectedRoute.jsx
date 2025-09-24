@@ -48,6 +48,7 @@ function ProtectedRoute() {
     //Avoid react restrict mode race conditions
     if (hasRun.current) return;
     hasRun.current = true;
+
     if (!user) return;
 
     validateToken();
@@ -57,8 +58,8 @@ function ProtectedRoute() {
     };
   }, []);
 
-  if (loading) return <SplashScreen />;
   if (!user) return authService.logout();
+  if (loading) return <SplashScreen />;
 
   return <Outlet />;
 }
