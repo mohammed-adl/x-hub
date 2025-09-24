@@ -11,13 +11,7 @@ export default function Profile() {
   const { username } = useParams();
   const { data, isLoading, error } = useQuery({
     queryKey: ["user", username],
-    queryFn: async () => {
-      try {
-        return await handleGetUser(username);
-      } catch (err) {
-        throw err;
-      }
-    },
+    queryFn: () => handleGetUser(username),
   });
 
   const user = data?.user || {};

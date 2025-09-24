@@ -1,7 +1,10 @@
 import { useNavigate, Link } from "react-router-dom";
 import { useQueryClient } from "@tanstack/react-query";
+import { useParams } from "react-router-dom";
 
 import { BackButton } from "../../components/ui";
+import { message } from "../../assets/icons";
+
 import TweetsFeed from "./TweetsFeed.jsx";
 
 import { useUser } from "../../contexts";
@@ -26,6 +29,7 @@ export default function UserPage({
   const { username: ownerUsername } = user;
   const navigate = useNavigate();
   const queryClient = useQueryClient();
+  const { username: targetUsername } = useParams();
 
   async function followUser() {
     try {
@@ -68,9 +72,22 @@ export default function UserPage({
                 Edit Profile
               </button>
             ) : (
-              <button className={styles.editProfileButton} onClick={followUser}>
-                {isFollowingUser ? "Unfollow" : "Follow"}
-              </button>
+              <div
+                className={styles.followButtonWrapper}
+                onClick={() => navigate("/messages", { state: { username } })}
+              >
+                <img
+                  src={message}
+                  alt="message icon"
+                  className={styles.messageIcon}
+                />
+                <button
+                  className={styles.editProfileButton}
+                  onClick={followUser}
+                >
+                  {isFollowingUser ? "Unfollow" : "Follow"}
+                </button>
+              </div>
             )}
           </div>
 

@@ -9,6 +9,8 @@ router.use(verifyToken);
 
 router.get("/", messageController.getAllConversations);
 
+router.post("/", messageController.createChat);
+
 router.get("/:chatId", messageController.getChat);
 
 router.post("/:id", messageController.sendMessage);

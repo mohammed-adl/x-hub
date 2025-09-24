@@ -16,13 +16,7 @@ export default function Tweet() {
 
   const { data, isLoading, error } = useQuery({
     queryKey: ["tweet", tweetId],
-    queryFn: async () => {
-      try {
-        return await handleGetTweet(tweetId);
-      } catch (err) {
-        throw err;
-      }
-    },
+    queryFn: () => handleGetTweet(tweetId),
     refetchOnWindowFocus: false,
     retry: 1,
   });

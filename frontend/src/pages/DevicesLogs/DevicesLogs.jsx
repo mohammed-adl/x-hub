@@ -17,12 +17,8 @@ export default function DevicesLogs() {
   const { data, isLoading, error } = useQuery({
     queryKey: ["sessions"],
     queryFn: async () => {
-      try {
-        const refreshToken = localStorage.getItem("refreshToken");
-        return await handleGetSessionsLogs(refreshToken);
-      } catch (err) {
-        throw err;
-      }
+      const refreshToken = localStorage.getItem("refreshToken");
+      return await handleGetSessionsLogs(refreshToken);
     },
     refetchOnWindowFocus: false,
     retry: 1,

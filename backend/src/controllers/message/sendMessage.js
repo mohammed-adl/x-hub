@@ -1,6 +1,7 @@
 import asyncHandler from "express-async-handler";
 import { prisma, success, fail, messageSelect } from "../../lib/index.js";
 import { socketService } from "../../services/index.js";
+import { attachChatUrls } from "../../utils/fileUrl.js";
 
 export const sendMessage = asyncHandler(async (req, res) => {
   const senderId = req.user.id;
@@ -23,6 +24,11 @@ export const sendMessage = asyncHandler(async (req, res) => {
       });
     }
 
+    await prisma.chat.update({
+      where: { id: chat.id },
+      data: { updatedAt: new Date() },
+    });
+
     const message = await prisma.message.create({
       data: {
         content,
@@ -36,11 +42,9 @@ export const sendMessage = asyncHandler(async (req, res) => {
     return { chat, message };
   });
 
-  await socketService.alertMessage(
-    result.chat.id,
-    receiverId,
-    result.message.content
-  );
+  const messageWithUrls = attachChatUrls([result.message])[0];
 
-  return success(res, { chat: result.chat, message: result.message }, 201);
+  await socketService.alertMessage(result.chat.id, receiverId, messageWithUrls);
+
+  return success(res, { chat: result.chat, message: messageWithUrls }, 201);
 });

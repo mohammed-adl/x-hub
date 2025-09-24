@@ -76,6 +76,26 @@
   object-fit: cover;
 }
 
+.followButtonWrapper {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.messageIcon {
+  width: 2rem;
+  height: 2rem;
+  padding: 0.2rem;
+  margin-right: 0.2rem;
+  border-radius: 50%;
+  border: 2px solid var(--color-border);
+  background-color: #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
 .editProfileButton {
   padding: 0.5rem 0.8rem;
   background-color: #1d9bf0;

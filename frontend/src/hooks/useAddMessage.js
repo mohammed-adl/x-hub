@@ -5,17 +5,24 @@ export const useAddMessage = (chatId) => {
   const queryClient = useQueryClient();
   const { user } = useUser();
 
-  const addMessage = (messageContent) => {
-    const newMessageObj = {
-      id: Date.now(),
-      content: messageContent,
-      sender: {
-        id: user.id,
-        name: user.name,
-        profilePicture: user.profilePicture,
-      },
-      createdAt: new Date().toISOString(),
-    };
+  const addMessage = (messageData) => {
+    let newMessageObj;
+
+    if (typeof messageData === "string") {
+      newMessageObj = {
+        id: Date.now(),
+        content: messageData,
+        sender: {
+          id: user.id,
+          name: user.name,
+          username: user.username,
+          profilePicture: user.profilePicture,
+        },
+        createdAt: new Date().toISOString(),
+      };
+    } else {
+      newMessageObj = messageData;
+    }
 
     queryClient.setQueryData(["chat", chatId], (oldData) => {
       if (!oldData?.pages?.length) {

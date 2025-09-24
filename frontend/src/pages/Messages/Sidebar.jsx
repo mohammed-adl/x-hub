@@ -1,11 +1,11 @@
 import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 
 import { useUser, useMessage } from "../../contexts";
 import { generateAvatar } from "../../utils";
 import { Spinner, ErrorMessage, Avatar } from "../../components/ui";
-import { handleGetAllConvos } from "../../fetchers";
+import { handleGetAllConvos, handleCreateChat } from "../../fetchers";
 import styles from "./Messages.module.css";
 
 export default function Sidebar() {
@@ -13,31 +13,64 @@ export default function Sidebar() {
   const userId = user?.id;
   const { selectedChat, setSelectedChat } = useMessage();
   const location = useLocation();
-  const { sender } = location?.state || {};
+  const { username: targetUsername } = location?.state || {};
+  const queryClient = useQueryClient();
 
   const { data, isLoading, error } = useQuery({
-    queryKey: ["messages"],
-    queryFn: async () => {
-      try {
-        return await handleGetAllConvos();
-      } catch (err) {
-        throw err;
-      }
-    },
+    queryKey: ["conversations"],
+    queryFn: async () => await handleGetAllConvos(),
   });
 
   const conversations = data?.conversations || [];
 
-  useEffect(() => {
-    if (!isLoading && conversations.length > 0 && !selectedChat?.id) {
-      const firstId = conversations[0].id;
-      setSelectedChat({ id: firstId, partnerId: conversations[0].partnerId });
+  async function createChat(username) {
+    try {
+      const body = await handleCreateChat(username);
+
+      const partner = body.partner;
+      const chat = body.chat;
+
+      setSelectedChat({ id: chat.id, partnerId: partner.id });
+
+      queryClient.setQueryData(["conversations"], (oldData) => {
+        const oldConvos = oldData?.conversations || [];
+        const newConversation = {
+          id: chat.id,
+          partnerId: partner.id,
+          partner: partner,
+          lastMessage: null,
+        };
+        return {
+          ...oldData,
+          conversations: [newConversation, ...oldConvos],
+        };
+      });
+    } catch (err) {
+      console.log(err);
     }
-  }, [conversations, isLoading]);
+  }
+
+  useEffect(() => {
+    if (!isLoading && !selectedChat?.id) {
+      if (targetUsername) {
+        const existing = conversations.find(
+          (c) => c.partner.username === targetUsername
+        );
+        if (existing) {
+          setSelectedChat({ id: existing.id, partnerId: existing.partnerId });
+        } else {
+          createChat(targetUsername);
+        }
+      } else if (conversations.length > 0) {
+        const firstConv = conversations[0];
+        setSelectedChat({ id: firstConv.id, partnerId: firstConv.partnerId });
+      }
+    }
+  }, [conversations, isLoading, targetUsername, selectedChat?.id]);
 
   const handleSelect = (id) => {
     const conv = conversations.find((c) => c.id === id);
-    setSelectedChat({ id: conv.id, partnerId: conv.partnerId });
+    if (conv) setSelectedChat({ id: conv.id, partnerId: conv.partnerId });
   };
 
   if (isLoading) return <Spinner />;
@@ -59,14 +92,12 @@ export default function Sidebar() {
       ) : (
         conversations.map((conv, index) => {
           const partner = conv.partner;
-
           const id = conv.id;
-
           return (
             <div
               key={conv.partnerId || id || index}
               className={`${styles.conversation} ${
-                id === selectedChat.id ? styles.active : ""
+                id === selectedChat?.id ? styles.active : ""
               }`}
               onClick={() => handleSelect(id)}
             >

@@ -42,6 +42,7 @@ export const getAllConversations = asyncHandler(async (req, res) => {
       partner: {
         id: partnerWithUrl.id,
         name: partnerWithUrl.name,
+        username: partnerWithUrl.username,
         profilePicture: partnerWithUrl.profilePicture,
       },
       lastMessage: lastMessageWithUrls,

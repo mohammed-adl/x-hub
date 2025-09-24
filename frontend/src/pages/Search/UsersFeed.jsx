@@ -10,15 +10,10 @@ export default function UsersFeed() {
   const { username: ownerUsername } = useParams();
   const [searchParams] = useSearchParams();
   const query = searchParams.get("q");
+
   const { data, isLoading, error } = useQuery({
     queryKey: ["users", query],
-    queryFn: async () => {
-      try {
-        return await handleSearchUsers(query);
-      } catch (err) {
-        throw err;
-      }
-    },
+    queryFn: () => handleSearchUsers(query),
     refetchOnWindowFocus: false,
   });
 

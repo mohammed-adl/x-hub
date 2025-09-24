@@ -6,11 +6,13 @@ import styles from "./Messages.module.css";
 export default function MessagesList({ messages, isPartnerTyping }) {
   const { user } = useUser();
 
+  const reversedMessages = [...messages].reverse();
+
   return (
     <>
-      {messages.map((msg, index) => {
+      {reversedMessages.map((msg, index) => {
         const isMe = msg.sender.id === user.id;
-        const isLast = index === 0;
+        const isLast = index === reversedMessages.length - 1;
 
         return (
           <div
