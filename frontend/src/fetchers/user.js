@@ -35,8 +35,8 @@ export async function handleGetFollowers({ username, limit, cursor }) {
   );
 }
 
-export async function handleGetSessionsLogs() {
-  return await reqApi(`/users/sessions`);
+export async function handleGetSessionsLogs(refreshToken) {
+  return await reqApi(`/users/${refreshToken}/sessions`);
 }
 
 export async function handleGetSuggestions() {

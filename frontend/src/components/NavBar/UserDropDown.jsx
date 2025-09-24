@@ -23,7 +23,8 @@ export default function UserDropdown() {
 
   async function logoutUser() {
     try {
-      await handleLogOut();
+      const refreshToken = localStorage.getItem("refreshToken");
+      await handleLogOut(refreshToken);
       authService.logout();
     } catch (err) {
       if (err.status === 401) logout();

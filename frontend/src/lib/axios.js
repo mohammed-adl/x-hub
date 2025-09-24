@@ -1,10 +1,10 @@
 import axios from "axios";
-import { ApiError } from "@/utils";
-import { authService } from "@/services";
+import { ApiError } from "../utils";
+import { authService } from "../services";
 import { socket, initSocketConnection } from "../socket";
 
 const API_URL =
-  process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000/api/v1";
+  import.meta.env.NEXT_PUBLIC_API_URL || "http://localhost:3000/api/v1";
 
 const api = axios.create({
   withCredentials: true,
@@ -29,7 +29,7 @@ api.interceptors.response.use(
         refreshing = (async () => {
           try {
             const body = await authService.callRefreshToken();
-            authService.setTokens(body.token, body.refreshToken);
+            authService.setTokens(body);
             if (socket?.connected) {
               socket.disconnect();
               initSocketConnection();

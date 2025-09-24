@@ -1,15 +1,19 @@
 import express from "express";
 const router = express.Router();
-import { upload } from '../../middlewares/index.js';
+import { upload } from "../../middlewares/index.js";
 
-import { verifyToken, validate, validateFileType } from '../../middlewares/index.js';
-import { userId, username, editProfile } from '../../schemas/index.js';
-import * as userController from '../../controllers/user/index.js';
-import * as tweetController from '../../controllers/tweet/index.js';
+import {
+  verifyToken,
+  validate,
+  validateFileType,
+} from "../../middlewares/index.js";
+import { userId, username, editProfile } from "../../schemas/index.js";
+import * as userController from "../../controllers/user/index.js";
+import * as tweetController from "../../controllers/tweet/index.js";
 
 router.use(verifyToken);
 
-router.get("/sessions", userController.getSessionsLogs);
+router.get("/:id/sessions", userController.getSessionsLogs);
 router.get("/suggestions", verifyToken, userController.getSuggestions);
 
 router.get(
@@ -28,12 +32,6 @@ router.put(
   validateFileType(["image/jpeg", "image/png"]),
   userController.editProfile
 );
-
-// router.get(
-//   "/:id/profilePicture",
-//   validate({ params: userId }),
-//   userController.getProfilePicture
-// );
 
 router.get(
   "/:username/followers",

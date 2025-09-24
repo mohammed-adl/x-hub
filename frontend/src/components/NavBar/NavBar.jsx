@@ -15,7 +15,7 @@ export default function NavBar() {
   const { hasNotifications, setHasNotifications } = useNotification();
   const { user, setUser } = useUser();
   if (!user) return null;
-  const { name, username, profilePicture } = user;
+  const { name, username } = user;
   const [open, setopen] = useState(false);
 
   function handleClick() {

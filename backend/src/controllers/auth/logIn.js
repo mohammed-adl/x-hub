@@ -30,15 +30,18 @@ export const logIn = asyncHandler(async (req, res) => {
     id: user.id,
   });
 
-  await authService.saveRefreshToken(user.id, refreshToken, req);
+  const refreshTokenId = await authService.saveRefreshToken(
+    user.id,
+    refreshToken,
+    req
+  );
 
   const userWithUrls = attachFullUrls(user);
-
-  console.log("login", refreshTokenId);
 
   success(res, {
     token: accessToken,
     refreshToken,
+    refreshTokenId,
     user: userWithUrls,
   });
 });

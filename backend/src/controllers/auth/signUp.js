@@ -18,7 +18,11 @@ export const signUp = asyncHandler(async (req, res) => {
     id: user.id,
   });
 
-  await authService.saveRefreshToken(user.id, refreshToken, req);
+  const refreshTokenId = await authService.saveRefreshToken(
+    user.id,
+    refreshToken,
+    req
+  );
 
   const userWithUrls = attachFullUrls(user);
 
@@ -28,6 +32,7 @@ export const signUp = asyncHandler(async (req, res) => {
       message: "User registered successfully",
       token: accessToken,
       refreshToken,
+      refreshTokenId,
       user: userWithUrls,
     },
     201

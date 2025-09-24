@@ -5,16 +5,18 @@ import { handleRefreshToken } from "../fetchers";
 const isProd = import.meta.env.MODE === "production";
 
 const authService = {
-  setTokens(token, refreshToken) {
-    localStorage.setItem("token", token);
-    localStorage.setItem("refreshToken", refreshToken);
-    return { token, refreshToken };
+  setTokens(body) {
+    localStorage.setItem("token", body.token);
+    localStorage.setItem("refreshToken", body.refreshToken);
+    localStorage.setItem("refreshTokenId", body.refreshTokenId);
+    return { body };
   },
 
   clearSession() {
     localStorage.removeItem("user");
     localStorage.removeItem("token");
     localStorage.removeItem("refreshToken");
+    localStorage.removeItem("refreshTokenId");
     socket.disconnect();
   },
 

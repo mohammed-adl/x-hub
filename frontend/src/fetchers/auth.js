@@ -14,9 +14,10 @@ export async function handleLogIn(formData) {
   });
 }
 
-export async function handleLogOut() {
+export async function handleLogOut(refreshToken) {
   return await reqApi("/auth/logout", {
     method: "DELETE",
+    body: { refreshToken },
   });
 }
 

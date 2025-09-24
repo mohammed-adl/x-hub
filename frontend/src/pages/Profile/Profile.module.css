@@ -9,7 +9,7 @@
 .profileHeader {
   display: flex;
   align-items: flex-start;
-  gap: 1.3rem;
+
   margin-bottom: 0.8rem;
 }
 

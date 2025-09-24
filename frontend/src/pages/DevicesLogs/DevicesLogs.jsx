@@ -18,7 +18,8 @@ export default function DevicesLogs() {
     queryKey: ["sessions"],
     queryFn: async () => {
       try {
-        return await handleGetSessionsLogs();
+        const refreshToken = localStorage.getItem("refreshToken");
+        return await handleGetSessionsLogs(refreshToken);
       } catch (err) {
         throw err;
       }
@@ -28,7 +29,7 @@ export default function DevicesLogs() {
   });
 
   const devices = data?.sessions || [];
-  const tokenId = localStorage.getItem("refreshToken").id;
+  const tokenId = localStorage.getItem("refreshTokenId");
 
   const currentSession = devices.find((session) => session.id === tokenId);
   const otherDevices = devices.filter((session) => session.id !== tokenId);

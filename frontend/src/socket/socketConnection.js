@@ -6,7 +6,7 @@ export const initSocketConnection = () => {
   socket.auth.token = token;
   socket.connect();
 
-  const refreshTokenId = localStorage.getItem("refreshToken").id;
+  const refreshTokenId = localStorage.getItem("refreshTokenId");
   socket.emit("registerToken", refreshTokenId);
 
   socket.on("logoutSession", (tokenId) => {

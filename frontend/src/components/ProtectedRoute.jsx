@@ -21,7 +21,7 @@ function ProtectedRoute() {
       const isExpired = await authService.validateAccessToken();
       if (isExpired) {
         const body = await authService.callRefreshToken();
-        if (body) authService.setTokens(body.token, body.refreshToken);
+        if (body) authService.setTokens(body);
       }
 
       if (username && user && username !== user.username) {

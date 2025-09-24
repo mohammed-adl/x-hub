@@ -31,9 +31,9 @@ export default function LogIn() {
     setServerError(null);
 
     try {
-      const data = await handleLogIn(formData);
-      authService.setTokens(data);
-      const { user } = data;
+      const body = await handleLogIn(formData);
+      authService.setTokens(body);
+      const { user } = body;
       setUser(user);
       navigate(from, { replace: true });
     } catch (err) {
