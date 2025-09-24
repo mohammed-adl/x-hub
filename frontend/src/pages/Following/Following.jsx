@@ -17,7 +17,7 @@ export default function Following() {
     hasNextPage,
     isFetchingNextPage,
   } = useInfiniteQuery({
-    queryKey: ["followers", username],
+    queryKey: ["following", username],
     queryFn: async ({ pageParam = 0 }) => {
       try {
         return await handleGetFollowing({
