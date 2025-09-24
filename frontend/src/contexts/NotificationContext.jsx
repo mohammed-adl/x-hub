@@ -7,8 +7,7 @@ import { showNotificationToast } from "../toasts/notificationToast.jsx";
 const NotificationContext = createContext();
 
 export function NotificationProvider({ children }) {
-  const { user } = useUser();
-  console.log(user);
+  const { user, setUser } = useUser();
   const [hasNotifications, setHasNotifications] = useState(
     user?.hasNotifications
   );
@@ -17,7 +16,9 @@ export function NotificationProvider({ children }) {
     if (!socket.on) return;
 
     const handleNewNotification = (data) => {
+      setUser({ ...user, hasNotifications: true });
       setHasNotifications(true);
+
       if (window.innerWidth >= 1024) {
         showNotificationToast(data);
       }
@@ -27,6 +28,23 @@ export function NotificationProvider({ children }) {
 
     return () => socket.off("newNotification", handleNewNotification);
   }, []);
+
+  useEffect(() => {
+    function handleStorageChange(event) {
+      if (event.key === "user" && event.newValue) {
+        const user = JSON.parse(event.newValue);
+        if (user.hasNotifications === false) {
+          setUser({ ...user, hasNotifications: false });
+          setHasNotifications(false);
+        }
+      }
+    }
+
+    window.addEventListener("storage", handleStorageChange);
+    return () => {
+      window.removeEventListener("storage", handleStorageChange);
+    };
+  }, [setUser]);
 
   return (
     <NotificationContext.Provider
