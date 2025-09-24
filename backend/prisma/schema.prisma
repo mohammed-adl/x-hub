@@ -21,7 +21,6 @@ model User {
   isProtected       Boolean   @default(false)
   passcode          String?
   passcodeExpiresAt DateTime?
-  sentWelcome       Boolean   @default(false)
   createdAt         DateTime  @default(now())
 
   refreshTokens RefreshToken[]

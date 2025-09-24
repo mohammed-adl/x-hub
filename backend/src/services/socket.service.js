@@ -15,14 +15,12 @@ const socketService = {
   },
 
   async notifyUser(userId, payload) {
+    io.to(userId).emit("newNotification", payload);
+
     await prisma.user.update({
       where: { id: userId },
       data: { hasNotifications: true },
     });
-
-    io.to(userId).emit("newNotification", payload);
-
-    console.log("Emitted newNotification to user:", userId);
   },
 
   async alertMessage(chatId, receiverId, message) {

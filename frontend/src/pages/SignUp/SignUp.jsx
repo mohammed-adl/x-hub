@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 import { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import { useUser } from "../../contexts/UserContext.jsx";
+import { useUser, useNotification } from "../../contexts";
 import { handleSignUp } from "../../fetchers/auth.js";
 import authService from "../../services/authService.js";
 import { signUpSchema } from "../../schemas/index.js";
@@ -17,6 +17,7 @@ export default function SignUp() {
     formState: { errors },
   } = useForm({ resolver: zodResolver(signUpSchema) });
   const { setUser } = useUser();
+  const { setHasNotifications } = useNotification();
   const [loading, setLoading] = useState(false);
   const [serverError, setServerError] = useState(null);
   const navigate = useNavigate();
@@ -30,6 +31,7 @@ export default function SignUp() {
       const { user } = data;
       authService.setTokens(data);
       setUser(user);
+      setHasNotifications(true);
       navigate("/home");
     } catch (err) {
       setServerError(err.message);

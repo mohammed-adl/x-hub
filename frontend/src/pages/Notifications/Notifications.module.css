@@ -7,6 +7,7 @@
   font-size: 20px;
   font-weight: 800;
   padding: 16px;
+  padding-left: 3px;
   border-bottom: 1px solid var(--border-color);
   position: sticky;
   top: 0;
@@ -69,6 +70,13 @@
 
 .sender {
   color: #b8bcc0;
+}
+
+.error {
+  padding: 150px;
+  padding-left: 15px;
+  font-size: 15px;
+  color: var(--color-secondary);
 }
 
 .tweetText {

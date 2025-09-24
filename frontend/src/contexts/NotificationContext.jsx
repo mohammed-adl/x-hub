@@ -8,6 +8,7 @@ const NotificationContext = createContext();
 
 export function NotificationProvider({ children }) {
   const { user } = useUser();
+  console.log(user);
   const [hasNotifications, setHasNotifications] = useState(
     user?.hasNotifications
   );
@@ -25,7 +26,7 @@ export function NotificationProvider({ children }) {
     socket.on("newNotification", handleNewNotification);
 
     return () => socket.off("newNotification", handleNewNotification);
-  }, [socket]);
+  }, []);
 
   return (
     <NotificationContext.Provider

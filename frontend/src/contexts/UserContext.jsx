@@ -5,12 +5,11 @@ import { SplashScreen } from "../components/ui";
 export const UserContext = createContext();
 
 export function UserProvider({ children }) {
-  const [isLoading, setIsLoading] = useState(true);
-
   const [user, setUser] = useState(() => {
     const storedUser = localStorage.getItem("user");
     return storedUser ? JSON.parse(storedUser) : null;
   });
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     if (user) localStorage.setItem("user", JSON.stringify(user));

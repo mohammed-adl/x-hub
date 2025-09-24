@@ -43,8 +43,17 @@ const authService = {
         password: hashedPassword,
         name: data.name,
         username,
+        hasNotifications: true,
       },
       select: { ...userSelect },
+    });
+
+    await prisma.notification.create({
+      data: {
+        type: "WELCOME",
+        fromUserId: process.env.X_ACCOUNT_ID,
+        toUserId: user.id,
+      },
     });
 
     return user;

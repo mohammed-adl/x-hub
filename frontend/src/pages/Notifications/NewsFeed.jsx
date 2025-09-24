@@ -4,6 +4,7 @@ import { useInfiniteQuery } from "@tanstack/react-query";
 import { Spinner, ErrorMessage } from "../../components/ui";
 import NotificationCard from "./NotificationCard";
 import { handleGetNotifications } from "../../fetchers";
+import styles from "./Notifications.module.css";
 
 export default function NewsFeed() {
   const {
@@ -44,7 +45,8 @@ export default function NewsFeed() {
     return () => window.removeEventListener("scroll", onScroll);
   }, [fetchNextPage, hasNextPage, isFetchingNextPage]);
 
-  if (!notifications.length) return <div>You have no notifications</div>;
+  if (!notifications.length)
+    return <divs className={styles.error}>You have no notifications</divs>;
 
   if (isLoading) return <Spinner />;
   if (error) return <ErrorMessage />;
