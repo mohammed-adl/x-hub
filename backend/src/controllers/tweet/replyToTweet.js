@@ -7,7 +7,6 @@ export const replytoTweet = asyncHandler(async (req, res) => {
   const tweetId = req.params.id;
   const userId = req.user.id;
   const body = req.body;
-  console.log("body, ", body);
 
   const parentTweet = await prisma.tweet.findUnique({
     where: { id: tweetId },

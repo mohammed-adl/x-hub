@@ -29,7 +29,6 @@ export function showNotificationToast(data) {
   const tweetPath = `/tweet/${data?.tweet.id}`;
   const userPath = `/${data?.fromUser.username}`;
   const path = data?.tweet?.id ? tweetPath : userPath;
-  console.log(message);
 
   toast.custom(
     (t) => (

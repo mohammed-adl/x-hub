@@ -3,8 +3,7 @@ import { ApiError } from "../utils";
 import { authService } from "../services";
 import { socket, initSocketConnection } from "../socket";
 
-const API_URL =
-  import.meta.env.NEXT_PUBLIC_API_URL || "http://localhost:3000/api/v1";
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3000/api/v1";
 
 const api = axios.create({
   withCredentials: true,

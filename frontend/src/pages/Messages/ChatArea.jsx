@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from "react";
-import { useInfiniteQuery } from "@tanstack/react-query";
+import { useInfiniteQuery, useQueryClient } from "@tanstack/react-query";
 
 import { useMessage, useUser } from "../../contexts";
 import { handleGetChat, handleSendMessage } from "../../fetchers";
@@ -19,6 +19,7 @@ export default function ChatArea() {
   const typingTimeoutRef = useRef(null);
   const messagesContainerRef = useRef(null);
   const { addMessage } = useAddMessage(chatId);
+  const queryClient = useQueryClient();
 
   const {
     data,
@@ -118,11 +119,23 @@ export default function ChatArea() {
       };
       addMessage(messageObject);
 
+      queryClient.setQueryData(["conversations"], (oldData) => {
+        if (!oldData) return oldData;
+        const updatedConversations = oldData.conversations.map((conv) => {
+          if (conv.id === chatId)
+            return { ...conv, lastMessage: messageObject };
+          return conv;
+        });
+        const movedConversation = updatedConversations.find(
+          (conv) => conv.id === chatId
+        );
+        const rest = updatedConversations.filter((conv) => conv.id !== chatId);
+        return { ...oldData, conversations: [movedConversation, ...rest] };
+      });
+
       setTimeout(() => {
         const container = messagesContainerRef.current;
-        if (container) {
-          container.scrollTop = container.scrollHeight;
-        }
+        if (container) container.scrollTop = container.scrollHeight;
       }, 0);
     } catch (err) {
       console.log(err);

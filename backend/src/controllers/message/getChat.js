@@ -21,9 +21,6 @@ export const getChat = asyncHandler(async (req, res) => {
 
   if (!chat) return success(res, { chat: [], nextCursor: null });
 
-  console.log(chatId);
-  console.log(chat.messages);
-
   const messagesWithUrls = attachChatUrls(chat.messages);
 
   const nextCursor =

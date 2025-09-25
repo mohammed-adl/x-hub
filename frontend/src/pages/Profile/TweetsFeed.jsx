@@ -25,8 +25,6 @@ export default function TweetsFeed({ username }) {
 
   const tweets = data?.pages?.flatMap((page) => page.tweets) || [];
 
-  console.log(tweets);
-
   useEffect(() => {
     function onScroll() {
       const nearBottom =

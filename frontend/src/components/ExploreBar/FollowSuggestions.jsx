@@ -35,8 +35,6 @@ export default function FollowSuggestions({
     });
   }
 
-  console.log(suggestions);
-
   if (isLoading) return <Spinner />;
   if (error) return <ErrorMessage />;
 
