@@ -7,7 +7,126 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+// ---------- TRADING APP SCHEMA (UNCHANGED) ----------
+
 model User {
+  id                String    @id @default(uuid())
+  username          String    @unique
+  password          String
+  email             String    @unique
+  hasNotifications  Boolean   @default(true)
+  passcode          String?
+  passcodeExpiresAt DateTime?
+  createdAt         DateTime  @default(now())
+
+  initialBalance Decimal @default(100000)
+  balance        Decimal @default(100000)
+  profits        Decimal @default(0)
+
+  holdings      Holding[]
+  trades        Trade[]
+  transactions  Transaction[]
+  notifications Notification[]
+  refreshTokens RefreshToken[]
+
+  @@map("users")
+}
+
+model Holding {
+  id        String   @id @default(uuid())
+  symbol    String
+  name      String?
+  quantity  Decimal  @default(0)
+  avgPrice  Decimal  @default(0)
+  userId    String
+  updatedAt DateTime @default(now()) @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, symbol])
+  @@map("holdings")
+}
+
+model Trade {
+  id        String     @id @default(uuid())
+  symbol    String
+  name      String?
+  type      TRADE_TYPE
+  quantity  Decimal
+  price     Decimal
+  profit    Decimal?
+  createdAt DateTime   @default(now())
+  userId    String
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, createdAt])
+  @@map("trades")
+}
+
+model Transaction {
+  id        String           @id @default(uuid())
+  type      TRANSACTION_TYPE
+  amount    Decimal
+  createdAt DateTime         @default(now())
+  userId    String
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, createdAt])
+  @@index([type, createdAt])
+  @@map("transactions")
+}
+
+model Notification {
+  id        String            @id @default(uuid())
+  title     String
+  content   String
+  type      NOTIFICATION_TYPE
+  createdAt DateTime          @default(now())
+  userId    String
+  isViewed  Boolean           @default(false)
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, createdAt])
+  @@map("notifications")
+}
+
+model RefreshToken {
+  id        String   @id @default(uuid())
+  token     String
+  createdAt DateTime @default(now())
+  expiresAt DateTime
+
+  user   User   @relation(fields: [userId], references: [id])
+  userId String
+
+  @@index([userId])
+  @@map("refresh_tokens")
+}
+
+enum NOTIFICATION_TYPE {
+  WELCOME
+  SUCCESS
+  INFO
+  WARNING
+  ERROR
+}
+
+enum TRANSACTION_TYPE {
+  DEPOSIT
+  WITHDRAWAL
+}
+
+enum TRADE_TYPE {
+  BUY
+  SELL
+}
+
+// ---------- X CLONE MODELS ----------
+
+model XUser {
   id                String    @id @default(uuid())
   username          String?   @unique
   name              String
@@ -23,167 +142,167 @@ model User {
   passcodeExpiresAt DateTime?
   createdAt         DateTime  @default(now())
 
-  refreshTokens RefreshToken[]
-  tweets        Tweet[]
+  refreshTokens XRefreshToken[]
+  tweets        XTweet[]
 
-  following Follows[] @relation("Following")
-  followers Follows[] @relation("Followers")
+  following XFollows[] @relation("XFollowing")
+  followers XFollows[] @relation("XFollowers")
 
-  sentMessages     Message[] @relation("SentMessages")
-  receivedMessages Message[] @relation("ReceivedMessages")
+  sentMessages     XMessage[] @relation("XSentMessages")
+  receivedMessages XMessage[] @relation("XReceivedMessages")
 
-  notificationsFrom Notification[] @relation("NotificationsFrom")
-  notificationsTo   Notification[] @relation("NotificationsTo")
+  notificationsFrom XNotification[] @relation("XNotificationsFrom")
+  notificationsTo   XNotification[] @relation("XNotificationsTo")
 
-  chatsAsUser1 Chat[] @relation("User1Chats")
-  chatsAsUser2 Chat[] @relation("User2Chats")
+  chatsAsUser1 XChat[] @relation("XUser1Chats")
+  chatsAsUser2 XChat[] @relation("XUser2Chats")
 
-  likes   Like[]
-  Session Session[]
+  likes   XLike[]
+  Session XSession[]
 
-  @@map("users")
+  @@map("x_users")
 }
 
-model Tweet {
+model XTweet {
   id        String   @id
   content   String?
   createdAt DateTime @default(now())
 
-  user     User   @relation(fields: [authorId], references: [id])
+  user     XUser  @relation(fields: [authorId], references: [id])
   authorId String
 
-  tweetMedia    TweetMedia[]
-  notifications Notification[] @relation("TweetNotifications")
-  likes         Like[]
-  retweets      Tweet[]        @relation("TweetRetweets")
-  replies       Tweet[]        @relation("TweetReplies")
+  tweetMedia    XTweetMedia[]
+  notifications XNotification[] @relation("XTweetNotifications")
+  likes         XLike[]
+  retweets      XTweet[]        @relation("XTweetRetweets")
+  replies       XTweet[]        @relation("XTweetReplies")
 
-  originalTweet   Tweet?  @relation("TweetRetweets", fields: [originalTweetId], references: [id], onDelete: Cascade)
+  originalTweet   XTweet? @relation("XTweetRetweets", fields: [originalTweetId], references: [id], onDelete: Cascade)
   originalTweetId String?
 
-  parentTweet   Tweet?  @relation("TweetReplies", fields: [parentTweetId], references: [id], onDelete: Cascade)
+  parentTweet   XTweet? @relation("XTweetReplies", fields: [parentTweetId], references: [id], onDelete: Cascade)
   parentTweetId String?
 
   @@index([authorId])
-  @@map("tweets")
+  @@map("x_tweets")
 }
 
-model TweetMedia {
+model XTweetMedia {
   id        String    @id @default(uuid())
   path      String
   type      MediaType
   createdAt DateTime  @default(now())
 
-  tweet   Tweet  @relation(fields: [tweetId], references: [id], onDelete: Cascade)
+  tweet   XTweet @relation(fields: [tweetId], references: [id], onDelete: Cascade)
   tweetId String
 
-  @@map("tweet_media")
+  @@map("x_tweet_media")
 }
 
-model Follows {
+model XFollows {
   id          String   @id @default(uuid())
   createdAt   DateTime @default(now())
-  following   User     @relation("Following", fields: [followingId], references: [id])
+  following   XUser    @relation("XFollowing", fields: [followingId], references: [id])
   followingId String
 
-  follower   User   @relation("Followers", fields: [followerId], references: [id])
+  follower   XUser  @relation("XFollowers", fields: [followerId], references: [id])
   followerId String
 
   @@unique([followerId, followingId])
   @@index([followerId, followingId])
-  @@map("follows")
+  @@map("x_follows")
 }
 
-model Like {
+model XLike {
   id        String   @id @default(uuid())
   createdAt DateTime @default(now())
 
-  user   User   @relation(fields: [userId], references: [id])
+  user   XUser  @relation(fields: [userId], references: [id])
   userId String
 
-  tweet   Tweet?  @relation(fields: [tweetId], references: [id], onDelete: Cascade)
+  tweet   XTweet? @relation(fields: [tweetId], references: [id], onDelete: Cascade)
   tweetId String?
 
   @@unique([userId, tweetId])
   @@index([userId, tweetId])
-  @@map("likes")
+  @@map("x_likes")
 }
 
-model Message {
+model XMessage {
   id        String   @id @default(uuid())
   content   String
   isRead    Boolean  @default(false)
   createdAt DateTime @default(now())
 
-  sender   User   @relation("SentMessages", fields: [senderId], references: [id])
+  sender   XUser  @relation("XSentMessages", fields: [senderId], references: [id])
   senderId String
 
-  receiver   User   @relation("ReceivedMessages", fields: [receiverId], references: [id])
+  receiver   XUser  @relation("XReceivedMessages", fields: [receiverId], references: [id])
   receiverId String
 
-  chat   Chat?   @relation(fields: [chatId], references: [id], onDelete: Cascade)
+  chat   XChat?  @relation(fields: [chatId], references: [id], onDelete: Cascade)
   chatId String?
 
   @@index([receiverId, createdAt])
   @@index([senderId, createdAt])
   @@index([chatId, createdAt])
-  @@map("messages")
+  @@map("x_messages")
 }
 
-model Chat {
+model XChat {
   id        String   @id @default(uuid())
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
 
-  user1   User   @relation("User1Chats", fields: [user1Id], references: [id])
+  user1   XUser  @relation("XUser1Chats", fields: [user1Id], references: [id])
   user1Id String
-  user2   User   @relation("User2Chats", fields: [user2Id], references: [id])
+  user2   XUser  @relation("XUser2Chats", fields: [user2Id], references: [id])
   user2Id String
 
-  messages Message[]
+  messages XMessage[]
 
   @@unique([user1Id, user2Id])
-  @@map("chats")
+  @@map("x_chats")
 }
 
-model Notification {
+model XNotification {
   id        String           @id @default(uuid())
   type      NotificationType
   isViewed  Boolean          @default(false)
   isSent    Boolean          @default(false)
   createdAt DateTime         @default(now())
 
-  fromUser   User   @relation("NotificationsFrom", fields: [fromUserId], references: [id])
+  fromUser   XUser  @relation("XNotificationsFrom", fields: [fromUserId], references: [id])
   fromUserId String
 
-  toUser   User   @relation("NotificationsTo", fields: [toUserId], references: [id])
+  toUser   XUser  @relation("XNotificationsTo", fields: [toUserId], references: [id])
   toUserId String
 
-  tweet   Tweet?  @relation("TweetNotifications", fields: [tweetId], references: [id], onDelete: Cascade)
+  tweet   XTweet? @relation("XTweetNotifications", fields: [tweetId], references: [id], onDelete: Cascade)
   tweetId String?
 
   @@unique([tweetId, type])
   @@unique([fromUserId, tweetId, type])
   @@index([isViewed])
   @@index([type, fromUserId, toUserId])
-  @@map("notifications")
+  @@map("x_notifications")
 }
 
-model Session {
+model XSession {
   id        String   @id @default(uuid())
   token     String
   ip        String?
   device    String?
   createdAt DateTime @default(now())
 
-  user   User   @relation(fields: [userId], references: [id])
+  user   XUser  @relation(fields: [userId], references: [id])
   userId String
 
   @@index([userId])
-  @@map("sessions")
+  @@map("x_sessions")
 }
 
-model RefreshToken {
+model XRefreshToken {
   id        String   @id @default(uuid())
   token     String
   ip        String?
@@ -192,25 +311,25 @@ model RefreshToken {
   createdAt DateTime @default(now())
   expiresAt DateTime
 
-  user   User   @relation(fields: [userId], references: [id])
+  user   XUser  @relation(fields: [userId], references: [id])
   userId String
 
-  refreshTokenSockets RefreshTokenSocket[]
+  refreshTokenSockets XRefreshTokenSocket[]
 
   @@index([userId])
-  @@map("refresh_tokens")
+  @@map("x_refresh_tokens")
 }
 
-model RefreshTokenSocket {
+model XRefreshTokenSocket {
   id             String   @id @default(uuid())
   refreshTokenId String
   socketId       String
   createdAt      DateTime @default(now())
 
-  refreshToken RefreshToken @relation(fields: [refreshTokenId], references: [id], onDelete: Cascade)
+  refreshToken XRefreshToken @relation(fields: [refreshTokenId], references: [id], onDelete: Cascade)
 
   @@index([refreshTokenId])
-  @@map("refresh_token_sockets")
+  @@map("x_refresh_token_sockets")
 }
 
 enum NotificationType {
