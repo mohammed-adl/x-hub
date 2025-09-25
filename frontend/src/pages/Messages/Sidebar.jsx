@@ -21,43 +21,57 @@ export default function Sidebar() {
 
   const conversations = data?.conversations || [];
 
-  if (!isLoading && !selectedChat?.id) {
-    if (targetUsername) {
-      const existing = conversations.find(
-        (c) => c.partner.username === targetUsername
-      );
-      if (existing) {
-        setSelectedChat({ id: existing.id, partnerId: existing.partnerId });
-      } else {
-        (async () => {
-          try {
-            const body = await handleCreateChat(targetUsername);
-            const { chat, partner } = body;
-            setSelectedChat({ id: chat.id, partnerId: partner.id });
+  // Determine which chat to select / create
+  let chatToSelect = selectedChat;
+  if (!selectedChat?.id && conversations.length > 0) {
+    chatToSelect = {
+      id: conversations[0].id,
+      partnerId: conversations[0].partnerId,
+    };
+  }
+
+  if (targetUsername) {
+    const existing = conversations.find(
+      (c) => c.partner.username === targetUsername
+    );
+    if (existing) {
+      chatToSelect = { id: existing.id, partnerId: existing.partnerId };
+    } else {
+      try {
+        const body = handleCreateChat(targetUsername); // assuming this returns a Promise
+        // merge into conversations safely after resolving
+        body
+          .then(({ chat, partner }) => {
             queryClient.setQueryData(["conversations"], (oldData) => {
               const oldConvos = oldData?.conversations || [];
-              return {
-                ...oldData,
-                conversations: [
-                  {
-                    id: chat.id,
-                    partnerId: partner.id,
-                    partner,
-                    lastMessage: null,
-                  },
-                  ...oldConvos,
-                ],
-              };
+              // avoid duplicates
+              if (!oldConvos.some((c) => c.id === chat.id)) {
+                return {
+                  ...oldData,
+                  conversations: [
+                    {
+                      id: chat.id,
+                      partnerId: partner.id,
+                      partner,
+                      lastMessage: null,
+                    },
+                    ...oldConvos,
+                  ],
+                };
+              }
+              return oldData;
             });
-          } catch (err) {
-            console.log(err);
-          }
-        })();
+            setSelectedChat({ id: chat.id, partnerId: partner.id });
+          })
+          .catch(console.log);
+      } catch (err) {
+        console.log(err);
       }
-    } else if (conversations.length > 0) {
-      const firstConv = conversations[0];
-      setSelectedChat({ id: firstConv.id, partnerId: firstConv.partnerId });
     }
+  }
+
+  if (!selectedChat?.id && chatToSelect) {
+    setSelectedChat(chatToSelect);
   }
 
   const handleSelect = (id) => {
