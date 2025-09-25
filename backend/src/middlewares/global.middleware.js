@@ -30,6 +30,8 @@ export const authLimiter = rateLimit({
 });
 
 export const registerMiddlewares = (app) => {
+  app.set("trust proxy", 1);
+
   app.use(
     helmet({
       crossOriginResourcePolicy: { policy: "cross-origin" },
