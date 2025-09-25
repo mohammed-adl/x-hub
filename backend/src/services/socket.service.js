@@ -3,7 +3,7 @@ import { prisma, notificationSelect, userSelect } from "../lib/index.js";
 
 const socketService = {
   async createNotification(type, fromUserId, toUserId, tweetId = null) {
-    return await prisma.notification.create({
+    return await prisma.xNotification.create({
       data: {
         type,
         fromUserId,
@@ -17,7 +17,7 @@ const socketService = {
   async notifyUser(userId, payload) {
     io.to(userId).emit("newNotification", payload);
 
-    await prisma.user.update({
+    await prisma.xUser.update({
       where: { id: userId },
       data: { hasNotifications: true },
     });

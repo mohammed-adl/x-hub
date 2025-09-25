@@ -6,7 +6,7 @@ export const getTweet = asyncHandler(async (req, res) => {
   const userId = req.user.id;
   const tweetId = req.params.id;
 
-  const tweet = await prisma.tweet.findUnique({
+  const tweet = await prisma.xTweet.findUnique({
     where: { id: tweetId },
     select: {
       likes: { where: { userId }, select: { id: true } },
@@ -16,7 +16,7 @@ export const getTweet = asyncHandler(async (req, res) => {
 
   if (!tweet) return fail("Tweet not found", 404);
 
-  const userRetweet = await prisma.tweet.findFirst({
+  const userRetweet = await prisma.xTweet.findFirst({
     where: {
       authorId: userId,
       originalTweetId: tweetId,

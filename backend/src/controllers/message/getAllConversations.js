@@ -6,7 +6,7 @@ import { attachChatUrls } from "../../utils/index.js";
 export const getAllConversations = asyncHandler(async (req, res) => {
   const userId = req.user.id;
 
-  const chats = await prisma.chat.findMany({
+  const chats = await prisma.xChat.findMany({
     where: {
       OR: [{ user1Id: userId }, { user2Id: userId }],
     },

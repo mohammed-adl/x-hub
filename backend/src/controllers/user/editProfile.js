@@ -18,7 +18,7 @@ export const editProfile = asyncHandler(async (req, res) => {
     dataToUpdate.profilePicture = profilePictureFile.relativePath;
   if (coverImageFile) dataToUpdate.coverImage = coverImageFile.relativePath;
 
-  const user = await prisma.user.update({
+  const user = await prisma.xUser.update({
     where: { id: userId },
     data: dataToUpdate,
     select: userSelect,

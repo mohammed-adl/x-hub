@@ -11,7 +11,7 @@ export const verifyToken = async (req, res, next) => {
   const accessToken = authHeader.split(" ")[1];
   const payload = jwt.verify(accessToken, process.env.ACCESS_SECRET);
 
-  const user = await prisma.user.findUnique({
+  const user = await prisma.xUser.findUnique({
     where: { id: payload.id },
   });
   if (!user) throw new AppError("User not found", 401);

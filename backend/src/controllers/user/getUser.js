@@ -6,14 +6,14 @@ export const getUser = asyncHandler(async (req, res) => {
   const originUserId = req.user.id;
   const { username } = req.params;
 
-  const user = await prisma.user.findUnique({
+  const user = await prisma.xUser.findUnique({
     where: { username },
     select: userSelect,
   });
 
   if (!user) return fail(res, "User not found", 404);
 
-  const isFollowing = await prisma.follows.findUnique({
+  const isFollowing = await prisma.xFollows.findUnique({
     where: {
       followerId_followingId: {
         followerId: originUserId,

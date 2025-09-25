@@ -12,7 +12,7 @@ export async function handleConnection(socket) {
       `User ${socket.userId} disconnected from room ${socket.socketId}`
     );
     try {
-      await prisma.refreshToken.updateMany({
+      await prisma.xRefreshToken.updateMany({
         where: { socketId: socket.id },
         data: { socketId: null },
       });
@@ -26,7 +26,7 @@ async function registerToken(refreshTokenId, socket) {
   if (!refreshTokenId) return;
 
   try {
-    const session = await prisma.refreshToken.findFirst({
+    const session = await prisma.xRefreshToken.findFirst({
       where: {
         id: refreshTokenId,
         expiresAt: { gt: new Date() },
@@ -34,7 +34,7 @@ async function registerToken(refreshTokenId, socket) {
     });
 
     if (session) {
-      await prisma.refreshToken.update({
+      await prisma.xRefreshToken.update({
         where: { id: refreshTokenId },
         data: { socketId: socket.id },
       });

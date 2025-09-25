@@ -3,14 +3,14 @@ import { prisma, userSelect, success } from "../../lib/index.js";
 import { attachFullUrls } from "../../utils/index.js";
 
 async function findExactUsername(query) {
-  return await prisma.user.findFirst({
+  return await prisma.xUser.findFirst({
     where: { username: { equals: query, mode: "insensitive" } },
     select: userSelect,
   });
 }
 
 async function findPublicExactName(query, excludeIds = []) {
-  return await prisma.user.findMany({
+  return await prisma.xUser.findMany({
     where: {
       name: { equals: query, mode: "insensitive" },
       NOT: { id: { in: excludeIds } },
@@ -21,7 +21,7 @@ async function findPublicExactName(query, excludeIds = []) {
 }
 
 async function findExactNameInNetwork(query, userId, excludeIds = []) {
-  return await prisma.user.findMany({
+  return await prisma.xUser.findMany({
     where: {
       name: { equals: query, mode: "insensitive" },
       OR: [
@@ -36,7 +36,7 @@ async function findExactNameInNetwork(query, userId, excludeIds = []) {
 }
 
 async function findSimilarNames(queryParts, userId, excludeIds = []) {
-  return await prisma.user.findMany({
+  return await prisma.xUser.findMany({
     where: {
       AND: [
         {

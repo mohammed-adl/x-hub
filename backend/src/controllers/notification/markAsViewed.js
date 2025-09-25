@@ -5,7 +5,7 @@ export const markAsViewed = asyncHandler(async (req, res) => {
   const userId = req.user.id;
   const notificationId = req.params.id;
 
-  const notification = await prisma.notification.findUnique({
+  const notification = await prisma.xNotification.findUnique({
     where: { id: notificationId },
     select: { toUserId: true },
   });
@@ -15,7 +15,7 @@ export const markAsViewed = asyncHandler(async (req, res) => {
   if (notification.toUserId !== userId)
     fail("You can't mark this notification as viewed", 403);
 
-  await prisma.notification.update({
+  await prisma.xNotification.update({
     where: { id: notificationId },
     data: { isViewed: true },
   });

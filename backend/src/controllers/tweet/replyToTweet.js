@@ -8,14 +8,14 @@ export const replytoTweet = asyncHandler(async (req, res) => {
   const userId = req.user.id;
   const body = req.body;
 
-  const parentTweet = await prisma.tweet.findUnique({
+  const parentTweet = await prisma.xTweet.findUnique({
     where: { id: tweetId },
     select: { authorId: true },
   });
 
   if (!parentTweet) fail("Tweet not found", 404);
 
-  const reply = await prisma.tweet.create({
+  const reply = await prisma.xTweet.create({
     data: {
       id: generateFlakeId(),
       content: req.body.content,
@@ -26,7 +26,7 @@ export const replytoTweet = asyncHandler(async (req, res) => {
   });
 
   if (userId !== parentTweet.authorId) {
-    const notification = await prisma.notification.create({
+    const notification = await prisma.xNotification.create({
       data: {
         type: "REPLY",
         fromUserId: userId,

@@ -15,7 +15,7 @@ export async function generateUniqueUsername(name) {
     const suffix = Math.floor(1000 + Math.random() * 9000);
     username = `${base}${suffix}`;
 
-    const existingUser = await prisma.user.findUnique({
+    const existingUser = await prisma.xUser.findUnique({
       where: { username },
       select: { id: true },
     });

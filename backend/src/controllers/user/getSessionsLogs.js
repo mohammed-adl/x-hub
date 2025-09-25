@@ -7,7 +7,7 @@ export const getSessionsLogs = asyncHandler(async (req, res) => {
 
   if (!refreshToken) return fail(res, "Refresh token not found", 401);
 
-  const sessions = await prisma.refreshToken.findMany({
+  const sessions = await prisma.xRefreshToken.findMany({
     where: {
       userId,
       expiresAt: { gt: new Date() },

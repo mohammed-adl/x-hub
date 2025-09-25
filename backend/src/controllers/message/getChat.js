@@ -7,7 +7,7 @@ export const getChat = asyncHandler(async (req, res) => {
   const limit = Number(req.query.limit) || 20;
   const cursor = Number(req.query.cursor || 0);
 
-  const chat = await prisma.chat.findFirst({
+  const chat = await prisma.xChat.findFirst({
     where: { id: chatId },
     include: {
       messages: {

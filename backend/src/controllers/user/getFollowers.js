@@ -32,7 +32,7 @@ export const getFollowers = asyncHandler(async (req, res) => {
 
   const followersIds = formatted.map((user) => user.id);
 
-  const existingFollows = await prisma.follows.findMany({
+  const existingFollows = await prisma.xFollows.findMany({
     where: {
       followerId: userId,
       followingId: { in: followersIds },

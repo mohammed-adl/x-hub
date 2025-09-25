@@ -13,14 +13,14 @@ export const toggleRetweet = asyncHandler(async (req, res) => {
   const userId = req.user.id;
   const tweetId = req.params.id;
 
-  const originalTweet = await prisma.tweet.findUnique({
+  const originalTweet = await prisma.xTweet.findUnique({
     where: { id: tweetId },
     select: { authorId: true },
   });
 
   if (!originalTweet) return fail("Tweet not found", 404);
 
-  const existingRetweet = await prisma.tweet.findFirst({
+  const existingRetweet = await prisma.xTweet.findFirst({
     where: {
       originalTweetId: tweetId,
       authorId: userId,
@@ -28,7 +28,7 @@ export const toggleRetweet = asyncHandler(async (req, res) => {
   });
 
   if (existingRetweet) {
-    await prisma.tweet.delete({
+    await prisma.xTweet.delete({
       where: { id: existingRetweet.id },
     });
 
@@ -50,7 +50,7 @@ export const toggleRetweet = asyncHandler(async (req, res) => {
     });
 
     if (originalTweet.authorId !== userId) {
-      const notificationExists = await tx.notification.findUnique({
+      const notificationExists = await tx.xNotification.findUnique({
         where: {
           fromUserId_tweetId_type: {
             fromUserId: userId,
@@ -68,7 +68,7 @@ export const toggleRetweet = asyncHandler(async (req, res) => {
           tweetId
         );
 
-        const notification = await tx.notification.findUnique({
+        const notification = await tx.xNotification.findUnique({
           where: { id: notificationCreated.id },
           select: notificationSelect,
         });

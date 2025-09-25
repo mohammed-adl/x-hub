@@ -6,14 +6,14 @@ export const createChat = asyncHandler(async (req, res) => {
   const userId = req.user.id;
   const partnerUsername = req.body.username;
 
-  const partner = await prisma.user.findUnique({
+  const partner = await prisma.xUser.findUnique({
     where: { username: partnerUsername },
     select: userSelect,
   });
 
   if (!partner) return fail(res, "Partner not found", 400);
 
-  const existingChat = await prisma.chat.findFirst({
+  const existingChat = await prisma.xChat.findFirst({
     where: {
       OR: [
         { user1Id: userId, user2Id: partner.id },
@@ -28,7 +28,7 @@ export const createChat = asyncHandler(async (req, res) => {
     return success(res, { chat: existingChat, partner: partnerWithUrl });
   }
 
-  const chat = await prisma.chat.create({
+  const chat = await prisma.xChat.create({
     data: {
       user1Id: userId,
       user2Id: partner.id,

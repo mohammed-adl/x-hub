@@ -38,14 +38,14 @@ export const toggleLike = asyncHandler(async (req, res) => {
   let notification;
 
   await prisma.$transaction(async (tx) => {
-    await tx.like.create({
+    await tx.xLike.create({
       data: {
         tweetId,
         userId,
       },
     });
 
-    const notificationExists = await tx.notification.findUnique({
+    const notificationExists = await tx.xNotification.findUnique({
       where: {
         tweetId_type: {
           tweetId,
@@ -64,7 +64,7 @@ export const toggleLike = asyncHandler(async (req, res) => {
         tweetId
       );
 
-      await tx.notification.update({
+      await tx.xNotification.update({
         where: { id: notification.id },
         data: { isSent: true },
       });

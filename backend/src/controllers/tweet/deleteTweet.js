@@ -5,7 +5,7 @@ export const deleteTweet = asyncHandler(async (req, res) => {
   const userId = req.user.id;
   const tweetId = req.params.id;
 
-  const tweet = await prisma.tweet.findUnique({
+  const tweet = await prisma.xTweet.findUnique({
     where: { id: tweetId },
   });
 

@@ -6,7 +6,7 @@ export const toggleFollow = asyncHandler(async (req, res, next) => {
   const userId = req.user.id;
   const username = req.params.username;
 
-  const targetUser = await prisma.user.findUnique({
+  const targetUser = await prisma.xUser.findUnique({
     where: { username },
   });
   if (!targetUser) fail("User not found", 404);
@@ -17,12 +17,12 @@ export const toggleFollow = asyncHandler(async (req, res, next) => {
   let isFollowing;
 
   await prisma.$transaction(async (tx) => {
-    const existing = await tx.follows.findUnique({
+    const existing = await tx.xFollows.findUnique({
       where: { followerId_followingId: { followerId: userId, followingId } },
     });
 
     if (existing) {
-      await tx.follows.delete({
+      await tx.xFollows.delete({
         where: { followerId_followingId: { followerId: userId, followingId } },
       });
       isFollowing = false;
@@ -35,7 +35,7 @@ export const toggleFollow = asyncHandler(async (req, res, next) => {
   });
 
   if (isFollowing) {
-    const notificationExists = await prisma.notification.findFirst({
+    const notificationExists = await prisma.xNotification.findFirst({
       where: {
         type: "FOLLOW",
         fromUserId: userId,

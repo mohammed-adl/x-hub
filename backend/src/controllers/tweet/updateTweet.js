@@ -6,7 +6,7 @@ export const updateTweet = asyncHandler(async (req, res) => {
   const tweetId = req.params.id;
   const content = req.body.content;
 
-  const tweet = await prisma.tweet.findUnique({
+  const tweet = await prisma.xTweet.findUnique({
     where: {
       id: tweetId,
     },
@@ -15,7 +15,7 @@ export const updateTweet = asyncHandler(async (req, res) => {
   if (!tweet) return fail("Tweet not found", 404);
   if (tweet.authorId !== userId) return fail("Unauthorized", 403);
 
-  const updatedTweet = await prisma.tweet.update({
+  const updatedTweet = await prisma.xTweet.update({
     where: { id: tweetId },
     data: { content },
     select: tweetSelect,

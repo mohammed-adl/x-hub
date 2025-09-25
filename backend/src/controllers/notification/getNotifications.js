@@ -7,7 +7,7 @@ export const getNotifications = asyncHandler(async (req, res) => {
   const limit = Number(req.query.limit) || 20;
   const cursor = req.query.cursor;
 
-  const notifications = await prisma.notification.findMany({
+  const notifications = await prisma.xNotification.findMany({
     where: { toUserId: userId },
     orderBy: { createdAt: "desc" },
     take: limit,

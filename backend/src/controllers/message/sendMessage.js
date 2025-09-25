@@ -8,7 +8,7 @@ export const sendMessage = asyncHandler(async (req, res) => {
   const chatId = req.params.chatId;
   const { content, partnerId: receiverId } = req.body;
 
-  const receiver = await prisma.user.findUnique({ where: { id: receiverId } });
+  const receiver = await prisma.xUser.findUnique({ where: { id: receiverId } });
   if (!receiver) return fail(res, "Receiver not found", 400);
 
   const result = await prisma.$transaction(async (prisma) => {
@@ -19,17 +19,17 @@ export const sendMessage = asyncHandler(async (req, res) => {
     });
 
     if (!chat) {
-      chat = await prisma.chat.create({
+      chat = await prisma.xChat.create({
         data: { user1Id: senderId, user2Id: receiverId },
       });
     }
 
-    await prisma.chat.update({
+    await prisma.xChat.update({
       where: { id: chat.id },
       data: { updatedAt: new Date() },
     });
 
-    const message = await prisma.message.create({
+    const message = await prisma.xMessage.create({
       data: {
         content,
         senderId,

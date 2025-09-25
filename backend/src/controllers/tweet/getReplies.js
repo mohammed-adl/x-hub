@@ -8,7 +8,7 @@ export const getReplies = asyncHandler(async (req, res) => {
   const { cursor } = req.query;
   const tweetId = req.params.id;
 
-  const replies = await prisma.tweet.findMany({
+  const replies = await prisma.xTweet.findMany({
     where: { parentTweetId: tweetId },
     select: {
       ...tweetSelect,
@@ -26,7 +26,7 @@ export const getReplies = asyncHandler(async (req, res) => {
     return success(res, { replies: [], message: "You have no replies yet" });
   }
 
-  const retweets = await prisma.tweet.findMany({
+  const retweets = await prisma.xTweet.findMany({
     where: {
       authorId: userId,
       originalTweetId: { in: replies.map((r) => r.id) },

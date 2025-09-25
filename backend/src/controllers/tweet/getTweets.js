@@ -8,14 +8,14 @@ export const getTweets = asyncHandler(async (req, res) => {
   const cursor = req.query.cursor;
   const username = req.params.username;
 
-  const user = await prisma.user.findUnique({
+  const user = await prisma.xUser.findUnique({
     where: { username },
     select: { id: true },
   });
 
   if (!user) return fail("User not found", 404);
 
-  const tweets = await prisma.tweet.findMany({
+  const tweets = await prisma.xTweet.findMany({
     where: { authorId: user.id },
     select: {
       ...tweetSelect,

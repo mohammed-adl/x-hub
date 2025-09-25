@@ -7,7 +7,7 @@ export const postTweet = asyncHandler(async (req, res) => {
   const parentTweetId = req.body.parentTweetId || null;
   const images = req.files || [];
 
-  const tweet = await prisma.tweet.create({
+  const tweet = await prisma.xTweet.create({
     data: {
       id: generateFlakeId(),
       content,

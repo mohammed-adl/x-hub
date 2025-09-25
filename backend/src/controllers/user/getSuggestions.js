@@ -5,7 +5,7 @@ import { getRandomItems, attachFullUrls } from "../../utils/index.js";
 const SUGGESTION_LIMIT = 3;
 
 async function getFollowingIds(userId) {
-  const following = await prisma.follows.findMany({
+  const following = await prisma.xFollows.findMany({
     where: { followerId: userId },
     select: { followingId: true },
   });
@@ -13,7 +13,7 @@ async function getFollowingIds(userId) {
 }
 
 async function getMutualFollowingSuggestions(userId, followingIds) {
-  const mutualFollowing = await prisma.follows.groupBy({
+  const mutualFollowing = await prisma.xFollows.groupBy({
     by: ["followingId"],
     where: {
       followerId: { in: followingIds },
@@ -28,7 +28,7 @@ async function getMutualFollowingSuggestions(userId, followingIds) {
 
   if (mutualFollowingIds.length < SUGGESTION_LIMIT) return [];
 
-  const mutualSuggestions = await prisma.user.findMany({
+  const mutualSuggestions = await prisma.xUser.findMany({
     where: { id: { in: mutualFollowingIds } },
     select: userSelect,
   });
@@ -37,7 +37,7 @@ async function getMutualFollowingSuggestions(userId, followingIds) {
 }
 
 async function getNewFollowersSuggestions(userId, followingIds) {
-  const newFollowers = await prisma.follows.findMany({
+  const newFollowers = await prisma.xFollows.findMany({
     where: {
       followingId: userId,
       followerId: { notIn: [...followingIds, userId] },
@@ -50,7 +50,7 @@ async function getNewFollowersSuggestions(userId, followingIds) {
   const newFollowersIds = newFollowers.map((user) => user.followerId);
   if (newFollowersIds.length < SUGGESTION_LIMIT) return [];
 
-  const users = await prisma.user.findMany({
+  const users = await prisma.xUser.findMany({
     where: { id: { in: newFollowersIds } },
     select: userSelect,
   });
@@ -59,7 +59,7 @@ async function getNewFollowersSuggestions(userId, followingIds) {
 }
 
 async function getPopularUsersSuggestions(userId, followingIds) {
-  const popularUsers = await prisma.follows.groupBy({
+  const popularUsers = await prisma.xFollows.groupBy({
     by: ["followingId"],
     _count: { followerId: true },
     orderBy: { _count: { followerId: "desc" } },
@@ -68,7 +68,7 @@ async function getPopularUsersSuggestions(userId, followingIds) {
 
   const topUserIds = popularUsers.map((u) => u.followingId);
 
-  const topUsers = await prisma.user.findMany({
+  const topUsers = await prisma.xUser.findMany({
     where: {
       AND: [
         { id: { in: topUserIds } },

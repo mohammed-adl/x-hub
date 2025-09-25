@@ -11,7 +11,7 @@ export const refreshToken = asyncHandler(async (req, res) => {
 
   const payload = await authService.verifyRefreshToken(refreshToken);
 
-  const tokens = await prisma.refreshToken.findMany({
+  const tokens = await prisma.xRefreshToken.findMany({
     where: {
       userId: payload.id,
       expiresAt: { gt: new Date() },
@@ -28,7 +28,7 @@ export const refreshToken = asyncHandler(async (req, res) => {
   }
   if (!validToken) fail("Invalid refresh token", 401);
 
-  await prisma.refreshToken.delete({
+  await prisma.xRefreshToken.delete({
     where: { id: validToken.id },
   });
 

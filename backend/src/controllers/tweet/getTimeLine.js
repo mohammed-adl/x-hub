@@ -7,7 +7,7 @@ export const getTimeLine = asyncHandler(async (req, res) => {
   const limit = Number(req.query.limit) || 20;
   const cursor = req.query.cursor;
 
-  const tweets = await prisma.tweet.findMany({
+  const tweets = await prisma.xTweet.findMany({
     where: { authorId: { not: userId }, parentTweetId: null },
     select: {
       ...tweetSelect,
@@ -24,10 +24,6 @@ export const getTimeLine = asyncHandler(async (req, res) => {
     orderBy: { id: "desc" },
     ...(cursor > 0 && { cursor: { id: cursor }, skip: 1 }),
   });
-
-  if (tweets.length === 0) {
-    return fail("You have no tweets");
-  }
 
   const formatted = tweets.map((tweet) => ({
     ...tweet,
