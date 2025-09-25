@@ -12,7 +12,7 @@ export const sendMessage = asyncHandler(async (req, res) => {
   if (!receiver) return fail(res, "Receiver not found", 400);
 
   const result = await prisma.$transaction(async (prisma) => {
-    let chat = await prisma.chat.findFirst({
+    let chat = await prisma.xChat.findFirst({
       where: {
         id: chatId,
       },

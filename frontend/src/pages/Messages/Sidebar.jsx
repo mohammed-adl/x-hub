@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 
@@ -10,7 +9,6 @@ import styles from "./Messages.module.css";
 
 export default function Sidebar() {
   const { user } = useUser();
-  const userId = user?.id;
   const { selectedChat, setSelectedChat } = useMessage();
   const location = useLocation();
   const { username: targetUsername } = location?.state || {};
@@ -18,55 +16,49 @@ export default function Sidebar() {
 
   const { data, isLoading, error } = useQuery({
     queryKey: ["conversations"],
-    queryFn: async () => await handleGetAllConvos(),
+    queryFn: handleGetAllConvos,
   });
 
   const conversations = data?.conversations || [];
 
-  async function createChat(username) {
-    try {
-      const body = await handleCreateChat(username);
-
-      const partner = body.partner;
-      const chat = body.chat;
-
-      setSelectedChat({ id: chat.id, partnerId: partner.id });
-
-      queryClient.setQueryData(["conversations"], (oldData) => {
-        const oldConvos = oldData?.conversations || [];
-        const newConversation = {
-          id: chat.id,
-          partnerId: partner.id,
-          partner: partner,
-          lastMessage: null,
-        };
-        return {
-          ...oldData,
-          conversations: [newConversation, ...oldConvos],
-        };
-      });
-    } catch (err) {
-      console.log(err);
+  if (!isLoading && !selectedChat?.id) {
+    if (targetUsername) {
+      const existing = conversations.find(
+        (c) => c.partner.username === targetUsername
+      );
+      if (existing) {
+        setSelectedChat({ id: existing.id, partnerId: existing.partnerId });
+      } else {
+        (async () => {
+          try {
+            const body = await handleCreateChat(targetUsername);
+            const { chat, partner } = body;
+            setSelectedChat({ id: chat.id, partnerId: partner.id });
+            queryClient.setQueryData(["conversations"], (oldData) => {
+              const oldConvos = oldData?.conversations || [];
+              return {
+                ...oldData,
+                conversations: [
+                  {
+                    id: chat.id,
+                    partnerId: partner.id,
+                    partner,
+                    lastMessage: null,
+                  },
+                  ...oldConvos,
+                ],
+              };
+            });
+          } catch (err) {
+            console.log(err);
+          }
+        })();
+      }
+    } else if (conversations.length > 0) {
+      const firstConv = conversations[0];
+      setSelectedChat({ id: firstConv.id, partnerId: firstConv.partnerId });
     }
   }
-
-  useEffect(() => {
-    if (!isLoading && !selectedChat?.id) {
-      if (targetUsername) {
-        const existing = conversations.find(
-          (c) => c.partner.username === targetUsername
-        );
-        if (existing) {
-          setSelectedChat({ id: existing.id, partnerId: existing.partnerId });
-        } else {
-          createChat(targetUsername);
-        }
-      } else if (conversations.length > 0) {
-        const firstConv = conversations[0];
-        setSelectedChat({ id: firstConv.id, partnerId: firstConv.partnerId });
-      }
-    }
-  }, [conversations, isLoading, targetUsername, selectedChat?.id]);
 
   const handleSelect = (id) => {
     const conv = conversations.find((c) => c.id === id);
