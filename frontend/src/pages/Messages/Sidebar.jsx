@@ -66,7 +66,10 @@ export default function Sidebar() {
               }
               alt={conv.partner.name}
               size={48}
-              onClick={() => navigate(`/${conv.partner.username}`)}
+              onClick={() => {
+                e.stopPropagation();
+                navigate(`/${conv.partner.username}`);
+              }}
             />
             <div className={styles.info}>
               <div className={styles.nameRow}>

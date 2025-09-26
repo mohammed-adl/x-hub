@@ -1,39 +1,32 @@
 // hooks/useAddMessage.js
 import { useQueryClient } from "@tanstack/react-query";
 import { useUser } from "../contexts";
+import { handleSendMessage } from "../fetchers";
 
-export const useAddMessage = (chatId) => {
+export const useAddMessage = (chatId, partnerId) => {
   const queryClient = useQueryClient();
   const { user } = useUser();
 
-  const addMessage = (messageData) => {
+  const addMessageToCache = (messageObj) => {
     if (!chatId) return;
 
-    const newMessageObj = {
-      id: messageData.id || `temp-${Date.now()}`,
-      content: messageData.content || messageData,
-      createdAt: messageData.createdAt || new Date().toISOString(),
-      sender: messageData.sender || {
-        id: user.id,
-        name: user.name,
-        username: user.username,
-        profilePicture: user.profilePicture,
-      },
-      receiver: messageData.receiver || null,
-      isOptimistic: messageData.isOptimistic || false,
-    };
-
     queryClient.setQueryData(["chat", chatId], (oldData) => {
+      // If no old data, create the initial structure
       if (!oldData?.pages?.length) {
         return {
-          pages: [{ chat: [newMessageObj], nextCursor: null }],
+          pages: [{ messages: [messageObj], nextCursor: null }],
           pageParams: [0],
         };
       }
 
       const newPages = [...oldData.pages];
       const firstPage = { ...newPages[0] };
-      firstPage.chat = [newMessageObj, ...firstPage.chat];
+
+      // Ensure firstPage.messages is always an array
+      firstPage.messages = Array.isArray(firstPage.messages)
+        ? [messageObj, ...firstPage.messages]
+        : [messageObj];
+
       newPages[0] = firstPage;
 
       return {
@@ -43,41 +36,50 @@ export const useAddMessage = (chatId) => {
     });
   };
 
-  const removeOptimisticMessage = (tempId) => {
-    queryClient.setQueryData(["chat", chatId], (oldData) => {
-      if (!oldData?.pages?.length) return oldData;
+  const sendMessage = async (content) => {
+    if (!chatId || !partnerId || !content.trim()) return;
+    console.log(content);
 
-      const newPages = oldData.pages.map((page) => ({
-        ...page,
-        chat: page.chat.filter((msg) => msg.id !== tempId),
-      }));
+    const messageContent = content.trim();
+    const tempId = `temp-${Date.now()}`;
 
-      return {
-        ...oldData,
-        pages: newPages,
-      };
-    });
+    // Optimistic message
+    const optimisticMessage = {
+      id: tempId,
+      content: messageContent,
+      createdAt: new Date().toISOString(),
+      sender: {
+        id: user.id,
+        name: user.name,
+        username: user.username,
+        profilePicture: user.profilePicture,
+      },
+      receiver: { id: partnerId },
+      isOptimistic: true,
+    };
+
+    // Add immediately to cache
+    addMessageToCache(optimisticMessage);
+
+    try {
+      // Send to server
+      await handleSendMessage(chatId, partnerId, messageContent);
+      // Do nothing on success - keep the optimistic message
+    } catch (error) {
+      // Remove optimistic message on error
+      queryClient.setQueryData(["chat", chatId], (oldData) => {
+        if (!oldData?.pages?.length) return oldData;
+        const newPages = [...oldData.pages];
+        const firstPage = { ...newPages[0] };
+        firstPage.messages = firstPage.messages.filter(
+          (msg) => msg.id !== tempId
+        );
+        newPages[0] = firstPage;
+        return { ...oldData, pages: newPages };
+      });
+      console.error("Failed to send message:", error);
+    }
   };
 
-  const updateMessage = (tempId, updatedMessage) => {
-    queryClient.setQueryData(["chat", chatId], (oldData) => {
-      if (!oldData?.pages?.length) return oldData;
-
-      const newPages = oldData.pages.map((page) => ({
-        ...page,
-        chat: page.chat.map((msg) =>
-          msg.id === tempId
-            ? { ...msg, ...updatedMessage, isOptimistic: false }
-            : msg
-        ),
-      }));
-
-      return {
-        ...oldData,
-        pages: newPages,
-      };
-    });
-  };
-
-  return { addMessage, removeOptimisticMessage, updateMessage };
+  return { sendMessage };
 };

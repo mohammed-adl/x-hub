@@ -11,27 +11,28 @@ export default function MessagesList({ messages, isPartnerTyping }) {
   return (
     <>
       {reversedMessages.map((msg, index) => {
-        const isMe = msg.sender.id === user.id;
+        const isMe = msg?.sender.id === user.id;
         const isLast = index === reversedMessages.length - 1;
 
         return (
           <div
-            key={`${msg.id}-${index}`}
+            key={`${msg?.id}-${index}`}
             className={`${styles.message} ${isMe ? styles.me : styles.other}`}
           >
             {!isMe && (
               <Avatar
                 src={
-                  msg.sender.profilePicture || generateAvatar(msg.sender?.name)
+                  msg?.sender.profilePicture ||
+                  generateAvatar(msg?.sender?.name)
                 }
                 alt="avatar"
                 size={43}
               />
             )}
             <div className={styles.textContainer}>
-              <div className={styles.text}>{msg.content}</div>
+              <div className={styles.text}>{msg?.content}</div>
               <div className={styles.timestamp}>
-                {formatTimeAgo(msg.createdAt)}
+                {formatTimeAgo(msg?.createdAt)}
               </div>
               {isPartnerTyping && isLast && (
                 <div className={styles.typingIndicator}>typing...</div>
