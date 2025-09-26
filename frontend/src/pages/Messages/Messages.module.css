@@ -95,9 +95,16 @@
 }
 
 .header {
+  display: flex;
+  gap: 0.5rem;
   padding: 16px;
   font-weight: 700;
   border-bottom: 1px solid #212b33;
+}
+
+.partner {
+  font-size: 1.2rem;
+  font-weight: 500;
 }
 
 .messages {
@@ -142,6 +149,7 @@
   background-color: #1d9bf0;
   color: white;
   word-break: break-word;
+  cursor: pointer;
 }
 
 .other .text {

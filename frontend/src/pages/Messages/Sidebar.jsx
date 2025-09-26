@@ -66,7 +66,7 @@ export default function Sidebar() {
               }
               alt={conv.partner.name}
               size={48}
-              onClick={() => {
+              onClick={(e) => {
                 e.stopPropagation();
                 navigate(`/${conv.partner.username}`);
               }}

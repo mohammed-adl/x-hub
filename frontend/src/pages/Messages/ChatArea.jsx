@@ -9,7 +9,7 @@ import {
 
 import { send } from "../../assets/icons";
 import MessagesList from "./MessagesList";
-import { Spinner, ErrorMessage } from "../../components/ui";
+import { Spinner, ErrorMessage, Avatar } from "../../components/ui";
 import styles from "./Messages.module.css";
 
 export default function ChatArea() {
@@ -67,6 +67,15 @@ export default function ChatArea() {
 
   return (
     <div className={styles.chatArea}>
+      <div className={styles.header}>
+        <Avatar
+          src={selectedChat?.partner.profilePicture}
+          name={selectedChat?.partner.name}
+          size={35}
+          onClick={() => navigate(`/${selectedChat?.partner.username}`)}
+        />
+        <div className={styles.partner}>{selectedChat?.partner.name}</div>
+      </div>
       <div className={styles.messages} ref={messagesContainerRef}>
         {isFetchingNextPage && <Spinner />}
         {messages.length === 0 ? (

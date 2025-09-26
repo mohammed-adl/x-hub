@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useUser } from "../../contexts";
 import { generateAvatar, formatTimeAgo } from "../../utils";
 import { Avatar } from "../../components/ui";
@@ -5,8 +6,16 @@ import styles from "./Messages.module.css";
 
 export default function MessagesList({ messages, isPartnerTyping }) {
   const { user } = useUser();
+  const [showTimestamp, setShowTimestamp] = useState({});
 
   const reversedMessages = [...messages].reverse();
+
+  const toggleTimestamp = (messageId) => {
+    setShowTimestamp((prev) => ({
+      ...prev,
+      [messageId]: !prev[messageId],
+    }));
+  };
 
   return (
     <>
@@ -30,10 +39,17 @@ export default function MessagesList({ messages, isPartnerTyping }) {
               />
             )}
             <div className={styles.textContainer}>
-              <div className={styles.text}>{msg?.content}</div>
-              <div className={styles.timestamp}>
-                {formatTimeAgo(msg?.createdAt)}
+              <div
+                className={styles.text}
+                onClick={() => toggleTimestamp(msg?.id)}
+              >
+                {msg?.content}
               </div>
+              {showTimestamp[msg?.id] && (
+                <div className={styles.timestamp}>
+                  {formatTimeAgo(msg?.createdAt)}
+                </div>
+              )}
               {isPartnerTyping && isLast && (
                 <div className={styles.typingIndicator}>typing...</div>
               )}
