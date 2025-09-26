@@ -201,9 +201,9 @@ button {
     flex-direction: column;
   }
 
-  .chatArea {
+  /* .chatArea {
     display: none;
-  }
+  } */
 
   .sidebar {
     width: 100%;

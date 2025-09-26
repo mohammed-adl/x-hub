@@ -1,4 +1,6 @@
 import { useCallback } from "react";
+import { useNavigate } from "react-router-dom";
+
 import { useMessage } from "../../contexts";
 import {
   useAddMessage,
@@ -14,6 +16,7 @@ import styles from "./Messages.module.css";
 
 export default function ChatArea() {
   const { selectedChat, setIsTyping, isPartnerTyping } = useMessage();
+  const navigate = useNavigate();
 
   const chatId = selectedChat?.id;
   const partnerId = selectedChat?.partner.id;

@@ -12,7 +12,7 @@ import { useFetchConvos, useCreateChat } from "../../hooks";
 export default function Sidebar() {
   const location = useLocation();
   const navigate = useNavigate();
-  const { selectedChat, setSelectedChat } = useMessage();
+  const { selectedChat, setSelectedChat, isPartnerTyping } = useMessage();
 
   const [username, setUsername] = useState(location.state?.username || null);
   const [searchTerm, setSearchTerm] = useState("");
