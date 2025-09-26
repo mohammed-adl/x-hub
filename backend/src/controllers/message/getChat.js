@@ -1,5 +1,5 @@
 import asyncHandler from "express-async-handler";
-import { prisma, success, fail, messageSelect } from "../../lib/index.js";
+import { prisma, success, messageSelect } from "../../lib/index.js";
 import { attachChatUrls } from "../../utils/fileUrl.js";
 
 export const getChat = asyncHandler(async (req, res) => {
@@ -19,7 +19,7 @@ export const getChat = asyncHandler(async (req, res) => {
     },
   });
 
-  if (!chat) return success(res, { chat: [], nextCursor: null });
+  if (!chat) return success(res, { messages: [], nextCursor: null });
 
   const messagesWithUrls = attachChatUrls(chat.messages);
 
@@ -28,5 +28,5 @@ export const getChat = asyncHandler(async (req, res) => {
       ? messagesWithUrls[messagesWithUrls.length - 1].id
       : null;
 
-  return success(res, { chat: messagesWithUrls, nextCursor });
+  return success(res, { messages: messagesWithUrls, nextCursor });
 });

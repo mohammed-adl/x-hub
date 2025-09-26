@@ -7,8 +7,9 @@ const MessageContext = createContext();
 export function MessageProvider({ children }) {
   const [isTyping, setIsTyping] = useState(false);
   const [isPartnerTyping, setIsPartnerTyping] = useState(false);
-  const [selectedChat, setSelectedChat] = useState({});
+  const [selectedChat, setSelectedChat] = useState(null);
   const { addMessage } = useAddMessage(selectedChat?.id);
+  console.log(selectedChat);
 
   useEffect(() => {
     socket.on("newMessage", ({ chatId, message }) => {
@@ -27,19 +28,19 @@ export function MessageProvider({ children }) {
     if (isTyping) {
       socket.emit("typing", {
         chatId: selectedChat.id,
-        partnerId: selectedChat.partnerId,
+        partnerId: selectedChat.partner.id,
       });
     } else {
       socket.emit("stopTyping", {
         chatId: selectedChat.id,
-        partnerId: selectedChat.partnerId,
+        partnerId: selectedChat.partner.id,
       });
     }
 
     return () => {
       socket.emit("stopTyping", {
         chatId: selectedChat.id,
-        partnerId: selectedChat.partnerId,
+        partnerId: selectedChat.partner.id,
       });
     };
   }, [isTyping, selectedChat]);

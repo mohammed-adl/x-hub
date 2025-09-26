@@ -4,3 +4,4 @@ export * from "./formatDates.js";
 export * from "./tweetCount.js";
 export * from "./avatar.js";
 export * from "./mapTweetsToProps.js";
+export * from "./filter.js";

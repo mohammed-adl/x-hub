@@ -1,7 +1,7 @@
 import asyncHandler from "express-async-handler";
 import { prisma, success } from "../../lib/index.js";
 import { messageSelect } from "../../lib/select.js";
-import { attachChatUrls } from "../../utils/index.js";
+import { attachChatUrls, attachFullUrls } from "../../utils/index.js";
 
 export const getAllConversations = asyncHandler(async (req, res) => {
   const userId = req.user.id;
@@ -29,12 +29,7 @@ export const getAllConversations = asyncHandler(async (req, res) => {
     const lastMessageWithUrls = lastMessage
       ? attachChatUrls([lastMessage])[0]
       : null;
-    const partnerWithUrl = {
-      ...partner,
-      profilePicture: partner.profilePicture
-        ? attachChatUrls([{ sender: partner }])[0].sender.profilePicture
-        : null,
-    };
+    const partnerWithUrl = attachFullUrls(partner);
 
     return {
       id: chat.id,

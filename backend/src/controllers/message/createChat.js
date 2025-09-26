@@ -13,13 +13,10 @@ export const createChat = asyncHandler(async (req, res) => {
 
   if (!partner) return fail(res, "Partner not found", 400);
 
+  const [user1Id, user2Id] = [userId, partner.id].sort();
+
   const existingChat = await prisma.xChat.findFirst({
-    where: {
-      OR: [
-        { user1Id: userId, user2Id: partner.id },
-        { user1Id: partner.id, user2Id: userId },
-      ],
-    },
+    where: { user1Id, user2Id },
   });
 
   const partnerWithUrl = attachFullUrls(partner);
@@ -29,10 +26,7 @@ export const createChat = asyncHandler(async (req, res) => {
   }
 
   const chat = await prisma.xChat.create({
-    data: {
-      user1Id: userId,
-      user2Id: partner.id,
-    },
+    data: { user1Id, user2Id },
   });
 
   return success(res, { chat, partner: partnerWithUrl });

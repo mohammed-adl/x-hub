@@ -12,15 +12,14 @@ export const sendMessage = asyncHandler(async (req, res) => {
   if (!receiver) return fail(res, "Receiver not found", 400);
 
   const result = await prisma.$transaction(async (prisma) => {
+    const [user1Id, user2Id] = [senderId, receiverId].sort();
     let chat = await prisma.xChat.findFirst({
-      where: {
-        id: chatId,
-      },
+      where: { user1Id, user2Id },
     });
 
     if (!chat) {
       chat = await prisma.xChat.create({
-        data: { user1Id: senderId, user2Id: receiverId },
+        data: { user1Id, user2Id },
       });
     }
 
