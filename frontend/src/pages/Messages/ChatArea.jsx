@@ -63,7 +63,7 @@ export default function ChatArea() {
   );
 
   if (isLoading) return <Spinner />;
-  if (queryError) return <ErrorMessage message={queryError.message} />;
+  if (queryError) return <ErrorMessage message={"somthing went wrong"} />;
 
   return (
     <div className={styles.chatArea}>

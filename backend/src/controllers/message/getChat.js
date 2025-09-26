@@ -28,7 +28,5 @@ export const getChat = asyncHandler(async (req, res) => {
       ? messagesWithUrls[messagesWithUrls.length - 1].id
       : null;
 
-  console.log(messagesWithUrls, nextCursor);
-
   return success(res, { messages: messagesWithUrls, nextCursor });
 });

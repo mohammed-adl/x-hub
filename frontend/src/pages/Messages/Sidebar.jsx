@@ -74,14 +74,9 @@ export default function Sidebar() {
             <div className={styles.info}>
               <div className={styles.nameRow}>
                 <div className={styles.name}>{conv.partner.name}</div>
-                <div className={styles.time}>
-                  {conv.lastMessage?.createdAt
-                    ? formatTimeAgo(conv.lastMessage.createdAt)
-                    : ""}
-                </div>
               </div>
               <div className={styles.lastMessage}>
-                {conv.lastMessage?.text || ""}
+                {conv.lastMessage?.content || ""}
               </div>
             </div>
           </div>

@@ -8,19 +8,21 @@ export function MessageProvider({ children }) {
   const [isTyping, setIsTyping] = useState(false);
   const [isPartnerTyping, setIsPartnerTyping] = useState(false);
   const [selectedChat, setSelectedChat] = useState(null);
-  const { addMessage } = useAddMessage(selectedChat?.id);
-  console.log(selectedChat);
+  const { addMessageToCache } = useAddMessage(
+    selectedChat?.id,
+    selectedChat?.partner?.id
+  );
 
   useEffect(() => {
     socket.on("newMessage", ({ chatId, message }) => {
       if (chatId !== selectedChat?.id) return;
-      addMessage(message);
+      addMessageToCache(message);
     });
 
     return () => {
       socket.off("newMessage");
     };
-  }, [selectedChat?.id, addMessage]);
+  }, [selectedChat?.id, addMessageToCache]);
 
   useEffect(() => {
     if (!selectedChat?.id) return;

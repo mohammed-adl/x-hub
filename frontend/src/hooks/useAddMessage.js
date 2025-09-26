@@ -81,5 +81,5 @@ export const useAddMessage = (chatId, partnerId) => {
     }
   };
 
-  return { sendMessage };
+  return { sendMessage, addMessageToCache };
 };
