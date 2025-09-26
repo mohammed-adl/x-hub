@@ -33,8 +33,6 @@ export const getTweets = asyncHandler(async (req, res) => {
     ...(cursor > 0 && { cursor: { id: cursor }, skip: 1 }),
   });
 
-  if (tweets.length === 0) return fail("No tweets found");
-
   const formatted = tweets.map((tweet) => ({
     ...tweet,
     isLiked: tweet.likes.length > 0,

@@ -9,6 +9,7 @@
 .profileHeader {
   display: flex;
   align-items: flex-start;
+  margin-left: -0.9rem;
 
   margin-bottom: 0.8rem;
 }
@@ -145,6 +146,13 @@
 
 .followCount {
   color: white;
+}
+
+.tweetsFeed .noTweets {
+  margin-top: 1rem;
+  font-size: 1.2rem;
+  color: var(--color-secondary);
+  text-align: center;
 }
 
 .timeline {
