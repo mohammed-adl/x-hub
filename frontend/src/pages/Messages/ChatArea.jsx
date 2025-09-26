@@ -1,12 +1,15 @@
 import { useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 
+import { useUser } from "../../contexts";
+
 import { useMessage } from "../../contexts";
 import {
   useAddMessage,
   useChatScroll,
   useChatMessages,
   useTyping,
+  useUpdateConversation,
 } from "../../hooks";
 
 import { send } from "../../assets/icons";
@@ -16,6 +19,7 @@ import styles from "./Messages.module.css";
 
 export default function ChatArea() {
   const { selectedChat, setIsTyping, isPartnerTyping } = useMessage();
+  const { user } = useUser();
   const navigate = useNavigate();
 
   const chatId = selectedChat?.id;
@@ -45,15 +49,35 @@ export default function ChatArea() {
   } = useTyping(setIsTyping);
 
   const { sendMessage } = useAddMessage(chatId, partnerId);
+  const { updateConversationInCache } = useUpdateConversation(chatId);
 
   const handleSend = useCallback(async () => {
     if (!newMessage.trim()) return;
 
     const messageToSend = newMessage;
+    const optimisticMessage = {
+      id: `temp-${Date.now()}`,
+      content: messageToSend,
+      createdAt: new Date().toISOString(),
+      sender: {
+        id: user.id,
+        name: user.name,
+        username: user.username,
+        profilePicture: user.profilePicture,
+      },
+    };
+
     setNewMessage("");
+    updateConversationInCache(optimisticMessage);
     sendMessage(messageToSend);
     setTimeout(() => scrollToBottom(), 0);
-  }, [newMessage, sendMessage, setNewMessage, scrollToBottom]);
+  }, [
+    newMessage,
+    sendMessage,
+    setNewMessage,
+    scrollToBottom,
+    updateConversationInCache,
+  ]);
 
   const handleKeyDown = useCallback(
     (e) => {

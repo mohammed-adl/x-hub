@@ -1,6 +1,6 @@
 import React, { createContext, useState, useEffect, useContext } from "react";
 import { socket } from "../socket";
-import { useAddMessage } from "../hooks";
+import { useAddMessage, useUpdateConversation } from "../hooks";
 
 const MessageContext = createContext();
 
@@ -12,10 +12,12 @@ export function MessageProvider({ children }) {
     selectedChat?.id,
     selectedChat?.partner?.id
   );
+  const { updateConversationInCache } = useUpdateConversation(selectedChat?.id);
 
   useEffect(() => {
     socket.on("newMessage", ({ chatId, message }) => {
       if (chatId !== selectedChat?.id) return;
+      updateConversationInCache(message);
       addMessageToCache(message);
     });
 
