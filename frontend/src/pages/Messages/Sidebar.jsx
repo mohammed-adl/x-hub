@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
 import styles from "./Messages.module.css";
@@ -6,11 +6,7 @@ import { Avatar, Spinner, ErrorMessage } from "../../components/ui";
 
 import { useMessage } from "../../contexts";
 
-import {
-  generateAvatar,
-  formatTimeAgo,
-  filterConversations,
-} from "../../utils";
+import { generateAvatar, filterConversations } from "../../utils";
 import { useFetchConvos, useCreateChat } from "../../hooks";
 
 export default function Sidebar() {
@@ -30,10 +26,19 @@ export default function Sidebar() {
   const { data, isLoading, error } = useFetchConvos(isComplete);
   const conversations = data?.conversations || [];
 
+  const filteredConversations = filterConversations(conversations, searchTerm);
+
+  useEffect(() => {
+    if (!selectedChat && filteredConversations.length > 0) {
+      setSelectedChat({
+        id: filteredConversations[0].id,
+        partner: filteredConversations[0].partner,
+      });
+    }
+  }, [selectedChat, filteredConversations, setSelectedChat]);
+
   if (isCreating || isLoading) return <Spinner />;
   if (error) return <ErrorMessage message={error.message} />;
-
-  const filteredConversations = filterConversations(conversations, searchTerm);
 
   return (
     <div className={styles.sidebar}>
