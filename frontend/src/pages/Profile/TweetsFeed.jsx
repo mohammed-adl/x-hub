@@ -5,7 +5,7 @@ import { Spinner, ErrorMessage } from "../../components/ui";
 import { handleGetTweets } from "../../fetchers";
 import { TweetCard } from "../../components";
 import { mapTweetToProps } from "../../utils";
-import styles from "./Profile.jsx";
+import styles from "./Profile.module.css";
 
 export default function TweetsFeed({ username }) {
   const {
@@ -44,6 +44,9 @@ export default function TweetsFeed({ username }) {
 
   return (
     <div className={styles.tweetsFeed}>
+      {tweets.length === 0 && (
+        <div className={styles.noTweets}>No tweets yet</div>
+      )}
       {tweets.map((tweet) => (
         <TweetCard {...mapTweetToProps(tweet)} />
       ))}
