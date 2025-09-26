@@ -7,7 +7,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0.8rem 1rem;
+  padding: 1rem 0 1rem 0.2rem;
   border-bottom: 1px solid var(--color-secondary);
   position: sticky;
   top: 0;
@@ -15,9 +15,12 @@
   z-index: 10;
 }
 
+.backButton {
+  margin-right: 1rem;
+}
+
 .headerContent {
   flex: 1;
-  margin-left: 1.3rem;
 }
 
 .title {
