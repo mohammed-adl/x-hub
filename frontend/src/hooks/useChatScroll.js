@@ -67,7 +67,7 @@ export function useChatScroll({
 
   useEffect(() => {
     const container = containerRef.current;
-    if (container && messages.length > 0 && messages.length === 1) {
+    if (container && messages.length > 0) {
       container.scrollTop = container.scrollHeight;
     }
   }, [messages, chatId]);

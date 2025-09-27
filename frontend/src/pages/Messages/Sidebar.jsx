@@ -1,31 +1,39 @@
 import { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
 
 import styles from "./Messages.module.css";
 import { Avatar, Spinner, ErrorMessage } from "../../components/ui";
 
 import { useMessage } from "../../contexts";
 
+import { handleGetAllConvos } from "../../fetchers";
 import { generateAvatar, filterConversations } from "../../utils";
-import { useFetchConvos, useCreateChat } from "../../hooks";
+import { useCreateChat } from "../../hooks";
 
 export default function Sidebar() {
   const location = useLocation();
   const navigate = useNavigate();
-  const { selectedChat, setSelectedChat, isPartnerTyping } = useMessage();
+  const { selectedChat, setSelectedChat } = useMessage();
 
   const [username, setUsername] = useState(location.state?.username || null);
   const [searchTerm, setSearchTerm] = useState("");
 
-  const { isCreating, isComplete, body } = useCreateChat(
+  const { isCreating, isComplete } = useCreateChat(
     username,
     setUsername,
     setSelectedChat
   );
 
-  const { data, isLoading, error } = useFetchConvos(isComplete);
-  const conversations = data?.conversations || [];
+  const { data, isLoading, error } = useQuery({
+    queryKey: ["conversations"],
+    queryFn: handleGetAllConvos,
+    retry: 3,
+    staleTime: 60000,
+    enabled: isComplete,
+  });
 
+  const conversations = data?.conversations || [];
   const filteredConversations = filterConversations(conversations, searchTerm);
 
   useEffect(() => {
@@ -36,6 +44,12 @@ export default function Sidebar() {
       });
     }
   }, [selectedChat, filteredConversations, setSelectedChat]);
+
+  useEffect(() => {
+    if (location.state?.username) {
+      navigate(location.pathname, { replace: true, state: {} });
+    }
+  }, [location.state?.username, navigate, location.pathname]);
 
   if (isCreating || isLoading) return <Spinner />;
   if (error) return <ErrorMessage message={error.message} />;

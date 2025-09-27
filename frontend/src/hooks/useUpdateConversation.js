@@ -1,9 +1,9 @@
 import { useQueryClient } from "@tanstack/react-query";
 
-export const useUpdateConversation = (chatId) => {
+export const useUpdateConversation = (defaultChatId) => {
   const queryClient = useQueryClient();
 
-  const updateConversationInCache = (messageObj) => {
+  const updateConversationInCache = (messageObj, chatId = defaultChatId) => {
     if (!chatId || !messageObj) return;
 
     queryClient.setQueryData(["conversations"], (oldData) => {

@@ -16,21 +16,6 @@ export function MessageProvider({ children }) {
   const { updateConversationInCache } = useUpdateConversation(selectedChat?.id);
 
   useEffect(() => {
-    socket.on("newMessage", ({ chatId, message }) => {
-      if (chatId !== selectedChat?.id) return;
-      updateConversationInCache(message);
-      addMessageToCache(message);
-      setTimeout(() => {
-        scrollToBottom();
-      }, 0);
-    });
-
-    return () => {
-      socket.off("newMessage");
-    };
-  }, [selectedChat?.id, addMessageToCache]);
-
-  useEffect(() => {
     if (!selectedChat?.id) return;
 
     if (isTyping) {
@@ -72,6 +57,24 @@ export function MessageProvider({ children }) {
       socket.off("partnerStopTyping", handlePartnerStopTyping);
     };
   }, [selectedChat?.id]);
+
+  useEffect(() => {
+    socket.on("newMessage", ({ chatId, message }) => {
+      updateConversationInCache(message, chatId);
+      setIsPartnerTyping(false);
+
+      if (chatId === selectedChat?.id) {
+        addMessageToCache(message);
+        setTimeout(() => {
+          scrollToBottom();
+        }, 0);
+      }
+
+      return () => {
+        socket.off("newMessage");
+      };
+    });
+  }, [selectedChat?.id, addMessageToCache, updateConversationInCache]);
 
   return (
     <MessageContext.Provider

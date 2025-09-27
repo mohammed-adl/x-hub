@@ -1,13 +1,13 @@
-import { useCallback } from "react";
+import { useCallback, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { useInfiniteQuery } from "@tanstack/react-query";
 
-import { useUser } from "../../contexts";
+import { handleGetChat } from "../../fetchers";
+import { useUser, useMessage } from "../../contexts";
 
-import { useMessage } from "../../contexts";
 import {
   useAddMessage,
   useChatScroll,
-  useChatMessages,
   useTyping,
   useUpdateConversation,
 } from "../../hooks";
@@ -26,13 +26,23 @@ export default function ChatArea() {
   const partnerId = selectedChat?.partner.id;
 
   const {
-    messages,
-    fetchNextPage,
-    hasNextPage,
+    data,
     isLoading,
     error: queryError,
+    fetchNextPage,
+    hasNextPage,
     isFetchingNextPage,
-  } = useChatMessages(chatId);
+  } = useInfiniteQuery({
+    queryKey: ["chat", chatId],
+    queryFn: ({ pageParam = 0 }) =>
+      handleGetChat({ limit: 20, cursor: pageParam, chatId }),
+    getNextPageParam: (lastPage) => lastPage?.nextCursor,
+    enabled: !!chatId,
+    retry: 3,
+    staleTime: 30000,
+  });
+
+  const messages = data?.pages.flatMap((p) => p.messages || []) || [];
 
   const { containerRef: messagesContainerRef, scrollToBottom } = useChatScroll({
     fetchNextPage,
@@ -88,6 +98,12 @@ export default function ChatArea() {
     },
     [handleSend]
   );
+
+  useEffect(() => {
+    if (messages.length > 0) {
+      setTimeout(() => scrollToBottom(), 100);
+    }
+  }, [chatId, scrollToBottom]);
 
   if (isLoading) return <Spinner />;
   if (queryError) return <ErrorMessage message={"somthing went wrong"} />;
