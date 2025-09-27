@@ -66,8 +66,7 @@ export default function Sidebar() {
           >
             <Avatar
               src={
-                conv.partner.profilePicture ||
-                generateAvatar(conv.partner.username)
+                conv.partner.profilePicture || generateAvatar(conv.partner.name)
               }
               alt={conv.partner.name}
               size={48}
