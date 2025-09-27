@@ -87,8 +87,8 @@ export default function TweetCard({
           user: { name, username, profilePicture },
           tweetMedia,
           _count: {
-            likes: likesCount,
-            retweets: retweetsCount,
+            likes: likes,
+            retweets: retweets,
             replies: repliesCount,
           },
           createdAt: date,
@@ -162,7 +162,7 @@ export default function TweetCard({
             <div className={styles.tweetFooter}>
               <TweetAction
                 src={like}
-                count={formatTweetCounts(displayTweet._count.likes)}
+                count={formatTweetCounts(likes)}
                 type="like"
                 isActive={liked}
                 onClick={(e) => {
@@ -173,7 +173,7 @@ export default function TweetCard({
               />
               <TweetAction
                 src={retweet}
-                count={formatTweetCounts(displayTweet._count.retweets)}
+                count={formatTweetCounts(retweets)}
                 type="retweet"
                 isActive={retweeted}
                 onClick={(e) => {
