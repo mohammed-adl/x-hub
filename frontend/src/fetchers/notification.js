@@ -5,7 +5,7 @@ export async function handleGetNotifications({ limit, cursor }) {
 }
 
 export async function handleMarkAsViewed(notificationId) {
-  return await reqApi(`/notifications/${notificationId}`, {
+  return await reqApi(`/notifications/${notificationId}/view`, {
     method: "POST",
   });
 }

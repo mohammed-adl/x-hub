@@ -38,15 +38,13 @@ export const toggleRetweet = asyncHandler(async (req, res) => {
   let retweet;
 
   await prisma.$transaction(async (tx) => {
-    retweet = await tx.tweet.create({
+    retweet = await tx.xTweet.create({
       data: {
         id: generateFlakeId(),
         originalTweetId: tweetId,
         authorId: userId,
       },
-      select: {
-        tweetSelect,
-      },
+      select: tweetSelect,
     });
 
     if (originalTweet.authorId !== userId) {

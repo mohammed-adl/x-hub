@@ -72,14 +72,12 @@ export default function UserPage({
                 Edit Profile
               </button>
             ) : (
-              <div
-                className={styles.followButtonWrapper}
-                onClick={() => navigate("/messages", { state: { username } })}
-              >
+              <div className={styles.followButtonWrapper}>
                 <img
                   src={message}
                   alt="message icon"
                   className={styles.messageIcon}
+                  onClick={() => navigate("/messages", { state: { username } })}
                 />
                 <button
                   className={styles.editProfileButton}

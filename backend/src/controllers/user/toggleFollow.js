@@ -27,7 +27,7 @@ export const toggleFollow = asyncHandler(async (req, res, next) => {
       });
       isFollowing = false;
     } else {
-      await tx.follows.create({
+      await tx.xFollows.create({
         data: { followerId: userId, followingId },
       });
       isFollowing = true;

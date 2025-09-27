@@ -29,7 +29,7 @@ export default function NotificationCard({ notification }) {
     }
   }
 
-  function getCountText(notification, includeTweet = true) {
+  function getCountText(notification) {
     if (notification.type === "WELCOME") return "Welcome to X!";
     if (notification.type === "FOLLOW") return " followed you";
 
@@ -39,12 +39,8 @@ export default function NotificationCard({ notification }) {
     else if (type === "RETWEET") count = notification.tweet?._count.retweets;
 
     const action = type === "LIKE" ? "liked" : "retweeted";
-    if (count === 1)
-      return ` ${action} your post${includeTweet ? ` "${tweetContent}"` : ""}`;
-    if (count === 2)
-      return ` and 1 other ${action} your post${
-        includeTweet ? ` "${tweetContent}"` : ""
-      }`;
+    if (count === 1) return ` ${action} your post`;
+    if (count === 2) return ` and 1 other ${action} your post`;
     if (count > 1)
       return ` and ${formatTweetCounts(count)} others ${action} your post`;
   }

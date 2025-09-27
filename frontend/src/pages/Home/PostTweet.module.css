@@ -50,10 +50,21 @@
   background-color: #1d9bf0;
   color: white;
   font-weight: 700;
+  font-size: 0.9rem;
   border: none;
-  border-radius: 9999px;
-  padding: 0.5rem 1rem;
+  border-radius: 30px;
+  padding: 1rem 1rem;
   cursor: pointer;
+  max-width: 79px;
+  max-height: 79px;
+  transition: opacity 0.2s ease;
+}
+
+/* When disabled */
+.postButton:disabled {
+  opacity: 0.5; /* more transparent */
+  cursor: not-allowed; /* blocked cursor */
+  pointer-events: none; /* no interaction */
 }
 
 @keyframes shake {

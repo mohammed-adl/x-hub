@@ -86,6 +86,10 @@
   margin-bottom: 6px;
 }
 
+.viewedBox {
+  background-color: transparent;
+}
+
 .unViewedBox {
   background-color: rgba(113, 118, 123, 0.2);
 }

@@ -7,14 +7,14 @@ export const getFollowers = asyncHandler(async (req, res) => {
   const { limit = 20, cursor } = req.query;
   const userId = req.user.id;
 
-  const user = await prisma.user.findUnique({
+  const user = await prisma.xUser.findUnique({
     where: { username },
     select: { id: true },
   });
 
   if (!user) return fail(res, "User not found", 404);
 
-  const followers = await prisma.follows.findMany({
+  const followers = await prisma.xFollows.findMany({
     where: { followingId: user.id },
     take: parseInt(limit),
     ...(cursor > 0 && {

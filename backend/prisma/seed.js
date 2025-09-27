@@ -1,60 +1,52 @@
 import { PrismaClient } from "@prisma/client";
-import { v4 as uuidv4 } from "uuid";
 
 const prisma = new PrismaClient();
 
 async function main() {
-  const a = "5f90861c-92b6-4a92-8c10-2823799e758a";
-  const b = "24ab6235-b5d9-413f-b3d1-72ad1a087b0a";
-
-  const [user1Id, user2Id] = a < b ? [a, b] : [b, a];
-
-  let chat = await prisma.chat.findUnique({
-    where: {
-      user1Id_user2Id: { user1Id, user2Id },
+  // Example users
+  const users = [
+    {
+      username: "johndoe",
+      name: "John Doe",
+      email: "john@example.com",
+      password: "hashedpassword123", // ⚠️ store hashed in real app
+      bio: "Just a regular guy who loves coding.",
+      profilePicture: "https://i.pravatar.cc/150?img=1",
+      coverImage: "https://picsum.photos/800/200?random=1",
+      isVerified: true,
     },
-  });
+    {
+      username: "janedoe",
+      name: "Jane Doe",
+      email: "jane@example.com",
+      password: "hashedpassword456",
+      bio: "Frontend dev & coffee lover.",
+      profilePicture: "https://i.pravatar.cc/150?img=2",
+      coverImage: "https://picsum.photos/800/200?random=2",
+      isProtected: true,
+    },
+    {
+      username: "techguy",
+      name: "Mike Smith",
+      email: "mike@example.com",
+      password: "hashedpassword789",
+      bio: "Building cool stuff with JS.",
+      profilePicture: "https://i.pravatar.cc/150?img=3",
+      coverImage: "https://picsum.photos/800/200?random=3",
+    },
+  ];
 
-  if (!chat) {
-    chat = await prisma.chat.create({
-      data: {
-        id: uuidv4(),
-        user1Id,
-        user2Id,
-      },
-    });
+  for (const user of users) {
+    await prisma.xUser.create({ data: user });
   }
 
-  await prisma.message.createMany({
-    data: [
-      {
-        id: uuidv4(),
-        content: "Hey — this is the first test message",
-        senderId: a,
-        receiverId: b,
-        chatId: chat.id,
-      },
-      {
-        id: uuidv4(),
-        content: "Reply: got your message",
-        senderId: b,
-        receiverId: a,
-        chatId: chat.id,
-      },
-    ],
-  });
-
-  const messages = await prisma.message.findMany({
-    where: { chatId: chat.id },
-    orderBy: { createdAt: "asc" },
-  });
-
-  console.log(chat, messages);
+  console.log("✅ Seeded users successfully!");
 }
 
 main()
   .catch((e) => {
     console.error(e);
+    process.exit(1);
   })
   .finally(async () => {
     await prisma.$disconnect();

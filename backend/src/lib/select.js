@@ -22,7 +22,7 @@ export const retweetSelect = {
   id: true,
   content: true,
   createdAt: true,
-  user: {
+  xUser: {
     select: {
       id: true,
       name: true,

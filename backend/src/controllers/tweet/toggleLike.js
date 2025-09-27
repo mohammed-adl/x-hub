@@ -6,14 +6,14 @@ export const toggleLike = asyncHandler(async (req, res) => {
   const userId = req.user.id;
   const tweetId = req.params.id;
 
-  const tweet = await prisma.tweet.findUnique({
+  const tweet = await prisma.xTweet.findUnique({
     where: { id: tweetId },
     select: { authorId: true },
   });
 
   if (!tweet) return fail("Tweet not found", 404);
 
-  const alreadyLiked = await prisma.like.findUnique({
+  const alreadyLiked = await prisma.xLike.findUnique({
     where: {
       userId_tweetId: {
         userId,
@@ -23,7 +23,7 @@ export const toggleLike = asyncHandler(async (req, res) => {
   });
 
   if (alreadyLiked) {
-    await prisma.like.delete({
+    await prisma.xLike.delete({
       where: {
         userId_tweetId: {
           userId,
@@ -69,7 +69,7 @@ export const toggleLike = asyncHandler(async (req, res) => {
         data: { isSent: true },
       });
     } else if (notificationExists && !notificationExists.isSent && !isAuthor) {
-      notification = await tx.notification.update({
+      notification = await tx.xNotification.update({
         where: { id: notificationExists.id },
         data: {
           createdAt: new Date(),

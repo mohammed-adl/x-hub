@@ -128,7 +128,7 @@ export default function PostTweet() {
             onClick={handlePost}
             disabled={loading || content.trim().length === 0}
           >
-            {loading ? <div className="spinner" /> : "Post"}
+            Post
           </button>
         </div>
       </div>
