@@ -5,3 +5,4 @@ export * from "./tweetCount.js";
 export * from "./avatar.js";
 export * from "./mapTweetsToProps.js";
 export * from "./filter.js";
+export * from "./scroll.js";

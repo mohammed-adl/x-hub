@@ -1,10 +1,14 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+
 import { useUser } from "../../contexts";
 import { generateAvatar, formatTimeAgo } from "../../utils";
+
 import { Avatar } from "../../components/ui";
 import styles from "./Messages.module.css";
 
 export default function MessagesList({ messages, isPartnerTyping }) {
+  const navigate = useNavigate();
   const { user } = useUser();
   const [showTimestamp, setShowTimestamp] = useState({});
 
@@ -36,6 +40,7 @@ export default function MessagesList({ messages, isPartnerTyping }) {
                 }
                 alt="avatar"
                 size={43}
+                onClick={() => navigate(`/${msg?.sender?.username}`)}
               />
             )}
             <div className={styles.textContainer}>

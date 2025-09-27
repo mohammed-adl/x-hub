@@ -103,7 +103,11 @@ export default function ChatArea() {
         />
         <div className={styles.partner}>{selectedChat?.partner.name}</div>
       </div>
-      <div className={styles.messages} ref={messagesContainerRef}>
+      <div
+        className={styles.messages}
+        ref={messagesContainerRef}
+        data-messages-container
+      >
         {isFetchingNextPage && <Spinner />}
         {messages.length === 0 ? (
           <div className={styles.noMessages}>Send a message to start</div>

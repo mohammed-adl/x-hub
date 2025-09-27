@@ -1,6 +1,7 @@
 import React, { createContext, useState, useEffect, useContext } from "react";
 import { socket } from "../socket";
 import { useAddMessage, useUpdateConversation } from "../hooks";
+import { scrollToBottom } from "../utils";
 
 const MessageContext = createContext();
 
@@ -19,6 +20,9 @@ export function MessageProvider({ children }) {
       if (chatId !== selectedChat?.id) return;
       updateConversationInCache(message);
       addMessageToCache(message);
+      setTimeout(() => {
+        scrollToBottom();
+      }, 0);
     });
 
     return () => {
