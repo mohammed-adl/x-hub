@@ -225,7 +225,11 @@ npx prisma migrate dev
 ## Screenshots / Demo
 
 <p align="center">
-  <img src="/frontend/public/logout.gif" alt="Logout Screenshot" width="850" ">
+  <img src="/frontend/public/selective-logout.gif" alt="Logout Screenshot" width="800" ">
+</p>
+
+<p align="center">
+  <img src="/frontend/public/notifications.PNG" alt="Logout Screenshot" width="800" ">
 </p>
 
 ---
