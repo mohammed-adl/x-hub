@@ -69,11 +69,11 @@ export function MessageProvider({ children }) {
           scrollToBottom();
         }, 0);
       }
-
-      return () => {
-        socket.off("newMessage");
-      };
     });
+
+    return () => {
+      socket.off("newMessage");
+    };
   }, [selectedChat?.id, addMessageToCache, updateConversationInCache]);
 
   return (

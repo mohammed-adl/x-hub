@@ -8,7 +8,11 @@ export const getTimeLine = asyncHandler(async (req, res) => {
   const cursor = req.query.cursor;
 
   const tweets = await prisma.xTweet.findMany({
-    where: { authorId: { not: userId }, parentTweetId: null },
+    where: {
+      authorId: { not: userId },
+      parentTweetId: null,
+      originalTweetId: null,
+    },
     select: {
       ...tweetSelect,
       likes: {

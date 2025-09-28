@@ -71,12 +71,12 @@ const authService = {
     });
 
     if (!user) {
-      throw new AppError("Incorrect username or password", 400);
+      throw new AppError("Incorrect email or password", 400);
     }
 
     const isPasswordCorrect = await bcrypt.compare(password, user.password);
     if (!isPasswordCorrect) {
-      throw new AppError("Incorrect username or password", 400);
+      throw new AppError("Incorrect email or password", 400);
     }
     delete user.password;
     return user;

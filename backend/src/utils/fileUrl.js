@@ -1,9 +1,17 @@
 export const getFileUrl = (filePath) => {
+  if (!filePath) return null;
+
+  if (filePath.startsWith("http://") || filePath.startsWith("https://")) {
+    return filePath;
+  }
+
   const baseUrl = process.env.BASE_URL || "http://localhost:3000";
   return `${baseUrl}/uploads/${filePath}`;
 };
 
 export const getFileUrlFromMulter = (file) => {
+  if (!file?.relativePath) return null;
+
   const baseUrl = process.env.BASE_URL || "http://localhost:3000";
   return `${baseUrl}/uploads/${file.relativePath}`;
 };
