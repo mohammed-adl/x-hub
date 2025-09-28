@@ -1,11 +1,14 @@
 import { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { useQueryClient } from "@tanstack/react-query";
-import { Avatar } from "../ui";
-import TweetAction from "./TweetAction.jsx";
+
+import { useUser } from "../../contexts";
 import { formatTimeShort, formatTweetCounts } from "../../utils";
 import { like, reply, retweet } from "../../assets/icons/index.js";
 import { handleLikeTweet, handleRetweet } from "../../fetchers";
+
+import { Avatar } from "../ui";
+import TweetAction from "./TweetAction.jsx";
 import styles from "./TweetCard.module.css";
 
 export default function TweetCard({
@@ -26,8 +29,13 @@ export default function TweetCard({
   tweetMedia,
 }) {
   const queryClient = useQueryClient();
+  const { user } = useUser();
+  const { name: retweeterName, username: retweeterUsername } = user;
+  const { username: profileUsername } = useParams();
+
   const [liked, setLiked] = useState(isLiked || false);
   const [likes, setLikesCount] = useState(likesCount || 0);
+
   const [retweeted, setRetweeted] = useState(isRetweeted || false);
   const [retweets, setRetweetsCount] = useState(retweetsCount || 0);
   const navigate = useNavigate();
@@ -79,7 +87,10 @@ export default function TweetCard({
         <div className={styles.retweetSection}>
           <div className={styles.retweetInfo}>
             <img src={retweet} alt="retweet" />
-            <span>{name} retweeted</span>
+            <span>
+              {profileUsername === retweeterUsername ? "you" : retweeterName}{" "}
+              retweeted
+            </span>
           </div>
         </div>
       )}
