@@ -21,6 +21,7 @@ export default function TweetsFeed({ username }) {
       return await handleGetTweets({ limit: 20, cursor: pageParam, username });
     },
     getNextPageParam: (lastPage) => lastPage.nextCursor,
+    refetchOnWindowFocus: false,
   });
 
   const tweets = data?.pages?.flatMap((page) => page.tweets) || [];

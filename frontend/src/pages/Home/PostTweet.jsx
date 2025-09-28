@@ -51,13 +51,32 @@ export default function PostTweet() {
         });
       }
 
-      await handlePostTweet(formData);
+      const body = await handlePostTweet(formData);
+      const tweet = body.tweet;
+
+      tweet.user.profilePicture = profilePicture;
+
+      queryClient.setQueryData(["tweets"], (oldData) => {
+        if (!oldData) return oldData;
+
+        const newPages = oldData.pages.map((page, index) => {
+          if (index === 0) {
+            return {
+              ...page,
+              tweets: [tweet, ...page.tweets],
+            };
+          }
+          return page;
+        });
+
+        return { ...oldData, pages: newPages };
+      });
+
       setContent("");
       setSelectedFiles([]);
       clearPreviews();
       setShowAnimation(true);
       await delay(500);
-      queryClient.invalidateQueries("tweets");
     } catch (err) {
       console.log(err);
       toast.error("Something went wrong!");

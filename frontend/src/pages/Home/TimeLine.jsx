@@ -26,6 +26,7 @@ export default function TimeLine() {
     },
     getNextPageParam: (lastPage) => lastPage?.nextCursor,
     retry: 1,
+    refetchOnWindowFocus: false,
   });
   const tweets = data?.pages?.flatMap((page) => page.tweets);
 
