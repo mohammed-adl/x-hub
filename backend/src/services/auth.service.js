@@ -47,14 +47,17 @@ const authService = {
       },
       select: { ...userSelect },
     });
+    const X_ACCOUNT_ID = process.env.X_ACCOUNT_ID;
 
-    await prisma.xNotification.create({
-      data: {
-        type: "WELCOME",
-        fromUserId: process.env.X_ACCOUNT_ID,
-        toUserId: user.id,
-      },
-    });
+    if (X_ACCOUNT_ID) {
+      await prisma.xNotification.create({
+        data: {
+          type: "WELCOME",
+          fromUserId: X_ACCOUNT_ID,
+          toUserId: user.id,
+        },
+      });
+    }
 
     return user;
   },
