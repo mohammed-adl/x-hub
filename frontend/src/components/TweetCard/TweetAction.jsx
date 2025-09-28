@@ -12,7 +12,7 @@ function TweetAction({ src, count, type, onClick, isActive }) {
   return (
     <button className={`${styles.actionBox} ${activeClass}`} onClick={onClick}>
       <img src={src} alt={type} className={styles.actionIcon} />
-      {<span className={styles.actionCount}>{count}</span>}
+      <span className={styles.actionCount}>{count}</span>
     </button>
   );
 }

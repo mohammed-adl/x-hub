@@ -1,10 +1,8 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useQueryClient } from "@tanstack/react-query";
-
-import TweetAction from "./TweetAction.jsx";
 import { Avatar } from "../ui";
-
+import TweetAction from "./TweetAction.jsx";
 import { formatTimeShort, formatTweetCounts } from "../../utils";
 import { like, reply, retweet } from "../../assets/icons/index.js";
 import { handleLikeTweet, handleRetweet } from "../../fetchers";
@@ -28,12 +26,18 @@ export default function TweetCard({
   tweetMedia,
 }) {
   const queryClient = useQueryClient();
-
-  const [liked, setLiked] = useState(isLiked);
-  const [likes, setLikesCount] = useState(likesCount);
-  const [retweeted, setRetweeted] = useState(isRetweeted);
-  const [retweets, setRetweetsCount] = useState(retweetsCount);
+  const [liked, setLiked] = useState(isLiked || false);
+  const [likes, setLikesCount] = useState(likesCount || 0);
+  const [retweeted, setRetweeted] = useState(isRetweeted || false);
+  const [retweets, setRetweetsCount] = useState(retweetsCount || 0);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    setLiked(isLiked || false);
+    setRetweeted(isRetweeted || false);
+    setLikesCount(likesCount || 0);
+    setRetweetsCount(retweetsCount || 0);
+  }, [isLiked, isRetweeted, likesCount, retweetsCount]);
 
   function handleNavigation(e, username) {
     e.preventDefault();
@@ -43,40 +47,15 @@ export default function TweetCard({
 
   async function actionsHandler(type) {
     try {
-      switch (type) {
-        case "like":
-          await likeTweet();
-          break;
-        case "retweet":
-          await retweetTweet();
-          break;
-        default:
-          break;
+      if (type === "like") {
+        await handleLikeTweet(tweetId);
+        queryClient.invalidateQueries(["tweet", tweetId]);
       }
-    } catch (err) {
-      console.log(err);
-    }
-  }
-
-  async function likeTweet() {
-    try {
-      await handleLikeTweet(tweetId);
-      setLiked((prev) => !prev);
-      setLikesCount((prev) => (liked ? prev - 1 : prev + 1));
-    } catch {
-      console.log("error");
-    }
-  }
-
-  async function retweetTweet() {
-    try {
-      await handleRetweet(tweetId);
-      queryClient.invalidateQueries(["tweet", tweetId]);
-      setRetweeted((prev) => !prev);
-      setRetweetsCount((prev) => (retweeted ? prev - 1 : prev + 1));
-    } catch {
-      console.log("error");
-    }
+      if (type === "retweet") {
+        await handleRetweet(tweetId);
+        queryClient.invalidateQueries(["tweet", tweetId]);
+      }
+    } catch {}
   }
 
   const displayTweet =
@@ -104,7 +83,6 @@ export default function TweetCard({
           </div>
         </div>
       )}
-
       <div className={styles.tweetWrapper}>
         <div
           className={styles.tweetAvatar}
@@ -138,31 +116,34 @@ export default function TweetCard({
                   </div>
                 </div>
               </div>
-              <p className={styles.tweetText}>{displayTweet.content}</p>
-              <div
-                className={`${styles.mediaContainer} ${
-                  displayTweet.tweetMedia?.length
-                    ? styles[`mediaCount${displayTweet.tweetMedia.length}`]
-                    : ""
-                }`}
-              >
-                {displayTweet.tweetMedia?.map((media) => (
-                  <img
-                    key={media.path}
-                    src={media.path}
-                    alt={media.type}
-                    className={styles.media}
-                  />
-                ))}
-              </div>
+              {displayTweet.content && (
+                <p className={styles.tweetText}>{displayTweet.content}</p>
+              )}
+              {displayTweet.tweetMedia?.length > 0 && (
+                <div
+                  className={`${styles.mediaContainer} ${
+                    displayTweet.tweetMedia.length
+                      ? styles[`mediaCount${displayTweet.tweetMedia.length}`]
+                      : ""
+                  }`}
+                >
+                  {displayTweet.tweetMedia.map((media) => (
+                    <img
+                      key={media.path}
+                      src={media.path}
+                      alt={media.type}
+                      className={styles.media}
+                    />
+                  ))}
+                </div>
+              )}
             </div>
           </div>
-
           {!parentTweetId && (
             <div className={styles.tweetFooter}>
               <TweetAction
                 src={like}
-                count={formatTweetCounts(likes)}
+                count={formatTweetCounts(displayTweet._count.likes)}
                 type="like"
                 isActive={liked}
                 onClick={(e) => {
@@ -173,7 +154,7 @@ export default function TweetCard({
               />
               <TweetAction
                 src={retweet}
-                count={formatTweetCounts(retweets)}
+                count={formatTweetCounts(displayTweet._count.retweets)}
                 type="retweet"
                 isActive={retweeted}
                 onClick={(e) => {
