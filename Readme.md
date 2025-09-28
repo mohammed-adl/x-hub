@@ -26,17 +26,20 @@ Live Demo: [https://xhubco.vercel.app](https://xhubco.vercel.app)
 
 ### Authentication & Security
 
-- Secure JWT-based authentication with refresh token rotation.
-- **Selective logout** (log out from one device while keeping others active).
-- **Device logs** — track and manage active sessions.
-- Input validation and sanitization with Zod.
-- **Rate limiting** to protect against brute-force attacks and abuse.
+- **Full auth system**: JWT access & refresh tokens with automatic background refreshing via interceptors.
+- **Device session management**: Track all active sessions; logout suspicious/unwanted devices or all sessions at once.
+- **Input validation**: Zod ensures clean & safe inputs.
+- **Secure data storage**: Sensitive data hashed in database.
+- **Rate limiting**: Protects against brute-force & API abuse.
+- **Route protection & redirection**: Secure routes against unauthorized access and redirect users from invalid or restricted URLs.
 
 ### Messaging System
 
-- Complete **real-time messaging** system with seen/read indicators.
-- Live conversations with Socket.IO.
-- Optimized message pagination and smooth chat experience.
+- **Real-time messaging** with seen/read indicators and live updates via Socket.IO.
+- **Optimized pagination** ensures smooth loading for long conversations.
+- **Cached messages**: Sent and received messages are cached locally to minimize re-renders and API calls, improving speed and performance.
+- **Efficient rendering**: Only updates relevant parts of the UI to reduce unnecessary resource usage.
+- **Seamless UX**: Instant display of new messages and minimal lag during high-volume chats.
 
 ### Notifications
 
@@ -46,9 +49,8 @@ Live Demo: [https://xhubco.vercel.app](https://xhubco.vercel.app)
 
 ### Social Graph & Algorithms
 
-- **Follow system** with retweets, replies, and engagement features.
-- **Smart follow suggestions** powered by algorithms.
-- **Search system** with scalable query handling.
+- **Smart follow suggestions**: Multi-step algorithm considers mutual connections, activity levels, and fallback strategies to ensure relevant recommendations, including popular content for newer or less active users.
+- **Advanced search system**: Queries first return exact matches, then relevant matches, and finally popular results to provide a rich set of related data.
 
 ### UX / UI Enhancements
 
@@ -115,6 +117,8 @@ x-hub/
 ---
 
 ## Getting Started
+
+> ⚠️ **Warning:** You need to sign up with an account named **X** and post its **Id** in the `.env` file to ensure sending welcome messages to new users.
 
 ### Prerequisites
 
@@ -211,8 +215,6 @@ npx prisma migrate dev
 ---
 
 ## Usage
-
-> ⚠️ **Warning:** You need to sign up with an account named **X** and post its **Id** in the `.env` file.
 
 1. Sign up or log in.
 2. Create posts, follow users, and engage with retweets and replies.
