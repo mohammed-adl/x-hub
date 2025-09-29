@@ -41,6 +41,11 @@ export const sendMessage = asyncHandler(async (req, res) => {
     return { chat, message };
   });
 
+  await prisma.xUser.update({
+    where: { id: receiverId },
+    data: { hasUnreadMessages: true },
+  });
+
   const messageWithUrls = attachChatUrls([result.message])[0];
 
   await socketService.alertMessage(result.chat.id, receiverId, messageWithUrls);

@@ -1,7 +1,7 @@
 # x-hub – Social Media Platform
 
 <p align="center">
-  <img src="/frontend/public/main.gif" alt="Main Demo GIF" width="850"/>
+  <img src="/frontend/public/messages.gif" alt="Main Demo GIF" width="850"/>
 </p>
 
 A full-stack, real-time social media platform inspired by Twitter. x-hub provides robust authentication, advanced messaging, notifications, algorithms for feeding and searching, and a responsive, modern UI — all backed by scalable architecture and secure practices.
@@ -225,6 +225,10 @@ npx prisma migrate dev
 ---
 
 ## Screenshots / Demo
+
+<p align="center">
+  <img src="/frontend/public/timeline.PNG" alt="Timeline Screenshot" width="800" ">
+</p>
 
 <p align="center">
   <img src="/frontend/public/selective-logout.gif" alt="Logout Screenshot" width="800" ">

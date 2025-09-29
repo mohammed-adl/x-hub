@@ -134,6 +134,7 @@ model XUser {
   password          String
   bio               String?
   hasNotifications  Boolean   @default(false)
+  hasUnreadMessages Boolean   @default(false)
   profilePicture    String?
   coverImage        String?
   isVerified        Boolean   @default(false)

@@ -23,6 +23,8 @@ export default function Tweet() {
 
   const tweet = data?.tweet;
 
+  console.log(tweet);
+
   if (isLoading) return <Spinner />;
   if (error) return <ErrorMessage />;
 

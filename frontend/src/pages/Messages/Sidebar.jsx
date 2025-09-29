@@ -5,7 +5,7 @@ import { useQuery } from "@tanstack/react-query";
 import styles from "./Messages.module.css";
 import { Avatar, Spinner, ErrorMessage } from "../../components/ui";
 
-import { useMessage } from "../../contexts";
+import { useMessage, useUser } from "../../contexts";
 
 import { handleGetAllConvos } from "../../fetchers";
 import { generateAvatar, filterConversations } from "../../utils";
@@ -14,6 +14,7 @@ import { useCreateChat } from "../../hooks";
 export default function Sidebar() {
   const location = useLocation();
   const navigate = useNavigate();
+  const { setUser } = useUser();
   const { selectedChat, setSelectedChat } = useMessage();
 
   const [username, setUsername] = useState(location.state?.username || null);
@@ -35,6 +36,8 @@ export default function Sidebar() {
 
   const conversations = data?.conversations || [];
   const filteredConversations = filterConversations(conversations, searchTerm);
+
+  console.log(conversations);
 
   useEffect(() => {
     if (!selectedChat && filteredConversations.length > 0) {

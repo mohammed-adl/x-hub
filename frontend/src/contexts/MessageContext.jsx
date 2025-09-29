@@ -1,19 +1,43 @@
 import React, { createContext, useState, useEffect, useContext } from "react";
 import { socket } from "../socket";
 import { useAddMessage, useUpdateConversation } from "../hooks";
+import { handleMarkMessagesAsRead } from "../fetchers";
 import { scrollToBottom } from "../utils";
+import { useUser } from "./UserContext.jsx";
 
 const MessageContext = createContext();
 
 export function MessageProvider({ children }) {
+  const { user, setUser } = useUser();
   const [isTyping, setIsTyping] = useState(false);
   const [isPartnerTyping, setIsPartnerTyping] = useState(false);
   const [selectedChat, setSelectedChat] = useState(null);
+  const [hasUnreadMessages, setHasUnreadMessages] = useState(
+    user?.hasUnreadMessages
+  );
+
   const { addMessageToCache } = useAddMessage(
     selectedChat?.id,
     selectedChat?.partner?.id
   );
   const { updateConversationInCache } = useUpdateConversation(selectedChat?.id);
+
+  useEffect(() => {
+    function handleStorageChange(event) {
+      if (event.key === "user" && event.newValue) {
+        const user = JSON.parse(event.newValue);
+        if (user.hasUnreadMessages === false) {
+          setUser({ ...user, hasUnreadMessages: false });
+          setHasUnreadMessages(false);
+        }
+      }
+    }
+
+    window.addEventListener("storage", handleStorageChange);
+    return () => {
+      window.removeEventListener("storage", handleStorageChange);
+    };
+  }, [setUser]);
 
   useEffect(() => {
     if (!selectedChat?.id) return;
@@ -60,14 +84,19 @@ export function MessageProvider({ children }) {
 
   useEffect(() => {
     socket.on("newMessage", ({ chatId, message }) => {
-      updateConversationInCache(message, chatId);
+      updateConversationInCache(message, chatId); // always first
       setIsPartnerTyping(false);
+      console.log("message");
 
       if (chatId === selectedChat?.id) {
         addMessageToCache(message);
         setTimeout(() => {
           scrollToBottom();
         }, 0);
+      } else {
+        setUser((prev) => ({ ...prev, hasUnreadMessages: true }));
+        setHasUnreadMessages(true);
+        console.log(hasUnreadMessages);
       }
     });
 
@@ -75,6 +104,20 @@ export function MessageProvider({ children }) {
       socket.off("newMessage");
     };
   }, [selectedChat?.id, addMessageToCache, updateConversationInCache]);
+
+  useEffect(() => {
+    if (!selectedChat?.id) return;
+
+    const markAsRead = async () => {
+      try {
+        await handleMarkMessagesAsRead(selectedChat.id);
+      } catch (err) {
+        console.error("Failed to mark messages as read:", err);
+      }
+    };
+
+    markAsRead();
+  }, [selectedChat?.id]);
 
   return (
     <MessageContext.Provider
@@ -84,6 +127,8 @@ export function MessageProvider({ children }) {
         selectedChat,
         setSelectedChat,
         isPartnerTyping,
+        hasUnreadMessages,
+        setHasUnreadMessages,
       }}
     >
       {children}

@@ -56,14 +56,27 @@ export default function TweetCard({
   async function actionsHandler(type) {
     try {
       if (type === "like") {
-        await handleLikeTweet(tweetId);
-        queryClient.invalidateQueries(["tweet", tweetId]);
+        setLiked(!liked);
+        setLikesCount(liked ? likes - 1 : likes + 1);
+
+        // Then sync with server
       }
       if (type === "retweet") {
+        setRetweeted(!retweeted);
+        setRetweetsCount(retweeted ? retweets - 1 : retweets + 1);
+
         await handleRetweet(tweetId);
-        queryClient.invalidateQueries(["tweet", tweetId]);
       }
-    } catch {}
+    } catch {
+      if (type === "like") {
+        setLiked(!liked);
+        setLikesCount(likes);
+      }
+      if (type === "retweet") {
+        setRetweeted(!retweeted);
+        setRetweetsCount(retweets);
+      }
+    }
   }
 
   const displayTweet =

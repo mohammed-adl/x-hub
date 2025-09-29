@@ -21,3 +21,15 @@ export async function handleSendMessage(chatId, partnerId, content) {
     body: { content, partnerId },
   });
 }
+
+export async function handleMarkMessagesAsRead(chatId) {
+  return await reqApi(`/messages/${chatId}/read`, {
+    method: "POST",
+  });
+}
+
+export async function handleMarkMessagesAsVisited() {
+  return await reqApi("/messages/visited", {
+    method: "POST",
+  });
+}

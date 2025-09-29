@@ -8,6 +8,7 @@ export const userSelect = {
   isVerified: true,
   isProtected: true,
   hasNotifications: true,
+  hasUnreadMessages: true,
   createdAt: true,
   _count: {
     select: {

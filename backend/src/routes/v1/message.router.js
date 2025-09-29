@@ -13,6 +13,9 @@ router.post("/", messageController.createChat);
 
 router.get("/:chatId", messageController.getChat);
 
+router.post("/visited", messageController.markMessagesAsVisited);
+router.post("/:chatId/read", messageController.markMessagesAsRead);
+
 router.post("/:id", messageController.sendMessage);
 
 export default router;

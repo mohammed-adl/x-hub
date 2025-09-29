@@ -39,7 +39,7 @@ export const getTweet = asyncHandler(async (req, res) => {
     },
     tweetMedia: tweet.tweetMedia?.map((m) => ({
       ...m,
-      path: getFileUrlFromMulter({ relativePath: m.path }),
+      path: getFileUrl(m.path),
     })),
   };
 

@@ -1,8 +1,11 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 
-import { handleMarkAsVisited } from "../../fetchers/index.js";
-import { useUser, useNotification } from "../../contexts/index.js";
+import {
+  handleMarkAsVisited,
+  handleMarkMessagesAsVisited,
+} from "../../fetchers/index.js";
+import { useUser, useNotification, useMessage } from "../../contexts/index.js";
 
 import UserDropdown from "./UserDropDown.jsx";
 import LinkBox from "./LinkBox.jsx";
@@ -13,6 +16,7 @@ import styles from "./NavBar.module.css";
 
 export default function NavBar() {
   const { hasNotifications, setHasNotifications } = useNotification();
+  const { hasUnreadMessages, setHasUnreadMessages } = useMessage();
   const { user, setUser } = useUser();
   if (!user) return null;
   const { name, username } = user;
@@ -43,7 +47,12 @@ export default function NavBar() {
       <ul className={styles.linksContainer}>
         <LinkBox value="Home" src={home} navLink="/home" />
         <LinkBox value="Profile" src={profile} navLink={`/${username}`} />
-        <LinkBox value="Messages" src={message} navLink="/messages" />
+        <LinkBox
+          value="Messages"
+          src={message}
+          navLink="/messages"
+          onClick={visitMessages}
+        />
         <LinkBox
           value="Notifications"
           src={bell}

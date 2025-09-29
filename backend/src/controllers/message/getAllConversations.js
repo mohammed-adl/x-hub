@@ -26,6 +26,7 @@ export const getAllConversations = asyncHandler(async (req, res) => {
     const isUser1 = chat.user1Id === userId;
     const partner = isUser1 ? chat.user2 : chat.user1;
     const lastMessage = chat.messages[0] || null;
+
     const lastMessageWithUrls = lastMessage
       ? attachChatUrls([lastMessage])[0]
       : null;
