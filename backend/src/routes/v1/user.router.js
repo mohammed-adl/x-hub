@@ -2,11 +2,7 @@ import express from "express";
 const router = express.Router();
 import { upload } from "../../middlewares/index.js";
 
-import {
-  verifyToken,
-  validate,
-  validateFileType,
-} from "../../middlewares/index.js";
+import { verifyToken, validate } from "../../middlewares/index.js";
 import { userId, username, editProfile } from "../../schemas/index.js";
 import * as userController from "../../controllers/user/index.js";
 import * as tweetController from "../../controllers/tweet/index.js";
@@ -29,7 +25,6 @@ router.put(
     { name: "coverImage", maxCount: 1 },
   ]),
   validate({ body: editProfile }),
-  validateFileType(["image/jpeg", "image/png"]),
   userController.editProfile
 );
 

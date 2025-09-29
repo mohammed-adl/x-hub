@@ -1,15 +1,14 @@
 import multer from "multer";
-import fs from "fs";
-import path from "path";
-import { generateFlakeId } from '../utils/index.js';
+import { v2 as cloudinary } from "cloudinary";
+import { CloudinaryStorage } from "multer-storage-cloudinary";
+import { generateFlakeId } from "../utils/index.js";
 
-const baseUploadDir = "uploads";
-
-const ensureFolder = (folderPath) => {
-  if (!fs.existsSync(folderPath)) {
-    fs.mkdirSync(folderPath, { recursive: true });
-  }
-};
+// Configure Cloudinary
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
 
 const folderMap = {
   profilePicture: "profilePictures",
@@ -17,25 +16,21 @@ const folderMap = {
   tweetMedia: "tweetMedia",
 };
 
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    const field = file.fieldname;
-    const subfolder = folderMap[field] || "other";
-    const fullPath = path.join(baseUploadDir, subfolder);
-
-    ensureFolder(fullPath);
-    cb(null, fullPath);
-  },
-
-  filename: function (req, file, cb) {
-    const ext = file.originalname.split(".").pop();
-    const uniqueName = `${generateFlakeId()}.${ext}`;
-
-    // Store the relative path in a custom property for easy access
+const storage = new CloudinaryStorage({
+  cloudinary: cloudinary,
+  params: (req, file) => {
     const subfolder = folderMap[file.fieldname] || "other";
+    const ext = file.originalname.split(".").pop();
+    const uniqueName = `${generateFlakeId()}`;
+
     file.relativePath = `${subfolder}/${uniqueName}`;
 
-    cb(null, uniqueName);
+    return {
+      folder: subfolder,
+      public_id: uniqueName,
+      format: ext,
+      resource_type: "image",
+    };
   },
 });
 
@@ -49,5 +44,5 @@ const fileFilter = (req, file, cb) => {
 export const upload = multer({
   storage,
   fileFilter,
-  limits: { fileSize: 5 * 1024 * 1024 }, // 5MB
+  limits: { fileSize: 5 * 1024 * 1024 },
 });

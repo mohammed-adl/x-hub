@@ -1,6 +1,6 @@
-import { useNavigate, Link } from "react-router-dom";
+import { useState } from "react";
+import { useNavigate, Link, useParams } from "react-router-dom";
 import { useQueryClient } from "@tanstack/react-query";
-import { useParams } from "react-router-dom";
 
 import { BackButton } from "../../components/ui";
 import { message } from "../../assets/icons";
@@ -26,10 +26,11 @@ export default function UserPage({
   isFollowingUser,
 }) {
   const { user } = useUser();
-  const { username: ownerUsername } = user;
+  const { username: ownerUsername } = user || {};
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const { username: targetUsername } = useParams();
+  const [showImage, setShowImage] = useState(false);
 
   async function followUser() {
     try {
@@ -55,13 +56,17 @@ export default function UserPage({
           {coverImage ? (
             <img src={coverImage} alt="cover image" />
           ) : (
-            <div className={styles.coverPlaceholder}></div>
+            <div className={styles.coverPlaceholder} />
           )}
         </div>
 
         <div className={styles.profileDetails}>
           <div className={styles.editProfileBox}>
-            <div className={styles.profilePicture}>
+            <div
+              className={styles.profilePicture}
+              onClick={() => setShowImage(true)}
+              style={{ cursor: "pointer" }}
+            >
               <img src={avatarUrl} alt="profile picture" />
             </div>
             {username === ownerUsername ? (
@@ -120,6 +125,26 @@ export default function UserPage({
           <TweetsFeed username={username} />
         </div>
       </div>
+
+      {showImage && (
+        <div
+          className={styles.imageModalOverlay}
+          onClick={() => setShowImage(false)}
+        >
+          <div
+            className={styles.imageModalContent}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <img src={avatarUrl} alt="profile full view" />
+            <button
+              className={styles.closeButton}
+              onClick={() => setShowImage(false)}
+            >
+              ✕
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

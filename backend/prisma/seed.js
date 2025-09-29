@@ -1,274 +1,247 @@
 import { PrismaClient } from "@prisma/client";
+import FlakeId from "flake-idgen";
 
 const prisma = new PrismaClient();
+const flake = new FlakeId();
 
-// The specific user ID you want to create messages for
-const TARGET_USER_ID = "e53ec851-9e7d-4f75-8020-636ba9ea6580";
-
-// Realistic message templates for conversations
-const messageTemplates = {
-  greetings: [
-    "Hey! 👋",
-    "Hi there!",
-    "What's up? 😊",
-    "Hello! How are you?",
-    "Hey, how's your day going?",
-    "Yo! 🔥",
-  ],
-  responses: [
-    "Good morning! ☀️",
-    "Not much, just working on some projects",
-    "Pretty good! Thanks for asking 😊",
-    "Busy day but can't complain",
-    "All good here! How about you?",
-    "Just the usual, you know how it is",
-  ],
-  tech_talk: [
-    "Did you see the new React update?",
-    "That bug fix you suggested worked perfectly! 🙌",
-    "Working on a new feature, it's pretty exciting",
-    "Code review when you have time?",
-    "Thanks for the help with that API issue",
-    "The deployment went smoothly 🚀",
-  ],
-  casual: [
-    "Coffee later? ☕",
-    "How was your weekend?",
-    "Check out this meme 😂",
-    "Lunch plans today?",
-    "Did you watch that show I recommended?",
-    "Weather's been crazy lately",
-    "Thanks for the recommendation!",
-    "Haha that's hilarious 😭",
-    "Absolutely! Let's do it",
-    "Sounds like a plan 👍",
-  ],
-  work_related: [
-    "Meeting moved to 3 PM",
-    "Can you review this when you get a chance?",
-    "Great presentation today! 👏",
-    "I'll send over the docs shortly",
-    "Perfect, that makes sense",
-    "Let me know if you need anything else",
-  ],
-  reactions: [
-    "😂😂😂",
-    "That's awesome! 🔥",
-    "No way! Really?",
-    "Amazing work! 👏",
-    "Love it! 💯",
-    "This is so cool!",
-    "Exactly what I was thinking",
-    "You're the best! 🙏",
-  ],
-};
-
-function getRandomMessages(category, count = 1) {
-  const messages = messageTemplates[category];
-  const result = [];
-  for (let i = 0; i < count; i++) {
-    result.push(messages[Math.floor(Math.random() * messages.length)]);
-  }
-  return result;
+function generateFlakeId() {
+  const idBuffer = flake.next();
+  const id = BigInt("0x" + idBuffer.toString("hex")).toString();
+  return id;
 }
 
-async function createConversation(targetUserId, otherUserId, chatId) {
-  const messages = [];
+// Realistic tweet content for different user types
+const tweetTemplates = [
+  // Tech tweets
+  "Just shipped a new feature 🚀 The feeling when your code works on the first try is unmatched",
+  "Hot take: TypeScript > JavaScript. Fight me in the comments 😤",
+  "Debugging for 3 hours only to find a missing semicolon... classic Monday",
+  "React 19 is looking incredible! Can't wait to try out the new features",
+  "Anyone else think dark mode should be the default everywhere? 🌙",
+  "Coffee count today: 6 ☕ Productivity: through the roof 📈",
+  "That moment when you finally understand async/await... mind = blown 🤯",
 
-  // Create a realistic conversation flow
-  const conversationPatterns = [
-    // Pattern 1: Quick greeting exchange
-    {
-      messages: [
-        { sender: otherUserId, content: getRandomMessages("greetings")[0] },
-        { sender: targetUserId, content: getRandomMessages("responses")[0] },
-        { sender: otherUserId, content: getRandomMessages("casual")[0] },
-        { sender: targetUserId, content: getRandomMessages("reactions")[0] },
-      ],
-    },
-    // Pattern 2: Work discussion
-    {
-      messages: [
-        { sender: otherUserId, content: getRandomMessages("tech_talk")[0] },
-        { sender: targetUserId, content: getRandomMessages("responses")[0] },
-        { sender: targetUserId, content: getRandomMessages("tech_talk")[0] },
-        { sender: otherUserId, content: getRandomMessages("reactions")[0] },
-        { sender: otherUserId, content: getRandomMessages("work_related")[0] },
-      ],
-    },
-    // Pattern 3: Casual chat
-    {
-      messages: [
-        { sender: targetUserId, content: getRandomMessages("greetings")[0] },
-        { sender: otherUserId, content: getRandomMessages("casual")[0] },
-        { sender: targetUserId, content: getRandomMessages("casual")[0] },
-        { sender: otherUserId, content: getRandomMessages("reactions")[0] },
-      ],
-    },
-  ];
+  // Design tweets
+  "Clean typography can make or break a design ✨",
+  "Color theory is not just theory - it's magic in practice 🎨",
+  "Figma just announced some amazing new features! Design game is strong",
+  "White space is not wasted space. It's breathing room for your design",
+  "The best UI is invisible - users shouldn't have to think about it",
+  "Accessibility isn't optional. It's essential. Period. ♿",
 
-  const selectedPattern =
-    conversationPatterns[
-      Math.floor(Math.random() * conversationPatterns.length)
-    ];
+  // Startup/Business tweets
+  "Building a startup is 1% inspiration, 99% coffee and determination ☕",
+  "Failed fast, learned faster. Onto the next iteration! 💪",
+  "Customer feedback > personal opinions. Always listen to your users",
+  "Raised our seed round! 🎉 Excited to build the future with amazing investors",
+  "Team lunch today reminded me why culture matters more than perks 🍕",
+  "Pivot or persevere? Sometimes the hardest decisions lead to the best outcomes",
 
-  // Create messages with realistic timestamps
-  for (let i = 0; i < selectedPattern.messages.length; i++) {
-    const msgData = selectedPattern.messages[i];
+  // Data Science tweets
+  "Data doesn't lie, but it can be misleading if you're not careful 📊",
+  "Spent all day cleaning data. 80% of data science is just data janitor work",
+  "Machine learning model accuracy: 99.9% 📈 Me: *suspicious squinting*",
+  "Python pandas just saved me 3 hours of manual work. I love this language 🐍",
+  "Correlation ≠ Causation. Say it louder for the people in the back!",
 
-    // Messages spread over last few days, with gaps between them
-    const daysAgo = Math.floor(Math.random() * 5); // Last 5 days
-    const hoursAgo = Math.floor(Math.random() * 24);
-    const minutesAgo = Math.floor(Math.random() * 60);
+  // Crypto tweets
+  "HODL life chose me 💎🙌 Diamond hands forever",
+  "DeFi is eating traditional finance one protocol at a time",
+  "Just deployed my first smart contract on mainnet! Nerve-wracking but exciting",
+  "Bear market = building time. Stay focused on fundamentals 📈",
+  "Not financial advice: but that dip looks tasty 👀",
 
-    const createdAt = new Date();
-    createdAt.setDate(createdAt.getDate() - daysAgo);
-    createdAt.setHours(createdAt.getHours() - hoursAgo);
-    createdAt.setMinutes(createdAt.getMinutes() - minutesAgo + i * 5); // Small gaps between messages
+  // Fitness tweets
+  "Rest days are not lazy days. Recovery is part of the process 💪",
+  "PR day! Finally hit that deadlift goal I've been chasing for months 🏋️‍♀️",
+  "Consistency > perfection. Show up every day, even when you don't feel like it",
+  "Your only competition is who you were yesterday",
+  "Mind-muscle connection is real. Focus on form, not just weight",
 
-    const message = await prisma.xMessage.create({
-      data: {
-        content: msgData.content,
-        senderId: msgData.sender,
-        receiverId:
-          msgData.sender === targetUserId ? otherUserId : targetUserId,
-        chatId: chatId,
-        isRead: Math.random() > 0.3, // 70% chance read, 30% unread
-        createdAt: createdAt,
-      },
-    });
+  // Photography tweets
+  "Golden hour hits different when you're chasing the perfect shot 📸",
+  "Sometimes the best photos happen when you least expect them",
+  "Gear doesn't make the photographer, but good gear sure helps ✨",
+  "Street photography taught me to see beauty in ordinary moments",
+  "Film vs digital debate is so 2010. Use what inspires you to create",
 
-    messages.push(message);
-  }
+  // Food/Cooking tweets
+  "Fresh pasta made from scratch hits different than store-bought 🍝",
+  "Mise en place is life. Organization in the kitchen = peace of mind",
+  "Salt, fat, acid, heat - the four pillars of good cooking 👩‍🍳",
+  "Local farmers market haul today was incredible! Supporting local growers",
+  "Knife skills are everything. A sharp knife is a safe knife",
 
-  return messages;
+  // Gaming tweets
+  "Unity 2023 LTS is here and it's looking solid for indie development 🎮",
+  "Player feedback from our alpha test is pure gold. Back to the drawing board!",
+  "8 hours of debugging physics collision... but hey, the player can now jump properly",
+  "Indie game development: 10% coding, 90% wondering if anyone will play it",
+  "Steam wishlist milestone reached! 🎉 Thank you to everyone who believed in us",
+
+  // Marketing tweets
+  "Content that converts: authentic, valuable, and human. Not salesy BS 📈",
+  "A/B tested our email subject lines. 2 words changed = 40% higher open rates",
+  "Social media marketing rule #1: Be social. Stop treating it like a billboard",
+  "Brand storytelling isn't just marketing fluff. Stories create connections",
+  "Customer retention > customer acquisition. Keep your existing customers happy",
+
+  // Travel tweets
+  "WiFi password acquisition skills: Level Expert ✈️📶",
+  "48 countries down, 147 to go. The world is beautifully diverse 🌍",
+  "Travel tip: Always pack one day's clothes in your carry-on. Trust me on this",
+  "Local street food > fancy restaurants. Every. Single. Time. 🍜",
+  "Home is wherever my laptop and good coffee meet",
+
+  // AI/Research tweets
+  "Large language models are incredible, but we're still just scratching the surface 🤖",
+  "AI safety research isn't fear-mongering. It's responsible development",
+  "Published our latest paper on transformer architectures! Peer review here we come",
+  "The gap between AI hype and AI reality is where the real work happens",
+  "Machine learning democratization is happening faster than anyone predicted",
+];
+
+// Some inspirational/general tweets
+const generalTweets = [
+  "Monday motivation: You're exactly where you need to be 💫",
+  "Small wins compound into big victories. Celebrate every step forward",
+  "Imposter syndrome is just fear wearing a fancy name. You belong here",
+  "Learning in public is scary but rewarding. Share your journey",
+  "Take breaks. Your brain needs downtime to process and grow",
+  "Comparison is the thief of joy. Focus on your own path",
+  "Ask better questions, get better answers",
+  "Your future self will thank you for the work you do today",
+  "Progress > perfection. Always",
+  "What if everything you're going through is preparing you for what you asked for?",
+];
+
+// Photo paths for tweet media (without folder prefix)
+const tweetPhotos = [
+  "tweet-1_nwse9m",
+  "tweet-2_lpvo0d",
+  "tweet-3_i7gtfh",
+  "tweet-4_oac3fy",
+  "tweet-5_ih90i7",
+];
+
+function getRandomPhoto() {
+  return tweetPhotos[Math.floor(Math.random() * tweetPhotos.length)];
 }
 
-async function seedMessages() {
-  console.log("💬 Starting messages seeding...");
+async function seedTweets() {
+  console.log("🐦 Starting tweet seeding...");
 
-  // Check if target user exists
-  const targetUser = await prisma.xUser.findUnique({
-    where: { id: TARGET_USER_ID },
-    select: { id: true, username: true },
+  // Get all users to assign tweets to
+  const users = await prisma.xUser.findMany({
+    select: { id: true, username: true, bio: true },
   });
 
-  if (!targetUser) {
-    console.log(`❌ Target user with ID ${TARGET_USER_ID} not found!`);
+  if (users.length === 0) {
+    console.log("❌ No users found! Run user seeding first.");
     return;
   }
 
-  console.log(`🎯 Creating messages for user: ${targetUser.username}`);
+  console.log(`Found ${users.length} users to create tweets for`);
 
-  // Get other users to create conversations with
-  const otherUsers = await prisma.xUser.findMany({
-    where: {
-      id: { not: TARGET_USER_ID },
-    },
-    select: { id: true, username: true },
-    take: 5, // Create conversations with 5 different users
-  });
+  // Combine all tweet templates
+  const allTweets = [...tweetTemplates, ...generalTweets];
 
-  if (otherUsers.length === 0) {
-    console.log("❌ No other users found to create conversations with!");
-    return;
-  }
+  const createdTweets = [];
 
-  const createdChats = [];
-  const createdMessages = [];
+  // Create 3-5 tweets per user
+  for (const user of users) {
+    const numTweets = Math.floor(Math.random() * 3) + 3; // 3-5 tweets
 
-  // Create chats and messages with each user
-  for (let i = 0; i < Math.min(otherUsers.length, 4); i++) {
-    // Max 4 conversations
-    const otherUser = otherUsers[i];
+    for (let i = 0; i < numTweets; i++) {
+      try {
+        // Get random tweet content
+        const randomTweet =
+          allTweets[Math.floor(Math.random() * allTweets.length)];
 
-    try {
-      // Create chat (ensure user1Id < user2Id for consistency)
-      const user1Id =
-        TARGET_USER_ID < otherUser.id ? TARGET_USER_ID : otherUser.id;
-      const user2Id =
-        TARGET_USER_ID < otherUser.id ? otherUser.id : TARGET_USER_ID;
+        // Generate random created date (last 30 days)
+        const daysAgo = Math.floor(Math.random() * 30);
+        const hoursAgo = Math.floor(Math.random() * 24);
+        const createdAt = new Date();
+        createdAt.setDate(createdAt.getDate() - daysAgo);
+        createdAt.setHours(createdAt.getHours() - hoursAgo);
 
-      const chat = await prisma.xChat.create({
-        data: {
-          user1Id: user1Id,
-          user2Id: user2Id,
-        },
-      });
+        // 30% chance of having a photo
+        const hasPhoto = Math.random() < 0.3;
 
-      createdChats.push({
-        id: chat.id,
-        users: [targetUser.username, otherUser.username],
-      });
-
-      console.log(
-        `✅ Created chat between ${targetUser.username} and ${otherUser.username}`
-      );
-
-      // Create conversation messages
-      const messages = await createConversation(
-        TARGET_USER_ID,
-        otherUser.id,
-        chat.id
-      );
-      createdMessages.push(...messages);
-
-      console.log(
-        `📝 Created ${messages.length} messages in this conversation`
-      );
-
-      // Update chat's updatedAt to most recent message
-      if (messages.length > 0) {
-        const latestMessage = messages[messages.length - 1];
-        await prisma.xChat.update({
-          where: { id: chat.id },
-          data: { updatedAt: latestMessage.createdAt },
+        const tweet = await prisma.xTweet.create({
+          data: {
+            id: generateFlakeId(),
+            content: randomTweet,
+            authorId: user.id,
+            createdAt: createdAt,
+            // Create media if hasPhoto is true
+            ...(hasPhoto && {
+              tweetMedia: {
+                create: {
+                  path: getRandomPhoto(),
+                  type: "IMAGE",
+                },
+              },
+            }),
+          },
         });
-      }
-    } catch (error) {
-      if (error.code === "P2002") {
-        console.log(
-          `⚠️  Chat between ${targetUser.username} and ${otherUser.username} already exists`
-        );
-      } else {
+
+        createdTweets.push(tweet);
+      } catch (error) {
         console.error(
-          `❌ Error creating chat with ${otherUser.username}:`,
+          `❌ Error creating tweet for ${user.username}:`,
           error.message
         );
       }
     }
+
+    console.log(`✅ Created tweets for @${user.username}`);
   }
 
-  console.log(
-    `🎉 Created ${createdChats.length} chats with ${createdMessages.length} total messages!`
-  );
-
-  // Show summary
-  const unreadMessages = createdMessages.filter(
-    (m) => !m.isRead && m.receiverId === TARGET_USER_ID
-  );
-
-  console.log("\n📊 Messages Summary:");
-  console.log(`💬 Total chats: ${createdChats.length}`);
-  console.log(`📝 Total messages: ${createdMessages.length}`);
-  console.log(`🔴 Unread messages for target user: ${unreadMessages.length}`);
-
-  createdChats.forEach((chat) => {
-    const chatMessages = createdMessages.filter((m) => m.chatId === chat.id);
-    console.log(
-      `   ${chat.users.join(" ↔️ ")}: ${chatMessages.length} messages`
-    );
-  });
-
-  return { chats: createdChats, messages: createdMessages };
+  console.log(`🎉 Created ${createdTweets.length} tweets successfully!`);
+  return createdTweets;
 }
 
 async function main() {
   try {
-    await seedMessages();
-    console.log("✨ Messages seeding completed!");
+    // Delete existing tweets first
+    console.log("🗑️  Deleting existing tweets...");
+
+    const seededUsers = await prisma.xUser.findMany({
+      where: {
+        email: {
+          in: [
+            "alex.chen@techmail.com",
+            "mike.rodriguez@startup.io",
+            "jenny.liu@datacompany.com",
+            "david.kim@cryptomail.com",
+            "emma.thompson@fitnesshub.com",
+            "james.wilson@photoworks.com",
+            "maria.garcia@culinaryarts.com",
+            "ryan.oconnor@indiegames.com",
+            "lisa.park@marketingpro.com",
+            "sam.anderson@travelworld.com",
+            "priya.patel@airesearch.edu",
+          ],
+        },
+      },
+      select: { id: true },
+    });
+
+    const userIds = seededUsers.map((u) => u.id);
+
+    await prisma.xTweet.deleteMany({
+      where: {
+        authorId: { in: userIds },
+      },
+    });
+
+    console.log("✅ Deleted old tweets\n");
+
+    await seedTweets();
+    console.log("✨ Tweet seeding completed!");
   } catch (error) {
-    console.error("💥 Messages seeding failed:", error);
+    console.error("💥 Tweet seeding failed:", error);
     throw error;
   } finally {
     await prisma.$disconnect();
@@ -281,4 +254,4 @@ main().catch((error) => {
   process.exit(1);
 });
 
-export { seedMessages };
+export { seedTweets };

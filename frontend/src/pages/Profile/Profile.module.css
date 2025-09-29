@@ -188,3 +188,47 @@
 .timelineFeed {
   min-height: 18.8rem;
 }
+
+.imageModalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+.imageModalContent {
+  position: relative;
+  max-width: 400px;
+  max-height: 400px;
+}
+
+.imageModalContent img {
+  display: block;
+  max-width: 100%;
+  max-height: 100%;
+  border-radius: 12px;
+}
+
+.closeButton {
+  position: absolute;
+  top: -50px;
+  right: -10px;
+  background: none;
+  border: none;
+  font-size: 2rem;
+  color: #fff;
+  cursor: pointer;
+}
+
+@media (max-width: 600px) {
+  .imageModalContent {
+    max-width: 250px;
+    max-height: 250px;
+  }
+}

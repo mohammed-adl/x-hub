@@ -1,11 +1,7 @@
 import express from "express";
 const router = express.Router();
 
-import {
-  verifyToken,
-  validate,
-  validateFileType,
-} from "../../middlewares/index.js";
+import { verifyToken, validate } from "../../middlewares/index.js";
 import { tweetParams, tweetPost } from "../../schemas/index.js";
 import { upload } from "../../middlewares/index.js";
 import * as tweetController from "../../controllers/tweet/index.js";
@@ -25,7 +21,6 @@ router.get(
 router.post(
   "/",
   upload.array("tweetMedia", 4),
-  validateFileType("image"),
   validate({ body: tweetPost }),
   tweetController.postTweet
 );
