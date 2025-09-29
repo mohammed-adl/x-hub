@@ -20,8 +20,10 @@ export const signUp = z.object({
 
   password: z
     .string()
-    .min(6, { message: "Password must be at least 6 characters" })
+    .min(8, { message: "Password must be at least 8 characters" })
     .max(64, { message: "Password must be less than 65 characters" })
+    .regex(/[A-Z]/, "Password must contain an uppercase letter")
+    .regex(/[a-z]/, "Password must contain a lowercase letter")
     .regex(/[0-9]/, { message: "Password must contain at least one number" }),
 
   confirmPassword: z

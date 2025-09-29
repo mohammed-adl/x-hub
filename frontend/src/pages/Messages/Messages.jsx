@@ -10,16 +10,7 @@ export default function Messages() {
   return (
     <div className={styles.container}>
       <Sidebar />
-      {selectedChat ? (
-        <ChatArea />
-      ) : (
-        <div className={styles.emptyChatArea}>
-          <div className={styles.emptyMessage}>
-            <h3>Select a conversation to start messaging</h3>
-            <p>Choose from your existing conversations or start a new one</p>
-          </div>
-        </div>
-      )}
+      {selectedChat ? <ChatArea /> : null}
     </div>
   );
 }

@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { handleMarkAsVisited } from "../../fetchers/index.js";
 import { useUser, useNotification } from "../../contexts/index.js";
 
-import UserDropdown from "./UserDropdown.jsx";
+import UserDropdown from "./UserDropDown.jsx";
 import LinkBox from "./LinkBox.jsx";
 import { Avatar } from "../ui/index.js";
 import XLogo from "../../assets/XLogo.svg";

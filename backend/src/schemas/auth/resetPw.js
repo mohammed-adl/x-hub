@@ -25,12 +25,9 @@ export const resetPassword = z
     password: z
       .string()
       .trim()
-      .min(6, { message: "Password must be at least 8 characters" })
+      .min(8, { message: "Password must be at least 8 characters" })
       .max(64, { message: "Password must be less than 65 characters" })
-      .regex(/[0-9]/, { message: "Password must contain at least one number" })
-      .regex(/[^a-zA-Z0-9]/, {
-        message: "Password must contain at least one special character",
-      }),
+      .regex(/[0-9]/, { message: "Password must contain at least one number" }),
 
     confirmPassword: z
       .string()

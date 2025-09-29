@@ -58,7 +58,7 @@ export default function PostReply({ tweetId }) {
         onClick={() => postReply(tweetId)}
         disabled={loading}
       >
-        {loading ? <div className="spinner" /> : "Reply"}
+        {loading ? "Replying..." : "Reply"}
       </button>
     </div>
   );
