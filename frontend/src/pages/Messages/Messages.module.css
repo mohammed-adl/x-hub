@@ -12,6 +12,8 @@
   border-right: 1px solid #212b33;
   background-color: black;
   overflow-y: auto;
+  overflow-x: hidden;
+
   transition: all 0.3s ease;
 }
 
@@ -92,6 +94,8 @@
   flex: 1;
   display: flex;
   flex-direction: column;
+  height: 100%;
+  overflow: hidden;
 }
 
 .header {
@@ -100,11 +104,35 @@
   padding: 16px;
   font-weight: 700;
   border-bottom: 1px solid #212b33;
+  align-items: center;
 }
 
 .partner {
   font-size: 1.2rem;
   font-weight: 500;
+}
+
+.backButton {
+  display: none;
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  color: #e1e8ed;
+  cursor: pointer;
+  padding: 0;
+  margin-right: 0.5rem;
+}
+
+.backButton:hover {
+  color: #1d9bf0;
+}
+
+.chatAreaWrapper {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  height: 100%;
 }
 
 .messages {
@@ -114,6 +142,7 @@
   flex-direction: column;
   gap: 10px;
   overflow-y: auto;
+  overflow-x: hidden;
 }
 
 .message {
@@ -196,44 +225,6 @@ button {
   height: 22px;
 }
 
-@media (max-width: 900px) {
-  .container {
-    flex-direction: column;
-  }
-
-  /* .chatArea {
-    display: none;
-  } */
-
-  .sidebar {
-    width: 100%;
-    border-right: none;
-    border-bottom: 1px solid #212b33;
-  }
-}
-
-@media (max-width: 600px) {
-  .sidebar {
-    max-height: 100vh;
-  }
-
-  .searchInput {
-    padding: 6px 10px;
-  }
-
-  .inputArea {
-    padding: 6px;
-  }
-
-  input[type="text"] {
-    padding: 6px 10px;
-  }
-
-  button {
-    padding: 6px 12px;
-  }
-}
-
 .errorBar {
   background: #fee;
   border: 1px solid #fcc;
@@ -307,4 +298,76 @@ button {
   padding: 12px;
   background: #f5f5f5;
   font-size: 14px;
+}
+
+.noMessages {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: #8899a6;
+  font-size: 1rem;
+}
+
+/* Desktop - both sidebar and chat always visible */
+@media (min-width: 901px) {
+  .sidebar {
+    display: block !important;
+    overflow-y: auto !important;
+  }
+
+  .chatAreaWrapper {
+    display: flex !important;
+  }
+}
+
+/* Mobile - toggle between sidebar and chat */
+@media (max-width: 900px) {
+  .container {
+    flex-direction: row;
+  }
+
+  .sidebar {
+    width: 100%;
+    border-right: none;
+  }
+
+  .sidebar.hideMobile {
+    display: none;
+  }
+
+  .chatAreaWrapper {
+    display: none;
+  }
+
+  .chatAreaWrapper.showMobile {
+    display: flex;
+    width: 100%;
+  }
+
+  .backButton {
+    display: block;
+  }
+}
+
+@media (max-width: 600px) {
+  .sidebar {
+    max-height: 100vh;
+  }
+
+  .searchInput {
+    padding: 6px 10px;
+  }
+
+  .inputArea {
+    padding: 6px;
+  }
+
+  input[type="text"] {
+    padding: 6px 10px;
+  }
+
+  button {
+    padding: 6px 12px;
+  }
 }

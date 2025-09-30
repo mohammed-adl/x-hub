@@ -258,6 +258,11 @@ li {
     border-radius: 50%;
     object-fit: cover;
   }
+
+  .redDot {
+    top: 0.5rem;
+    right: 6.5rem;
+  }
 }
 
 @media (max-width: 1199px) and (min-width: 768px) {

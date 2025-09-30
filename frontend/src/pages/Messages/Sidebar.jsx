@@ -11,7 +11,7 @@ import { handleGetAllConvos } from "../../fetchers";
 import { generateAvatar, filterConversations } from "../../utils";
 import { useCreateChat } from "../../hooks";
 
-export default function Sidebar() {
+export default function Sidebar({ onSelectChat }) {
   const location = useLocation();
   const navigate = useNavigate();
   const { setUser } = useUser();
@@ -37,14 +37,13 @@ export default function Sidebar() {
   const conversations = data?.conversations || [];
   const filteredConversations = filterConversations(conversations, searchTerm);
 
-  console.log(conversations);
-
   useEffect(() => {
     if (!selectedChat && filteredConversations.length > 0) {
-      setSelectedChat({
+      const firstChat = {
         id: filteredConversations[0].id,
         partner: filteredConversations[0].partner,
-      });
+      };
+      setSelectedChat(firstChat);
     }
   }, [selectedChat, filteredConversations, setSelectedChat]);
 
@@ -53,6 +52,12 @@ export default function Sidebar() {
       navigate(location.pathname, { replace: true, state: {} });
     }
   }, [location.state?.username, navigate, location.pathname]);
+
+  const handleChatClick = (conv) => {
+    const chat = { id: conv.id, partner: conv.partner };
+    setSelectedChat(chat);
+    onSelectChat?.(chat);
+  };
 
   if (isCreating || isLoading) return <Spinner />;
   if (error) return <ErrorMessage message={error.message} />;
@@ -77,9 +82,7 @@ export default function Sidebar() {
             className={`${styles.conversation} ${
               selectedChat?.id === conv.id ? styles.active : ""
             }`}
-            onClick={() =>
-              setSelectedChat({ id: conv.id, partner: conv.partner })
-            }
+            onClick={() => handleChatClick(conv)}
           >
             <Avatar
               src={

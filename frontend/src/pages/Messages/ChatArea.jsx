@@ -17,7 +17,7 @@ import MessagesList from "./MessagesList";
 import { Spinner, ErrorMessage, Avatar } from "../../components/ui";
 import styles from "./Messages.module.css";
 
-export default function ChatArea() {
+export default function ChatArea({ onBack }) {
   const { selectedChat, setIsTyping, isPartnerTyping } = useMessage();
   const { user } = useUser();
   const navigate = useNavigate();
@@ -106,11 +106,14 @@ export default function ChatArea() {
   }, [chatId, scrollToBottom]);
 
   if (isLoading) return <Spinner />;
-  if (queryError) return <ErrorMessage message={"somthing went wrong"} />;
+  if (queryError) return <ErrorMessage message={"something went wrong"} />;
 
   return (
     <div className={styles.chatArea}>
       <div className={styles.header}>
+        <button className={styles.backButton} onClick={onBack}>
+          ←
+        </button>
         <Avatar
           src={selectedChat?.partner.profilePicture}
           name={selectedChat?.partner.name}

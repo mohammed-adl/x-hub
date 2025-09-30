@@ -1,10 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 
-import {
-  handleMarkAsVisited,
-  handleMarkMessagesAsVisited,
-} from "../../fetchers/index.js";
+import { handleMarkAsVisited } from "../../fetchers/index.js";
 import { useUser, useNotification, useMessage } from "../../contexts/index.js";
 
 import UserDropdown from "./UserDropDown.jsx";
@@ -47,12 +44,7 @@ export default function NavBar() {
       <ul className={styles.linksContainer}>
         <LinkBox value="Home" src={home} navLink="/home" />
         <LinkBox value="Profile" src={profile} navLink={`/${username}`} />
-        <LinkBox
-          value="Messages"
-          src={message}
-          navLink="/messages"
-          onClick={visitMessages}
-        />
+        <LinkBox value="Messages" src={message} navLink="/messages" />
         <LinkBox
           value="Notifications"
           src={bell}
