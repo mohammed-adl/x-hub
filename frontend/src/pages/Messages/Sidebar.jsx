@@ -37,6 +37,8 @@ export default function Sidebar({ onSelectChat }) {
   const conversations = data?.conversations || [];
   const filteredConversations = filterConversations(conversations, searchTerm);
 
+  console.log(filteredConversations);
+
   useEffect(() => {
     if (!selectedChat && filteredConversations.length > 0) {
       const firstChat = {
@@ -98,6 +100,7 @@ export default function Sidebar({ onSelectChat }) {
             <div className={styles.info}>
               <div className={styles.nameRow}>
                 <div className={styles.name}>{conv.partner.name}</div>
+                {!conv.isRead && <div className={styles.unreadBadge}></div>}
               </div>
               <div className={styles.lastMessage}>
                 {conv.lastMessage?.content || ""}

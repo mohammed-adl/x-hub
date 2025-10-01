@@ -32,6 +32,8 @@ export const getAllConversations = asyncHandler(async (req, res) => {
       : null;
     const partnerWithUrl = attachFullUrls(partner);
 
+    const isRead = isUser1 ? chat.user1HasRead : chat.user2HasRead;
+
     return {
       id: chat.id,
       partnerId: partner.id,
@@ -42,6 +44,7 @@ export const getAllConversations = asyncHandler(async (req, res) => {
         profilePicture: partnerWithUrl.profilePicture,
       },
       lastMessage: lastMessageWithUrls,
+      isRead: isRead,
     };
   });
 

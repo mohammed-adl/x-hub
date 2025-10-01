@@ -3,38 +3,76 @@ import { useQueryClient } from "@tanstack/react-query";
 export const useUpdateConversation = (defaultChatId) => {
   const queryClient = useQueryClient();
 
-  const updateConversationInCache = (messageObj, chatId = defaultChatId) => {
+  const updateConversationInCache = (
+    messageObj,
+    chatId = defaultChatId,
+    isCurrentChat = false
+  ) => {
     if (!chatId || !messageObj) return;
 
     queryClient.setQueryData(["conversations"], (oldData) => {
-      if (!oldData?.conversations?.length) return oldData;
+      if (!oldData) {
+        oldData = { conversations: [] };
+      }
 
-      const conversations = [...oldData.conversations];
+      const conversations = [...(oldData.conversations || [])];
 
-      // Find the conversation to update
+      // Find the conversation index
       const conversationIndex = conversations.findIndex(
         (conv) => conv.id === chatId
       );
 
-      if (conversationIndex === -1) return oldData;
+      // Determine the partner (whoever is NOT the receiver, since receiver is current user)
+      const partner =
+        messageObj.sender.id === messageObj.receiver.id
+          ? messageObj.receiver
+          : messageObj.sender;
 
-      // Update the conversation with the new last message
-      const updatedConversation = {
-        ...conversations[conversationIndex],
-        lastMessage: {
-          content: messageObj.content,
-          createdAt: messageObj.createdAt,
-          sender: messageObj.sender,
-        },
-        // Update the conversation's timestamp to sort properly
-        updatedAt: messageObj.createdAt,
-      };
+      if (conversationIndex !== -1) {
+        // Conversation exists - update it
+        const updatedConversation = {
+          ...conversations[conversationIndex],
+          lastMessage: {
+            id: messageObj.id,
+            content: messageObj.content,
+            createdAt: messageObj.createdAt,
+            sender: messageObj.sender,
+            receiver: messageObj.receiver,
+          },
+          // Set isRead to false only if we're NOT in the chat
+          isRead: isCurrentChat ? true : false,
+        };
 
-      // Remove the conversation from its current position
-      conversations.splice(conversationIndex, 1);
+        // Remove from current position
+        conversations.splice(conversationIndex, 1);
 
-      // Add it to the beginning (most recent)
-      conversations.unshift(updatedConversation);
+        // Add to the beginning
+        conversations.unshift(updatedConversation);
+      } else {
+        // Conversation doesn't exist - create it optimistically
+        const newConversation = {
+          id: chatId,
+          partnerId: partner.id,
+          partner: {
+            id: partner.id,
+            name: partner.name,
+            username: partner.username,
+            profilePicture: partner.profilePicture,
+          },
+          lastMessage: {
+            id: messageObj.id,
+            content: messageObj.content,
+            createdAt: messageObj.createdAt,
+            sender: messageObj.sender,
+            receiver: messageObj.receiver,
+          },
+          // New conversations are always unread (unless we're somehow in the chat already)
+          isRead: isCurrentChat ? true : false,
+        };
+
+        // Add to the beginning
+        conversations.unshift(newConversation);
+      }
 
       return {
         ...oldData,

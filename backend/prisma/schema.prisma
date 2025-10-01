@@ -232,7 +232,6 @@ model XLike {
 model XMessage {
   id        String   @id @default(uuid())
   content   String
-  isRead    Boolean  @default(false)
   createdAt DateTime @default(now())
 
   sender   XUser  @relation("XSentMessages", fields: [senderId], references: [id])
@@ -259,6 +258,9 @@ model XChat {
   user1Id String
   user2   XUser  @relation("XUser2Chats", fields: [user2Id], references: [id])
   user2Id String
+
+  user1HasRead Boolean @default(true)
+  user2HasRead Boolean @default(true)
 
   messages XMessage[]
 

@@ -23,9 +23,14 @@ export const sendMessage = asyncHandler(async (req, res) => {
       });
     }
 
+    const isReceiverUser1 = receiverId === user1Id;
+
     await prisma.xChat.update({
       where: { id: chat.id },
-      data: { updatedAt: new Date() },
+      data: {
+        updatedAt: new Date(),
+        [isReceiverUser1 ? "user1HasRead" : "user2HasRead"]: false,
+      },
     });
 
     const message = await prisma.xMessage.create({
