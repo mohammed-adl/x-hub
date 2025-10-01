@@ -1,7 +1,10 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 
-import { handleMarkAsVisited } from "../../fetchers/index.js";
+import {
+  handleMarkAsVisited,
+  handleMarkMessagesAsVisited,
+} from "../../fetchers/index.js";
 import { useUser, useNotification, useMessage } from "../../contexts/index.js";
 
 import UserDropdown from "./UserDropDown.jsx";
@@ -14,6 +17,7 @@ import styles from "./NavBar.module.css";
 export default function NavBar() {
   const { hasNotifications, setHasNotifications } = useNotification();
   const { hasUnreadMessages, setHasUnreadMessages } = useMessage();
+
   const { user, setUser } = useUser();
   if (!user) return null;
   const { name, username } = user;
@@ -33,6 +37,16 @@ export default function NavBar() {
     }
   }
 
+  async function visitMessages() {
+    try {
+      const body = await handleMarkMessagesAsVisited();
+      setUser(body.user);
+      setHasUnreadMessages(false);
+    } catch (err) {
+      console.error("Error visiting messages:", err);
+    }
+  }
+
   return (
     <div className={styles.sideBarContainer}>
       <div className={styles.logoBox}>
@@ -44,7 +58,13 @@ export default function NavBar() {
       <ul className={styles.linksContainer}>
         <LinkBox value="Home" src={home} navLink="/home" />
         <LinkBox value="Profile" src={profile} navLink={`/${username}`} />
-        <LinkBox value="Messages" src={message} navLink="/messages" />
+        <LinkBox
+          value="Messages"
+          src={message}
+          navLink="/messages"
+          hasUnreadMessages={hasUnreadMessages}
+          onClick={visitMessages}
+        />
         <LinkBox
           value="Notifications"
           src={bell}

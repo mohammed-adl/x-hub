@@ -6,6 +6,7 @@ export default function LinkBox({
   src,
   navLink,
   hasNotification,
+  hasUnreadMessages,
   onClick,
 }) {
   return (
@@ -15,6 +16,9 @@ export default function LinkBox({
           <div className={styles.iconBox}>
             <img src={src} className={styles.icon} />
             {hasNotification && <span className={styles.redDot}></span>}
+            {hasUnreadMessages && (
+              <span className={styles.messagesRedDot}></span>
+            )}
           </div>
           <div>{value}</div>
         </div>

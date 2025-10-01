@@ -16,7 +16,7 @@ export function NotificationProvider({ children }) {
     if (!socket.on) return;
 
     const handleNewNotification = (data) => {
-      setUser({ ...user, hasNotifications: true });
+      setUser((prev) => ({ ...prev, hasNotifications: true }));
       setHasNotifications(true);
 
       if (window.innerWidth >= 1024) {
