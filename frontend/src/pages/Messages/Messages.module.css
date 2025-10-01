@@ -447,4 +447,7 @@ button {
   button {
     padding: 6px 12px;
   }
+  .chatAreaWrapper {
+    padding-bottom: 48.3px;
+  }
 }
