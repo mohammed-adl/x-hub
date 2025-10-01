@@ -170,7 +170,6 @@ export const sessionSelect = {
 export const messageSelect = {
   id: true,
   content: true,
-  isRead: true,
   createdAt: true,
   sender: {
     select: {

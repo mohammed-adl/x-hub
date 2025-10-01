@@ -7,7 +7,7 @@ import { Avatar, Spinner, ErrorMessage } from "../../components/ui";
 
 import { useMessage, useUser } from "../../contexts";
 
-import { handleGetAllConvos } from "../../fetchers";
+import { handleGetAllConvos, handleMarkMessagesAsRead } from "../../fetchers";
 import { generateAvatar, filterConversations } from "../../utils";
 import { useCreateChat } from "../../hooks";
 
@@ -98,6 +98,7 @@ export default function Sidebar({ onSelectChat }) {
             <div className={styles.info}>
               <div className={styles.nameRow}>
                 <div className={styles.name}>{conv.partner.name}</div>
+                {!conv.isRead && <div className={styles.unreadBadge}></div>}
               </div>
               <div className={styles.lastMessage}>
                 {conv.lastMessage?.content || ""}

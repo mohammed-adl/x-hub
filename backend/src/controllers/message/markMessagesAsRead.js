@@ -5,14 +5,20 @@ export const markMessagesAsRead = asyncHandler(async (req, res) => {
   const userId = req.user.id;
   const chatId = req.params.chatId;
 
-  await prisma.xMessage.updateMany({
-    where: {
-      chatId: chatId,
-      receiverId: userId,
-      isRead: false,
-    },
+  const chat = await prisma.xChat.findUnique({
+    where: { id: chatId },
+  });
+
+  if (!chat) {
+    return res.status(404).json({ message: "Chat not found" });
+  }
+
+  const isUser1 = chat.user1Id === userId;
+
+  await prisma.xChat.update({
+    where: { id: chatId },
     data: {
-      isRead: true,
+      [isUser1 ? "user1HasRead" : "user2HasRead"]: true,
     },
   });
 

@@ -90,11 +90,12 @@ export function MessageProvider({ children }) {
 
   useEffect(() => {
     socket.on("newMessage", ({ chatId, message }) => {
-      updateConversationInCache(message, chatId); // always first
-      setIsPartnerTyping(false);
-      console.log("message");
+      const isCurrentChat = chatId === selectedChat?.id;
 
-      if (chatId === selectedChat?.id) {
+      updateConversationInCache(message, chatId, isCurrentChat);
+      setIsPartnerTyping(false);
+
+      if (isCurrentChat) {
         addMessageToCache(message);
         setTimeout(() => {
           scrollToBottom();
@@ -102,7 +103,6 @@ export function MessageProvider({ children }) {
       } else {
         setUser((prev) => ({ ...prev, hasUnreadMessages: true }));
         setHasUnreadMessages(true);
-        console.log(hasUnreadMessages);
       }
     });
 
