@@ -71,46 +71,47 @@ Live Demo: [https://xhubco.vercel.app](https://xhubco.vercel.app)
 
 ```text
 x-hub/
-├─ backend/
-│  ├─ prisma/
-│  ├─ .env
-│  ├─ app.js
-│  ├─ server.js
-│  └─ src/
-│     ├─ config/
-│     ├─ controllers/
-│     ├─ lib/
-│     ├─ middlewares/
-│     ├─ routes/
-│     ├─ schemas/
-│     ├─ services/
-│     ├─ socket/
-│     └─ utils/
-│
 ├─ frontend/
-│  ├─ public/
-│  ├─ .env
+│  ├─ public/         # Static assets like images, icons, and fonts
+│  ├─ .env            # Frontend environment variables
 │  ├─ src/
-│  │  ├─ app/
-│  │  ├─ assets/
-│  │  ├─ components/
-│  │  ├─ contexts/
-│  │  ├─ fetchers/
-│  │  ├─ hooks/
-│  │  ├─ lib/
-│  │  ├─ pages/
-│  │  ├─ schemas/
-│  │  ├─ services/
-│  │  ├─ socket/
-│  │  ├─ toasts/
-│  │  └─ utils/
+│  │  ├─ app/         # Main app entry point and routing
+│  │  ├─ assets/      # Images, icons, and other static files
+│  │  ├─ components/  # Reusable UI components
+│  │  ├─ contexts/    # React context for global state management
+│  │  ├─ fetchers/    # Functions for API requests
+│  │  ├─ hooks/       # Custom React hooks
+│  │  ├─ lib/         # Helper libraries or third-party integrations
+│  │  ├─ pages/       # Page-level components (routes)
+│  │  ├─ schemas/     # Zod validation schemas
+│  │  ├─ services/    # Business logic and API interaction helpers
+│  │  ├─ socket/      # Socket.IO client-side logic
+│  │  ├─ toasts/      # Toast and notification utilities
+│  │  └─ utils/       # General utility functions
 │  │
-│  ├─ App.jsx
-│  ├─ index.css
-│  ├─ main.jsx
-│  └─ index.html
+│  ├─ App.jsx         # Root React component
+│  ├─ index.css       # Global styles
+│  ├─ main.jsx        # React DOM render entry
+│  └─ index.html      # HTML template for the app
 │
-├─ README.md
+├─ backend/
+│  ├─ prisma/         # Prisma ORM schema and database migrations
+│  ├─ .env            # Backend environment variables
+│  ├─ app.js          # Express app configuration and middleware setup
+│  ├─ server.js       # Entry point for starting the backend server
+│  └─ src/
+│     ├─ config/      # Configuration files (e.g., environment, database)
+│     ├─ controllers/ # Route handlers controlling request logic
+│     ├─ lib/         # Shared helper libraries and integrations
+│     ├─ middlewares/ # Custom middlewares for auth, validation, etc.
+│     ├─ routes/      # API route definitions
+│     ├─ schemas/     # Validation schemas using Zod or Joi
+│     ├─ services/    # Core business logic and database operations
+│     ├─ socket/      # Socket.IO server-side implementation
+│     └─ utils/       # General-purpose backend utilities
+│
+├─ README.md           
+
 
 ```
 
