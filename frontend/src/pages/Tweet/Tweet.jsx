@@ -23,8 +23,6 @@ export default function Tweet() {
 
   const tweet = data?.tweet;
 
-  console.log(tweet);
-
   if (isLoading) return <Spinner />;
   if (error) return <ErrorMessage />;
 
@@ -38,7 +36,10 @@ export default function Tweet() {
         <TweetCard {...mapTweetToProps(tweet)} />
       </div>
       <div className={styles.repliesContainer}>
-        <PostReply tweetId={tweet.id} profilePicture={tweet.profilePicture} />
+        <PostReply
+          tweetId={tweet.id}
+          profilePicture={tweet.user.profilePicture}
+        />
         <RepliesFeed tweetId={tweet.id} />
       </div>
     </div>

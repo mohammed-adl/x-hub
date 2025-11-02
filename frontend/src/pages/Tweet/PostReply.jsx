@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { toast } from "react-hot-toast";
 import { useQueryClient } from "@tanstack/react-query";
+import { generateAvatar } from "../../utils";
 
 import Avatar from "../../components/ui/Avatar.jsx";
 
