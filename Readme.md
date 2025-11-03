@@ -16,9 +16,8 @@ Live Demo: [https://xhubco.vercel.app](https://xhubco.vercel.app)
 2. [Tech Stack](#tech-stack)
 3. [Architecture & Project Structure](#architecture--project-structure)
 4. [Getting Started](#getting-started)
-5. [Usage](#usage)
-6. [Screenshots / Demo](#screenshots--demo)
-7. [Future Improvements](#future-improvements)
+5. [Screenshots / Demo](#screenshots--demo)
+6. [Future Improvements](#future-improvements)
 
 ---
 
@@ -28,10 +27,7 @@ Live Demo: [https://xhubco.vercel.app](https://xhubco.vercel.app)
 
 - **Full auth system**: JWT access & refresh tokens with automatic background refreshing via interceptors.
 - **Device session management**: Track all active sessions; logout suspicious/unwanted devices or all sessions at once.
-- **Input validation**: Zod ensures clean & safe inputs.
-- **Secure data storage**: Sensitive data hashed in database.
-- **Rate limiting**: Protects against brute-force & API abuse.
-- **Route protection & redirection**: Secure routes against unauthorized access and redirect users from invalid or restricted URLs.
+- **Security**: Zod validation, rate limiting, and protected routes with automatic redirection.
 
 ### Messaging System
 
@@ -72,43 +68,43 @@ Live Demo: [https://xhubco.vercel.app](https://xhubco.vercel.app)
 ```text
 x-hub/
 ├─ backend/
-│  ├─ prisma/
+│  ├─ prisma/         # Prisma schema & migrations
 │  ├─ .env
-│  ├─ app.js
-│  ├─ server.js
+│  ├─ app.js          # Express app setup
+│  ├─ server.js       # Entry point for backend server
 │  └─ src/
-│     ├─ config/
-│     ├─ controllers/
-│     ├─ lib/
-│     ├─ middlewares/
-│     ├─ routes/
-│     ├─ schemas/
-│     ├─ services/
-│     ├─ socket/
-│     └─ utils/
+│     ├─ config/      # Backend configuration files
+│     ├─ controllers/ # Express route handlers
+│     ├─ lib/         # Helper libraries
+│     ├─ middlewares/ # Auth, validation, rate limiting, etc.
+│     ├─ routes/      # API route definitions
+│     ├─ schemas/     # Validation schemas (Zod)
+│     ├─ services/    # Business logic helpers
+│     ├─ socket/      # Socket.IO server code
+│     └─ utils/       # Utility functions
 │
 ├─ frontend/
-│  ├─ public/
-│  ├─ .env
+│  ├─ public/         # Static assets like images, fonts
+│  ├─ .env            # Environment variables
 │  ├─ src/
-│  │  ├─ app/
-│  │  ├─ assets/
-│  │  ├─ components/
-│  │  ├─ contexts/
-│  │  ├─ fetchers/
-│  │  ├─ hooks/
-│  │  ├─ lib/
-│  │  ├─ pages/
-│  │  ├─ schemas/
-│  │  ├─ services/
-│  │  ├─ socket/
-│  │  ├─ toasts/
-│  │  └─ utils/
+│  │  ├─ app/         # Main app entry and routing
+│  │  ├─ assets/      # Images, icons, and other static files
+│  │  ├─ components/  # Reusable React components
+│  │  ├─ contexts/    # React context for global state
+│  │  ├─ fetchers/    # API fetcher functions
+│  │  ├─ hooks/       # Custom React hooks
+│  │  ├─ lib/         # Helper libraries
+│  │  ├─ pages/       # Page components
+│  │  ├─ schemas/     # Zod schemas
+│  │  ├─ services/    # Frontend business logic
+│  │  ├─ socket/      # Socket.IO client code
+│  │  ├─ toasts/      # Toast notification components
+│  │  └─ utils/       # Utility functions
 │  │
-│  ├─ App.jsx
-│  ├─ index.css
-│  ├─ main.jsx
-│  └─ index.html
+│  ├─ App.jsx         # Root component
+│  ├─ index.css       # Global styles
+│  ├─ main.jsx        # Application entry point
+│  └─ index.html      # HTML template
 │
 ├─ README.md
 
@@ -211,16 +207,6 @@ npx prisma migrate dev
 - **Uploads:** Multer
 - **Authentication & Security:** JWT, bcrypt, Zod, Helmet, CORS, Rate Limiting
 - **Deployment:** Render (backend), Vercel (frontend)
-
----
-
-## Usage
-
-1. Sign up or log in.
-2. Create posts, follow users, and engage with retweets and replies.
-3. Chat in real-time with the built-in messaging system.
-4. Receive live notifications for every interaction.
-5. Explore suggested follows and search for people or content.
 
 ---
 
